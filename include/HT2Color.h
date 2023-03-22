@@ -22,6 +22,7 @@
 
 bool _sensorSendCommand(tHTCS2Ptr htcs2Ptr) {
   memset(htcs2Ptr->I2CData.request, 0, sizeof(htcs2Ptr->I2CData.request));
+
   htcs2Ptr->I2CData.request[0] = 3;                     // Message size
   htcs2Ptr->I2CData.request[1] = HTCS2_I2C_ADDR;        // I2C Address
   htcs2Ptr->I2CData.request[2] = HTCS2_CMD_REG;         // Command register
@@ -54,6 +55,7 @@ bool readHTrgb(tCDValues *CDSensorPtr){
 
   if (!writeI2C(&CDSensorPtr->HTStruct.I2CData))
     return false;
+    
   CDSensorPtr->rawRed   = (short)CDSensorPtr->HTStruct.I2CData.reply[1];
   CDSensorPtr->rawGreen = (short)CDSensorPtr->HTStruct.I2CData.reply[2];
   CDSensorPtr->rawBlue  = (short)CDSensorPtr->HTStruct.I2CData.reply[3];

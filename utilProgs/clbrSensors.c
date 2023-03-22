@@ -19,6 +19,7 @@ task main (){
     setMotorBrakeMode(motorC, motorCoast);
     long maxR, maxG, maxB;
     long minR, minG, minB;
+
     tCDValues *mass[4];
     mass[0] = &CDSensor1;
     mass[1] = &CDSensor2;
@@ -42,7 +43,7 @@ task main (){
             maxB = max2(maxB, mass[j]->rawBlue);
             displayCenteredTextLine(1, "RGB_min: %d %d %d %d", minR, minG, minB, j);
             displayCenteredTextLine(3, "RGB_max: %d %d %d %d", maxR, maxG, maxB, j);
-            sleep(200);
+            sleep(250);
             eraseDisplay();
         }
         writeRGB(maxR, maxG, maxB);
@@ -50,8 +51,5 @@ task main (){
         sleep(200);
         flushButtonMessages();
     }
-
-
-
     fileClose(fileHandle);
 }

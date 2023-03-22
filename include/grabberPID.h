@@ -5,6 +5,7 @@ typedef struct {
     float maxUpWithoutShip;
     float upForShipThrow;
     float upForShipPush;
+    float upForDrop;
     float maxV;
     float targetPos;
 } tGrabberPositionC;
@@ -26,8 +27,8 @@ tGrabberPositionD grabberD;
 
 task initGrabber() {
     motor[motorC] = 50;
-    motor[motorD] = -50;
-    sleep(400);
+    motor[motorD] = 50;
+    sleep(4000);
     setMotorBrakeMode(motorC, motorBrake);
     setMotorBrakeMode(motorD, motorBrake);
     motor[motorC] = 0;
@@ -40,12 +41,13 @@ task initGrabber() {
     grabberC.maxDown = -1400;
     grabberC.upForShipThrow = -1000;
     grabberC.upForShipPush = -450;
+    grabberC.upForDrop = -1050;
 
-    grabberD.closeBoth = 0;
-    grabberD.openForwardMax = 450;
-    grabberD.openForwardMin = 260;
-    grabberD.openBackwardMax = 800;
-    grabberD.openBackwardMin = 660;
+    grabberD.closeBoth = -850;
+    grabberD.openForwardMax = -480;
+    grabberD.openForwardMin = -615;
+    grabberD.openBackwardMax = 0;
+    grabberD.openBackwardMin = -230;
     stopTask(initGrabber);
 }
 
