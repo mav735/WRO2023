@@ -196,14 +196,14 @@ void start(){
     changePosGrabberC(100, grabberC.maxUpWithoutShip);
     arcEnc(-30, 30, 30, 20, 150);
     stopMove(200);
-    arcEnc(20, -20, 20, 15, (215 - 50));
+    arcEnc(20, -20, 20, 15, 165);
     arcAngle(80, -10, 80, 20, 90);
     stopMove(2000);
     changePosGrabberC(80, grabberC.maxDown);
     changePosGrabberD(80, grabberD.openBackwardMin);
     setDefaultLine();
     stopMove(200);
-    lineFollowEncoder(15, 15, 15, 100);
+    lineFollowEncoder(15, 20, 15, 110);
     stopMove(200);
 
     // shit
@@ -268,7 +268,7 @@ void start(){
 
     arcEnc(20, -20, 30, 30, 135);
     arcAngle(30, -80, 90, 40, 90);
-    arcAngle(20, 20, 90, 15, 180);
+    arcAngle(20, 20, 90, 30, 180);
     lineFollowCross(20, 60, 1);
     lineFollowEncoder(60, 80, 15, 350);
     changePosGrabberC(100, grabberC.maxUpWithoutShip);
@@ -320,11 +320,14 @@ void start(){
     changePosGrabberD(100, grabberD.openBackwardMax);
     sleep(500);
     changePosGrabberC(100, grabberC.maxUp);
+    setDefaultLineWhiteCross();
     arcEnc(20, -20, 20, 20, 200);
     arcAngle(-20, -20, 80, 20, 180);
-    setDefaultLineWhiteCross();
-    lineFollowCross(20, 60, 1);
-    arcEnc(-60, 60, 60, 20, 250);
+
+    lineFollowEncoder(20, 30, 100, 30);
+    lineFollowCross(30, 50, 1);
+
+    arcEnc(-50, 50, 50, 15, 250);
     stopMove(10000);
 }
 

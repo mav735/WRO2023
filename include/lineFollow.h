@@ -1,6 +1,6 @@
-const float kpConst = 0.63;
-const float kdConst = 3.3;
-const float kiConst = 0.0135;
+const float kpConst = 0.65;
+const float kdConst = 4.3;
+const float kiConst = 0.014;
 const float calibrationPower = 50;
 
 typedef struct {
@@ -138,16 +138,16 @@ void setDefaultLineWhiteCross() {
     lineCFG.maxLine = 255;
     lineCFG.minLine = 0;
     lineCFG.inverse = 1;
-    lineCFG.crossRoadMax = 300;
-    lineCFG.crossRoadMin = 130;
+    lineCFG.crossRoadMax = 255;
+    lineCFG.crossRoadMin = 235;
     lineCFG.sensorsIndError = 2;
     lineCFG.sensorsIndCross = 2;
     lineCFG.rgb[0] = true;
     lineCFG.rgb[1] = true;
     lineCFG.rgb[2] = true;
     lineCFG.rgbCross[0] = true;
-    lineCFG.rgbCross[1] = true;
-    lineCFG.rgbCross[2] = true;
+    lineCFG.rgbCross[1] = false;
+    lineCFG.rgbCross[2] = false;
     lineCFG.coef = 1;
 }
 
