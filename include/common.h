@@ -24,18 +24,18 @@ void waitTask(bool *taskFlag){
 void colSound(int col) {
     clearSounds();
     setSoundVolume(100);
-    if (col == 1) {
-        playSoundFile("Right");
+    if (col == 0) {
+        playSoundFile("White");
+    } else if (col == 1) {
+        playSoundFile("Black");
     } else if (col == 2) {
-        playSoundFile("Yellow");
+        playSoundFile("Right");
     } else if (col == 3) {
         playSoundFile("Green");
     } else if (col == 4) {
         playSoundFile("Blue");
     } else if (col == 5) {
-        playSoundFile("Black");
-    } else if (col == 6) {
-        playSoundFile("White");
+        playSoundFile("Yellow");
     } else {
         playSoundFile("Zero");
     }
@@ -141,4 +141,23 @@ void resetSensorConn(tSensors link){
     sleep(10);
     setSensorAutoID(link, true);
     sleep(1000);
+}
+
+void offAllSensors(){
+    setSensorAutoID(S1, false);
+    sleep(10);
+    setSensorConnectionType(S1, CONN_NONE);
+    sleep(10);
+    setSensorAutoID(S2, false);
+    sleep(10);
+    setSensorConnectionType(S2, CONN_NONE);
+    sleep(10);
+    setSensorAutoID(S3, false);
+    sleep(10);
+    setSensorConnectionType(S3, CONN_NONE);
+    sleep(10);
+    setSensorAutoID(S4, false);
+    sleep(10);
+    setSensorConnectionType(S4, CONN_NONE);
+    sleep(10);
 }

@@ -33,6 +33,8 @@ task main (){
         minR = 1000;
         minG = 1000;
         minB = 1000;
+        flushButtonMessages();
+        flushButtonMessages();
         while (!getButtonPress('C')) {
             getCDValues(mass[j]);
             minR = min2(minR, mass[j]->rawRed);
@@ -43,13 +45,22 @@ task main (){
             maxB = max2(maxB, mass[j]->rawBlue);
             displayCenteredTextLine(1, "RGB_min: %d %d %d %d", minR, minG, minB, j);
             displayCenteredTextLine(3, "RGB_max: %d %d %d %d", maxR, maxG, maxB, j);
-            sleep(250);
+            if (j < 2){
+                sleep(25);
+            }
+            else{
+                sleep(300);
+            }
             eraseDisplay();
         }
         writeRGB(maxR, maxG, maxB);
         writeRGB(minR, minG, minB);
         sleep(200);
         flushButtonMessages();
+        flushButtonMessages();
+        flushButtonMessages();
+        flushButtonMessages();
+        sleep(500);
     }
     fileClose(fileHandle);
 }

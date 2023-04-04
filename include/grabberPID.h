@@ -15,6 +15,7 @@ typedef struct {
     float closeBoth;
     float openForwardMax;
     float openForwardMin;
+    float dropFirstTwo;
     float openBackwardMax;
     float openBackwardMin;
     float maxV;
@@ -41,13 +42,14 @@ task initGrabber() {
     grabberC.maxDown = -1400;
     grabberC.upForShipThrow = -1000;
     grabberC.upForShipPush = -450;
-    grabberC.upForDrop = -1050;
+    grabberC.upForDrop = -1010;
 
     grabberD.closeBoth = -850;
     grabberD.openForwardMax = -480;
     grabberD.openForwardMin = -615;
     grabberD.openBackwardMax = 0;
     grabberD.openBackwardMin = -230;
+    grabberD.dropFirstTwo = -500;
     stopTask(initGrabber);
 }
 

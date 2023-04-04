@@ -456,11 +456,11 @@ void arcAngle(float startVA, float startVB, float topVX, float stopVX,
            boost);
 }
 
-void lineAligning(int velocity, float targetAngle, bool type = true, int color = 5){ //type: 0 - танковый, 1 - 1 колесом
+void lineAligning(int velocity, float targetAngle, bool type = true, int color = 2){ //type: 0 - N??�????????N???, 1 - 1 ?????�?�N?????
     arcColor2Sensors(-20, 20, velocity, &CDSensor1, &CDSensor2, color);
     float zeroEnc = (nMotorEncoder[motorB] - nMotorEncoder[motorA]) / 2;
     bool flag = true;
-    
+
     tCDValues *lastSensor = &CDSensor1;
     if (CDSensor1.color == 5){
         lastSensor = &CDSensor2;
@@ -469,7 +469,7 @@ void lineAligning(int velocity, float targetAngle, bool type = true, int color =
 
     arcColor(motor[motorA], motor[motorA] * -1, motor[motorA], lastSensor, color);
     float angle = radiansToDegrees(atan((((nMotorEncoder[motorB] - nMotorEncoder[motorA]) / 2 - zeroEnc) * ((g_wheelDiameter * PI) / 360)) / g_distBetweenSensors));
-    
+
     if (flag){
         angle = 360 - angle;
     }
