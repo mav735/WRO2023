@@ -105,13 +105,13 @@ void colorDetectInit() {
     CDSensor3.red[1] = 0.8114;
     CDSensor3.red[2] = 175;
 
-    CDSensor3.green[0] = 130;
-    CDSensor3.green[1] = 0.2413;
-    CDSensor3.green[2] = 70;
+    CDSensor3.green[0] = 145;
+    CDSensor3.green[1] = 0.2613;
+    CDSensor3.green[2] = 26;
 
-    CDSensor3.blue[0] = 220;
-    CDSensor3.blue[1] = 0.6060;
-    CDSensor3.blue[2] = 132;
+    CDSensor3.blue[0] = 228;
+    CDSensor3.blue[1] = 0.5526;
+    CDSensor3.blue[2] = 38;
 
     CDSensor3.yellow[0] = 36;
     CDSensor3.yellow[1] = 0.6730;
@@ -161,7 +161,7 @@ float calculateDistance(float *hsv_now, float *hsv_need){
     float dh = min2(fabs(hsv_need[0] - hsv_now[0]), 360 - fabs(hsv_need[0] - hsv_now[0])) / 180.0;
     float ds = abs(hsv_need[1] - hsv_now[1]);
     float dv = abs(hsv_need[2] - hsv_now[2]) / 255.0;
-    return 1 - sqrt(dh * dh + ds * ds + dv * dv); //
+    return 1 - sqrt(dh * dh + ds * ds); //+ dv * dv
 }
 
 void getCDValues(tCDValues *CDSensor, short *colorIndexies=baseColors, short amountColors=6) {

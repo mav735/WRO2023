@@ -1,7 +1,7 @@
-const float kpConst = 0.65;
-const float kdConst = 4.3;
-const float kiConst = 0.014;
-const float calibrationPower = 50;
+float kpConst = 0.65;
+float kdConst = 5;
+float kiConst = 0.015;
+float calibrationPower = 50;
 
 typedef struct {
     float minLine;
@@ -170,20 +170,47 @@ void setLeftSensorBlueLineBlackStop(short side,
 }
 
 void setRightSensorBlueGrayLineWhiteStop(short side, short stopType) {  // 1 - in -1 - out
-    lineCFG.maxLine = 180;
-    lineCFG.minLine = 160;
+    lineCFG.maxLine = 170;
+    lineCFG.minLine = 45;
     lineCFG.inverse = side;
     lineCFG.crossRoadMax = 255;
-    lineCFG.crossRoadMin = 60;
-    lineCFG.sensorsIndError = 2;
+    lineCFG.crossRoadMin = 50;
+
+    lineCFG.sensorsIndError = 1;
+
     lineCFG.sensorsIndCross = stopType;
+
     lineCFG.rgb[0] = true;
-    lineCFG.rgb[1] = false;
-    lineCFG.rgb[2] = false;
+    lineCFG.rgb[1] = true;
+    lineCFG.rgb[2] = true;
+
     lineCFG.rgbCross[0] = true;
     lineCFG.rgbCross[1] = true;
     lineCFG.rgbCross[2] = true;
-    lineCFG.coef = 0.3;
+    
+    lineCFG.coef = 1;
+}
+
+void setRightSensorBlueGrayLineBlueStop(short side, short stopType) {  // 1 - in -1 - out
+    lineCFG.maxLine = 170;
+    lineCFG.minLine = 45;
+    lineCFG.inverse = side;
+    lineCFG.crossRoadMax = 70;
+    lineCFG.crossRoadMin = 10;
+    
+    lineCFG.sensorsIndError = 1;
+
+    lineCFG.sensorsIndCross = stopType;
+
+    lineCFG.rgb[0] = true;
+    lineCFG.rgb[1] = true;
+    lineCFG.rgb[2] = true;
+
+    lineCFG.rgbCross[0] = false;
+    lineCFG.rgbCross[1] = true;
+    lineCFG.rgbCross[2] = false;
+    
+    lineCFG.coef = 0.7;
 }
 
 void calcKF(float power, float *kp, float *kd, float *ki) {
