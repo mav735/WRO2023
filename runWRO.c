@@ -72,7 +72,7 @@ void getOneByOneFromLeft(){
     arcAngle(20, 20, 100, 20, 90);
     stopMove(100);
     arcAngle(-80, 16, 80, 20, 90);
-    arcEnc(-20, 20, 20, 20, 40);
+    arcEnc(-20, 20, 20, 20, 20);
     changePosGrabberD(80, grabberD.openForwardMax);
     stopMove(100);
     arcEnc(20, -20, 20, 20, 40);
@@ -98,8 +98,9 @@ void getOneByOneFromLeft(){
     lineFollowEncoder(20, 20, 20, 180);
     stopMove(0, false, false);
     arcEnc(-20, 20, 20, 20, 60);
+    stopMove(100);
     changePosGrabberD(80, grabberD.closeBoth);
-    stopMove(500);
+    stopMove(550);
     changePosGrabberC(100, grabberC.maxUp);
 }
 
@@ -115,27 +116,27 @@ void getOneByOneFromRight(){
 
     arcAngle(15, -80, 80, 20, 90);
     stopMove(100);
-    arcEnc(20, -20, 50, 20, 160);
+    arcEnc(20, -20, 50, 20, 180);
     stopMove(100);
     arcAngle(20, 20, 100, 20, 90);
     stopMove(100);
-    arcEnc(-20, 20, 20, 15, 180);
+    arcEnc(-20, 20, 20, 15, 200);
     changePosGrabberD(80, grabberD.closeBoth);
     stopMove(200);
     arcAngle(90, 0, 80, 50, 90);
-    arcEnc(-20, 20, 20, 15, 45);
+    arcEnc(-20, 20, 20, 15, 25);
     stopMove(200);
 
     arcAngle(-20, -20, 80, 20, 90);
-    changePosGrabberD(100, grabberD.openBackwardMax);
+    changePosGrabberD(80, grabberD.openBackwardMax);
     stopMove(500);
 
     setDefaultLine();
     lineFollowEncoder(20, 20, 20, 180);
-    stopMove(0, false, false);
-    arcEnc(-20, 20, 20, 20, 60);
+    arcEnc(-20, 20, 20, 20, 65);
+    stopMove(100);
     changePosGrabberD(80, grabberD.closeBoth);
-    stopMove(500);
+    stopMove(550);
     changePosGrabberC(100, grabberC.maxUp);
 }
 
@@ -198,7 +199,7 @@ void start(){
     stopMove(200);
     changePosGrabberC(100, grabberC.maxUp);
     stopMove(400);
-    arcAngle(40, 40, 60, 40, 185.5); //field_momento
+    arcAngle(40, 40, 60, 40, 186.3); //field_momento
     stopMove(200);
     readColors(encoders_elements, elements, 4, &CDSensor3);
     arcEnc(-20, 20, 80, 80, 950);
@@ -213,7 +214,7 @@ void start(){
     changePosGrabberD(80, grabberD.openBackwardMin);
     setDefaultLine();
     stopMove(200);
-    lineFollowEncoder(15, 15, 15, 180);
+    lineFollowEncoder(20, 40, 20, 180);
     stopMove(200);
 
     // shit

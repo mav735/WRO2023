@@ -1,5 +1,5 @@
 float kpConst = 0.65;
-float kdConst = 5;
+float kdConst = 5.3;
 float kiConst = 0.015;
 float calibrationPower = 50;
 
