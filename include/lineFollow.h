@@ -139,7 +139,7 @@ void setDefaultLineWhiteCross() {
     lineCFG.minLine = 0;
     lineCFG.inverse = 1;
     lineCFG.crossRoadMax = 255;
-    lineCFG.crossRoadMin = 235;
+    lineCFG.crossRoadMin = 230;
     lineCFG.sensorsIndError = 2;
     lineCFG.sensorsIndCross = 2;
     lineCFG.rgb[0] = true;

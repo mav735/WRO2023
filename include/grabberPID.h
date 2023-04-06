@@ -29,7 +29,7 @@ tGrabberPositionD grabberD;
 task initGrabber() {
     motor[motorC] = 50;
     motor[motorD] = 50;
-    sleep(4000);
+    sleep(500);
     setMotorBrakeMode(motorC, motorBrake);
     setMotorBrakeMode(motorD, motorBrake);
     motor[motorC] = 0;
@@ -48,8 +48,8 @@ task initGrabber() {
     grabberD.openForwardMax = -480;
     grabberD.openForwardMin = -615;
     grabberD.openBackwardMax = 0;
-    grabberD.openBackwardMin = -230;
-    grabberD.dropFirstTwo = -500;
+    grabberD.openBackwardMin = -240;
+    grabberD.dropFirstTwo = -570;
     stopTask(initGrabber);
 }
 

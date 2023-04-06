@@ -3,6 +3,7 @@
     "files.associations": {
         "chrono": "c",
         "cmath": "cpp",
-        "experementalcolor.h": "c"
+        "experementalcolor.h": "c",
+        "includes.h": "c"
     }
 }
