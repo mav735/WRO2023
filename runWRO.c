@@ -93,12 +93,12 @@ void getOneByOneFromLeft(){
     arcEnc(-20, 20, 40, 15, 45);
     stopMove(200);
 
-    arcAngle(20, 20, 80, 20, 90);
+    arcAngle(25, 25, 80, 25, 90);
     changePosGrabberD(60, grabberD.openBackwardMax);
     stopMove(550);
 
     setDefaultLine();
-    lineFollowEncoder(20, 20, 20, 180);
+    lineFollowEncoder(25, 25, 20, 180);
     changePosGrabberD(60, grabberD.openForwardMin);
     arcEnc(-20, 20, 20, 20, 40);
     stopMove(100);
@@ -133,13 +133,12 @@ void getOneByOneFromRight(){
     arcEnc(-20, 20, 20, 15, 20);
     stopMove(200);
 
-    arcAngle(-20, -20, 80, 20, 90);
-    stopMove(2000);
+    arcAngle(-25, -25, 80, 20, 90);
     changePosGrabberD(60, grabberD.openBackwardMax);
     stopMove(550);
 
     setDefaultLine();
-    lineFollowEncoder(20, 20, 20, 180);
+    lineFollowEncoder(25, 25, 20, 180);
     changePosGrabberD(60, grabberD.openForwardMin);
     arcEnc(-20, 20, 20, 20, 40);
     stopMove(100);
@@ -151,9 +150,12 @@ void getOneByOneFromRight(){
 }
 
 void getTwoPairsFromLeft(){
+    arcEnc(20, -20, 40, 20, 30);
+    stopMove(200);
+
     arcAngle(40, 0, 80, 40, 90);
     arcAngle(-70, 20, 80, 40, 90);
-    arcEnc(-20, 20, 40, 20, 160);
+    arcEnc(-20, 20, 40, 20, 185);
     changePosGrabberD(100, grabberD.openForwardMax);
     stopMove(200);
 
@@ -171,9 +173,12 @@ void getTwoPairsFromLeft(){
 }
 
 void getTwoPairsFromRight(){
+    arcEnc(20, -20, 40, 20, 30);
+    stopMove(200);
+
     arcAngle(0, -40, 80, 40, 90);
     arcAngle(-20, 80, 80, 40, 90);
-    arcEnc(-20, 20, 40, 20, 160);
+    arcEnc(-20, 20, 40, 20, 185);
     changePosGrabberD(100, grabberD.openForwardMax);
     stopMove(200);
 
@@ -207,7 +212,7 @@ void start(){
     arcEnc(-20, 20, 40, 15, 60);
     changePosGrabberC(100, grabberC.maxUp);
     stopMove(400);
-    arcAngle(40, 40, 60, 40, 186.1); //field_momento
+    arcAngle(40, 40, 60, 40, 185.4); //field_momento
     stopMove(200);
 
     readColors(encoders_elements, elements, 4, &CDSensor3);
@@ -282,14 +287,16 @@ void start(){
     changePosGrabberD(30, grabberD.dropFirstTwo);
     stopMove(200);
     changePosGrabberC(100, grabberC.maxUpWithoutShip);
-    arcEnc(-20, 20, 60, 15, 150);
+    arcEnc(-20, 20, 60, 14, 160);
     changePosGrabberC(100, grabberC.maxUp);
     stopMove(350);
-    arcEnc(20, -20, 30, 30, 135);
-    arcAngle(30, -80, 100, 40, 90);
-    arcAngle(20, 20, 70, 40, 180);
-    lineFollowCross(20, 80, 1);
-    lineFollowEncoder(80, 100, 15, 350);
+    arcEnc(20, -20, 30, 30, 145);
+
+    arcAngle(80, -30, 100, 20, 90);
+    lineFollowEncoder(40, 90, 90, 600);
+    lineFollowCross(90, 90, 1);
+    lineFollowEncoder(90, 90, 15, 350);
+
     changePosGrabberC(100, grabberC.maxUpWithoutShip);
     stopMove(100);
     arcEnc(20, -20, 100, 20, 260);
@@ -308,6 +315,9 @@ void start(){
     changePosGrabberD(100, grabberD.closeBoth);
     stopMove(100);
     changePosGrabberC(100, grabberC.maxUpWithoutShip);
+
+    arcEnc(20, -20, 80, 15, 30);
+    stopMove(100);
 
     arcAngle(20, 20, 80, 20, 90);
     stopMove(100);

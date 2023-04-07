@@ -1,6 +1,6 @@
-const float g_ArcKP = 0.6;
-const float g_ArcKD = 4;
-const float g_ArcKI = 0.001;
+const float g_ArcKP = 0.7;
+const float g_ArcKD = 6;
+const float g_ArcKI = 0.0012;
 
 bool checkEncForArc(float startVA, float startVB, float encA, float encB,
                     float enc) {
@@ -456,7 +456,7 @@ void arcAngle(float startVA, float startVB, float topVX, float stopVX,
            boost);
 }
 
-void lineAligning(int velocity, float targetAngle, bool type = true, int color = 2){ //type: 0 - N??°????????N???, 1 - 1 ?????»?µN?????
+void lineAligning(int velocity, float targetAngle, bool type = true, int color = 2){ //type: 0 - N??ï¿½????????N???, 1 - 1 ?????ï¿½?ï¿½N?????
     arcColor2Sensors(-20, 20, velocity, &CDSensor1, &CDSensor2, color);
     float zeroEnc = (nMotorEncoder[motorB] - nMotorEncoder[motorA]) / 2;
     bool flag = true;
