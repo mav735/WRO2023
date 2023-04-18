@@ -1,6 +1,6 @@
-float kpConst = 0.65;
-float kdConst = 5.3;
-float kiConst = 0.015;
+float kpConst = 0.4;
+float kdConst = 5;
+float kiConst = 0.01;
 float calibrationPower = 50;
 
 typedef struct {
@@ -53,9 +53,9 @@ void countValues(tCDValues *firstCD, tCDValues *secondCD,
     secondValue = mapping(secondValue / amountValues, lineCFG.minLine,
                           lineCFG.maxLine, 0, 100);
 
-    float errors[3] = {(firstValue - 50) * lineCFG.inverse * lineCFG.coef,
-                       (secondValue - 50) * lineCFG.inverse * lineCFG.coef,
-                       (firstValue - secondValue) * lineCFG.inverse * lineCFG.coef};
+    float errors[3] = {(firstValue - 50) * lineCFG.inverse * 1.41,
+                       (secondValue - 50) * lineCFG.inverse * 1.41,
+                       (firstValue - secondValue) * lineCFG.inverse};
 
     firstValue = 0;
     secondValue = 0;
@@ -80,6 +80,7 @@ void countValues(tCDValues *firstCD, tCDValues *secondCD,
 
     PIDValues->cross = crosses[lineCFG.sensorsIndCross];
     PIDValues->error = errors[lineCFG.sensorsIndError];
+
 }
 
 void setDefaultLine() {
@@ -116,7 +117,7 @@ void setDefaultLineGreyCross() {
     lineCFG.coef = 1;
 }
 
-void setLeftSensorBlackLineBlackStop(short side, short stopType) {  
+void setLeftSensorBlackLineBlackStop(short side, short stopType) {
     // 1 - in -1 - out ||| stop - 0(left) 1(right) 2(both)
     lineCFG.maxLine = 255;
     lineCFG.minLine = 0;
@@ -187,7 +188,7 @@ void setRightSensorBlueGrayLineWhiteStop(short side, short stopType) {  // 1 - i
     lineCFG.rgbCross[0] = true;
     lineCFG.rgbCross[1] = true;
     lineCFG.rgbCross[2] = true;
-    
+
     lineCFG.coef = 1;
 }
 
@@ -197,7 +198,7 @@ void setRightSensorBlueGrayLineBlueStop(short side, short stopType) {  // 1 - in
     lineCFG.inverse = side;
     lineCFG.crossRoadMax = 70;
     lineCFG.crossRoadMin = 10;
-    
+
     lineCFG.sensorsIndError = 1;
 
     lineCFG.sensorsIndCross = stopType;
@@ -209,7 +210,7 @@ void setRightSensorBlueGrayLineBlueStop(short side, short stopType) {  // 1 - in
     lineCFG.rgbCross[0] = false;
     lineCFG.rgbCross[1] = true;
     lineCFG.rgbCross[2] = false;
-    
+
     lineCFG.coef = 0.7;
 }
 
@@ -222,6 +223,7 @@ void calcKF(float power, float *kp, float *kd, float *ki) {
 
 void lineFollowCross(float startPower, float endPower, short crossCount,
                      float boost = gBoost) {
+    stopStopping();
     tPIDvalues PIDValues;
     PIDValues.cross = false;
     float e, ee = 0, U, P, I, D;
@@ -261,15 +263,14 @@ void lineFollowCross(float startPower, float endPower, short crossCount,
         e = PIDValues.error;
         P = e * kp;
 
-        nwErrIdx = (curErrIdx + 1) % errSz;
+        nwErrIdx = (curErrIdx + errSz - 1) % errSz;
         err[nwErrIdx] = e;
-        I -= err[curErrIdx];
+       	I -= err[curErrIdx];
         I += err[nwErrIdx];
-        curErrIdx = nwErrIdx;
-        I *= ki;
+        curErrIdx = (curErrIdx + 1) % errSz;
 
         D = (e - ee) * kd;
-        U = P + I + D;
+        U = P + I * ki + D;
         curPowerA = -curPower - U;
         curPowerB = curPower - U;
 
@@ -292,6 +293,7 @@ void lineFollowCross(float startPower, float endPower, short crossCount,
 
 void lineFollowEncoder(float startPower, float topPower, float endPower,
                        int encoder, float boost = gBoost) {
+    stopStopping();
     tPIDvalues PIDValues;
     PIDValues.cross = false;
     float e, ee = 0, U, P, I, D;
@@ -335,15 +337,14 @@ void lineFollowEncoder(float startPower, float topPower, float endPower,
         e = PIDValues.error;
         P = e * kp;
 
-        nwErrIdx = (curErrIdx + 1) % errSz;
+        nwErrIdx = (curErrIdx + errSz - 1) % errSz;
         err[nwErrIdx] = e;
         I -= err[curErrIdx];
         I += err[nwErrIdx];
-        curErrIdx = nwErrIdx;
-        I *= ki;
+        curErrIdx = (curErrIdx + 1) % errSz;
 
         D = (e - ee) * kd;
-        U = P + I + D;
+        U = P + I * ki + D;
         curPowerA = -curPower - U;
         curPowerB = curPower - U;
 

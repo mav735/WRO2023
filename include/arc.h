@@ -1,6 +1,8 @@
-const float g_ArcKP = 0.7;
+#include "stop.h"
+
+const float g_ArcKP = 1;
 const float g_ArcKD = 6;
-const float g_ArcKI = 0.0012;
+const float g_ArcKI = 0.01;
 
 bool checkEncForArc(float startVA, float startVB, float encA, float encB,
                     float enc) {
@@ -16,6 +18,7 @@ bool checkEncForArc(float startVA, float startVB, float encA, float encB,
 
 void arcEnc(float startVA, float startVB, float topVX, float stopVX, float enc,
             float boost = gBoost) {
+    stopStopping();
     if (enc <= 0) {
         return;
     }
@@ -40,6 +43,14 @@ void arcEnc(float startVA, float startVB, float topVX, float stopVX, float enc,
     float maxVX;
     float startVX;
     short signVX;
+
+    int ertSz = 20;
+    int ert[20];
+    for (int i = 0; i < ertSz; ++i) {
+        ert[i] = 0;
+    }
+    int curErtIdx = 0;
+    int nwErtIdx;
 
     bool isSmoothA;
 
@@ -125,18 +136,17 @@ void arcEnc(float startVA, float startVB, float topVX, float stopVX, float enc,
         else
             err = curEncA * sign + curEncB * ratio;
 
-        isum += err * g_ArcKI;
+        nwErtIdx = (curErtIdx + ertSz - 1) % ertSz;
+        ert[nwErtIdx] = err;
+        isum -= ert[curErtIdx];
+        isum += ert[nwErtIdx];
+        curErtIdx = (curErtIdx + 1) % ertSz;
 
-        if (isum > 100) {
-            isum = 100;
-        } else if (isum < -100) {
-            isum = -100;
-        }
-
-        u = (err - eold) * g_ArcKD + err * g_ArcKP + isum;
+        u = (err - eold) * g_ArcKD + err * g_ArcKP + isum * g_ArcKI;
         eold = err;
 
         if (startVA == 0) {
+            u = (err - eold) * stopKD + err * stopKP + isum * stopKI;
             tempVA = -u;
             tempVB = MTVarsB.targetV;
 
@@ -151,6 +161,7 @@ void arcEnc(float startVA, float startVB, float topVX, float stopVX, float enc,
             motor[motorA] = tempVA;
             motor[motorB] = tempVB;
         } else if (startVB == 0) {
+            u = (err - eold) * stopKD + err * stopKP + isum * stopKI;
             tempVA = MTVarsA.targetV;
             tempVB = -u;
 
@@ -200,6 +211,7 @@ void arcEnc(float startVA, float startVB, float topVX, float stopVX, float enc,
 
 void arcColor(float startVA, float startVB, float topVX, tCDValues *CDSensor,
               float color, float boost = gBoost) {
+    stopStopping();
     setMotorBrakeMode(motorA, motorCoast);
     setMotorBrakeMode(motorB, motorCoast);
 
@@ -214,6 +226,14 @@ void arcColor(float startVA, float startVB, float topVX, tCDValues *CDSensor,
 
     float startVX;
     short signVX;
+
+    int ertSz = 20;
+    int ert[20];
+    for (int i = 0; i < ertSz; ++i) {
+        ert[i] = 0;
+    }
+    int curErtIdx = 0;
+    int nwErtIdx;
 
     bool isSmoothA;
 
@@ -256,18 +276,17 @@ void arcColor(float startVA, float startVB, float topVX, tCDValues *CDSensor,
         else
             err = curEncA * sign + curEncB * ratio;
 
-        isum += err * g_ArcKI;
-
-        if (isum > 100) {
-            isum = 100;
-        } else if (isum < -100) {
-            isum = -100;
-        }
-
-        u = (err - eold) * g_ArcKD + err * g_ArcKP + isum;
+        nwErtIdx = (curErtIdx + ertSz - 1) % ertSz;
+        ert[nwErtIdx] = err;
+        isum -= ert[curErtIdx];
+        isum += ert[nwErtIdx];
+        curErtIdx = (curErtIdx + 1) % ertSz;
+        
+        u = (err - eold) * g_ArcKD + err * g_ArcKP + isum * g_ArcKI;
         eold = err;
 
         if (startVA == 0) {
+            u = (err - eold) * stopKD + err * stopKP + isum * stopKI;
             tempVA = -u;
             tempVB = MTVarsB.targetV;
 
@@ -282,6 +301,7 @@ void arcColor(float startVA, float startVB, float topVX, tCDValues *CDSensor,
             motor[motorA] = tempVA;
             motor[motorB] = tempVB;
         } else if (startVB == 0) {
+            u = (err - eold) * stopKD + err * stopKP + isum * stopKI;
             tempVA = MTVarsA.targetV;
             tempVB = -u;
 
@@ -325,6 +345,7 @@ void arcColor(float startVA, float startVB, float topVX, tCDValues *CDSensor,
 
 void arcColor2Sensors(float startVA, float startVB, float topVX, tCDValues *CDSensorFirst,
  tCDValues *CDSensorSecond, float color, float boost = gBoost) {
+    stopStopping();
     setMotorBrakeMode(motorA, motorCoast);
     setMotorBrakeMode(motorB, motorCoast);
 
@@ -339,6 +360,14 @@ void arcColor2Sensors(float startVA, float startVB, float topVX, tCDValues *CDSe
 
     float startVX;
     short signVX;
+
+    int ertSz = 20;
+    int ert[20];
+    for (int i = 0; i < ertSz; ++i) {
+        ert[i] = 0;
+    }
+    int curErtIdx = 0;
+    int nwErtIdx;
 
     bool isSmoothA;
 
@@ -383,18 +412,17 @@ void arcColor2Sensors(float startVA, float startVB, float topVX, tCDValues *CDSe
         else
             err = curEncA * sign + curEncB * ratio;
 
-        isum += err * g_ArcKI;
+        nwErtIdx = (curErtIdx + ertSz - 1) % ertSz;
+        ert[nwErtIdx] = err;
+        isum -= ert[curErtIdx];
+        isum += ert[nwErtIdx];
+        curErtIdx = (curErtIdx + 1) % ertSz;
 
-        if (isum > 100) {
-            isum = 100;
-        } else if (isum < -100) {
-            isum = -100;
-        }
-
-        u = (err - eold) * g_ArcKD + err * g_ArcKP + isum;
+        u = (err - eold) * g_ArcKD + err * g_ArcKP + isum * g_ArcKI;
         eold = err;
 
         if (startVA == 0) {
+            u = (err - eold) * stopKD + err * stopKP + isum * stopKI;
             tempVA = -u;
             tempVB = MTVarsB.targetV;
 
@@ -409,6 +437,7 @@ void arcColor2Sensors(float startVA, float startVB, float topVX, tCDValues *CDSe
             motor[motorA] = tempVA;
             motor[motorB] = tempVB;
         } else if (startVB == 0) {
+            u = (err - eold) * stopKD + err * stopKP + isum * stopKI;
             tempVA = MTVarsA.targetV;
             tempVB = -u;
 

@@ -12,7 +12,7 @@
 short markers[2] = {0, 0};
 short elements[4] = {0, 0, 0, 0};
 int encoders_markers[2] = {390, 470};
-int encoders_elements[4] = {475, 620, 750, 885};
+int encoders_elements[4] = {603, 733, 863, 993};
 
 void getCenterThenBorderElements(){
     setDefaultLine();
@@ -197,40 +197,45 @@ void getTwoPairsFromRight(){
 
 void start(){
     readColors(encoders_markers, markers, 2, &CDSensor3);
-    arcEnc(-40, 40, 60, 60, 200);
-    setLeftSensorBlackLineBlackStop(1, 1);
-    lineFollowCross(60, 70, 1);
-    arcEnc(-70, 70, 100, 15, 250);
-    stopMove(200);
-
-    arcEnc(20, -20, 100, 20, 50);
-    arcAngle(0, -40, 100, 40, 50);
-    arcAngle(-40, 0, 100, 40, 40);
-    arcEnc(-30, 30, 100, 15, 150);
-    changePosGrabberC(100, grabberC.maxUpWithoutShip);
-    arcAngle(-21, 80, 90, 20, 180);
-    arcEnc(-20, 20, 40, 15, 60);
-    changePosGrabberC(100, grabberC.maxUp);
-    stopMove(400);
-    arcAngle(40, 40, 60, 40, 185.4); //field_momento
-    stopMove(200);
-
-    readColors(encoders_elements, elements, 4, &CDSensor3);
-
-    arcEnc(-25, 25, 50, 50, 950);
-    changePosGrabberC(100, grabberC.maxUpWithoutShip);
-    arcEnc(-45, 45, 80, 15, 230);
-    stopMove(200);
-    arcEnc(20, -20, 80, 15, 195);
-    arcAngle(80, -10, 80, 20, 90);
-    arcEnc(20, -20, 80, 15, 100);
-    changePosGrabberC(80, grabberC.maxDown);
-    changePosGrabberD(80, grabberD.openBackwardMin);
+    arcEnc(-40, 40, 40, 40, 150);
     setDefaultLine();
-    stopMove(200);
-    lineFollowEncoder(20, 40, 15, 180);
-    stopMove(200);
+    lineFollowEncoder(40, 70, 70, 270);
+    arcEnc(-70, 70, 70, 20, 270);
+    stopMove(100);
 
+    arcEnc(30, -30, 100, 30, 65);
+    stopMove(100);
+    arcAngle(0, -40, -100, -40, 50);
+    stopMove(100);
+    arcAngle(-40, 0, -100, -40, 40);
+    arcEnc(-30, 30, 100, 20, 150);
+    changePosGrabberC(100, grabberC.maxUpWithoutShip);
+    arcAngle(-5.25, 20, 100, 20, 180);
+    arcEnc(-20, 20, 100, 15, 60);
+    changePosGrabberC(100, grabberC.maxUp);
+    stopMove(300);
+    arcAngle(0, -70, -100, -70, 90);
+    arcEnc(70, -70, 100, 70, 240);
+    arcAngle(0, -70, -100, -40, 90);
+    stopMove(100);
+    lineFollowEncoder(20, 100, 100, 300);
+    lineFollowCross(MTVarsB.targetV, 70, 1);
+    lineFollowEncoder(70, 70, 20, 400);
+    changePosGrabberC(100, grabberC.maxUpWithoutShip);
+    stopMove(300);
+    arcEnc(30, -30, 100, 20, 400 - g_distBetweenSensorsAndWheelBase);
+    stopMove(100);
+    arcAngle(20, 20, 100, 20, 90);
+    stopMove(100);
+    lineFollowEncoder(20, 100, 20, 600);
+    stopMove(150);
+    int encElements[3] = {130, 200, 250};
+    short colors[3] = {0, 0, 0};
+    readColors(encElements, colors, 3, &CDSensor3, 1);
+    arcAngle(-20, -20, -100, -20, 90);
+    stopMove(150);
+    arcAngle(20, 20, 100, 20, 90);
+    stopMove(20000);
     // shit
     if (markers[0] == -1){
         markers[0] = 4;
@@ -355,23 +360,20 @@ void start(){
 
 task main(){
     initAll();
-    stopMove(1000);
-
+    stopMove(100);
     float now = getBatteryVoltage();
     now = getBatteryVoltage();
-    displayCenteredTextLine(1, "%f", now);
-    if (now < 8){
+    if (now < 7.8){
         playSound(soundException);
     }
 
     unsigned long varPgmTime = nPgmTime;
 
-    setLeftSensorBlackLineBlackStop(1, 1);
     start();
-
     eraseDisplay();
     displayCenteredTextLine(2, "%d", nPgmTime - varPgmTime);
 
     stopMove(20000);
     fileClose(fileHandle);
+
 }

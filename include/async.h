@@ -13,7 +13,7 @@ task readingColors() {
     readingTask = true;
     oldEnc = (nMotorEncoder[motorB] - nMotorEncoder[motorA]) / 2;
     for(short nowEncIndex = 0; nowEncIndex < amountReading; nowEncIndex++){
-        while ((nMotorEncoder[motorB] - nMotorEncoder[motorA]) / 2 - oldEnc < encValues[nowEncIndex]){
+        while (fabs((nMotorEncoder[motorB] - nMotorEncoder[motorA]) / 2 - oldEnc) < encValues[nowEncIndex]){
             sleep(1);
         }
         getCDValues(CDSensorPtr, readingGlobal, readingAmountColors);
@@ -24,10 +24,31 @@ task readingColors() {
     stopTask(readingColors);
 }
 
-void readColors(int *encRead, short *readingPtr, short amountValues, tCDValues *CDSensorsPTR){
+task readingColors_OneWheel() {
+    float oldEnc = 0;
+    readingTask = true;
+    oldEnc = nMotorEncoder[motorA];
+    for (short nowEncIndex = 0; nowEncIndex < amountReading; nowEncIndex++) {
+        while (fabs(nMotorEncoder[motorA] - oldEnc) < encValues[nowEncIndex]) {
+            sleep(1);
+        }
+        getCDValues(CDSensorPtr, readingGlobal, readingAmountColors);
+        colSound(CDSensorPtr->color);
+        readingRes[nowEncIndex] = CDSensorPtr->color;
+    }
+    readingTask = false;
+    stopTask(readingColors_OneWheel);
+}
+
+void readColors(int *encRead, short *readingPtr, short amountValues, tCDValues *CDSensorsPTR, bool oneWheel = 0){
     CDSensorPtr = CDSensorsPTR;
     amountReading = amountValues;
     readingRes = readingPtr;
     encValues = encRead;
-    startTask(readingColors, kLowPriority);
+    if (!oneWheel){
+        startTask(readingColors, kLowPriority);
+    }
+    else{
+        startTask(readingColors_OneWheel, kLowPriority);
+    }
 }

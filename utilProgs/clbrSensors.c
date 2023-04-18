@@ -26,7 +26,7 @@ task main (){
     mass[2] = &CDSensor3;
     mass[3] = &CDSensor4;
 
-    for(short j = 0; j < 4; j++){
+    for(short j = 0; j < 2; j++){
         maxR = 0;
         maxG = 0;
         maxB = 0;
@@ -45,12 +45,7 @@ task main (){
             maxB = max2(maxB, mass[j]->rawBlue);
             displayCenteredTextLine(1, "RGB_min: %d %d %d %d", minR, minG, minB, j);
             displayCenteredTextLine(3, "RGB_max: %d %d %d %d", maxR, maxG, maxB, j);
-            if (j < 2){
-                sleep(25);
-            }
-            else{
-                sleep(300);
-            }
+            sleep(25);
             eraseDisplay();
         }
         writeRGB(maxR, maxG, maxB);
@@ -62,5 +57,18 @@ task main (){
         flushButtonMessages();
         sleep(500);
     }
+    maxR = 0;
+    maxG = 0;
+    maxB = 0;
+    minR = 255;
+    minG = 255;
+    minB = 255;
+    writeRGB(maxR, maxG, maxB);
+    writeRGB(minR, minG, minB);
+    sleep(500);
+    writeRGB(maxR, maxG, maxB);
+    writeRGB(minR, minG, minB);
+    sleep(500);
+
     fileClose(fileHandle);
 }

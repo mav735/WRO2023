@@ -105,13 +105,13 @@ void colorDetectInit() {
     CDSensor3.red[1] = 0.8114;
     CDSensor3.red[2] = 175;
 
-    CDSensor3.green[0] = 150;
-    CDSensor3.green[1] = 0.3333;
-    CDSensor3.green[2] = 29;
+    CDSensor3.green[0] = 317;
+    CDSensor3.green[1] = 0.11;
+    CDSensor3.green[2] = 223;
 
-    CDSensor3.blue[0] = 230;
-    CDSensor3.blue[1] = 0.44;
-    CDSensor3.blue[2] = 38;
+    CDSensor3.blue[0] = 45;
+    CDSensor3.blue[1] = 0.25;
+    CDSensor3.blue[2] = 218;
 
     CDSensor3.yellow[0] = 36;
     CDSensor3.yellow[1] = 0.6730;
@@ -143,13 +143,13 @@ void colorDetectInit() {
     CDSensor4.red[1] = 0.8114;
     CDSensor4.red[2] = 175;
 
-    CDSensor4.green[0] = 130;
-    CDSensor4.green[1] = 0.2413;
-    CDSensor4.green[2] = 70;
+    CDSensor4.green[0] = 317;
+    CDSensor4.green[1] = 0.11;
+    CDSensor4.green[2] = 223;
 
-    CDSensor4.blue[0] = 220;
-    CDSensor4.blue[1] = 0.6060;
-    CDSensor4.blue[2] = 132;
+    CDSensor4.blue[0] = 45;
+    CDSensor4.blue[1] = 0.25;
+    CDSensor4.blue[2] = 218;
 
     CDSensor4.yellow[0] = 36;
     CDSensor4.yellow[1] = 0.6730;
@@ -161,7 +161,7 @@ float calculateDistance(float *hsv_now, float *hsv_need){
     float dh = min2(fabs(hsv_need[0] - hsv_now[0]), 360 - fabs(hsv_need[0] - hsv_now[0])) / 180.0;
     float ds = abs(hsv_need[1] - hsv_now[1]);
     float dv = abs(hsv_need[2] - hsv_now[2]) / 255.0;
-    return 1 - sqrt(dh * dh + ds * ds) //+ dv * dv;
+    return 1 - sqrt(dh * dh + ds * ds); //+ dv * dv;
 }
 
 void getCDValues(tCDValues *CDSensor, short *colorIndexies=baseColors, short amountColors=6) {
