@@ -1,9 +1,9 @@
-// 1 - Red
-// 2 - Yellow
+// 0 - White
+// 1 - Black
+// 2 - Red
 // 3 - Green
 // 4 - Blue
-// 5 - Black
-// 6 - White
+// 5 - Yellow
 
 tCDValues CDSensor4, CDSensor3, CDSensor1, CDSensor2;
 short baseColors[6] = {0, 1, 2, 3, 4, 5};
