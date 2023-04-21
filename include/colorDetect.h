@@ -105,13 +105,13 @@ void colorDetectInit() {
     CDSensor3.red[1] = 0.8114;
     CDSensor3.red[2] = 175;
 
-    CDSensor3.green[0] = 317;
-    CDSensor3.green[1] = 0.11;
-    CDSensor3.green[2] = 223;
+    CDSensor3.green[0] = 310;
+    CDSensor3.green[1] = 0.02;
+    CDSensor3.green[2] = 232;
 
-    CDSensor3.blue[0] = 45;
-    CDSensor3.blue[1] = 0.25;
-    CDSensor3.blue[2] = 218;
+    CDSensor3.blue[0] = 49;
+    CDSensor3.blue[1] = 0.07;
+    CDSensor3.blue[2] = 234;
 
     CDSensor3.yellow[0] = 36;
     CDSensor3.yellow[1] = 0.6730;
