@@ -1,9 +1,9 @@
-// 0 - White
-// 1 - Black
-// 2 - Red
+// 1 - Red
+// 2 - Yellow
 // 3 - Green
 // 4 - Blue
-// 5 - Yellow
+// 5 - Black
+// 6 - White
 
 tCDValues CDSensor4, CDSensor3, CDSensor1, CDSensor2;
 short baseColors[6] = {0, 1, 2, 3, 4, 5};
@@ -159,8 +159,8 @@ void colorDetectInit() {
 
 float calculateDistance(float *hsv_now, float *hsv_need){
     float dh = min2(fabs(hsv_need[0] - hsv_now[0]), 360 - fabs(hsv_need[0] - hsv_now[0])) / 180.0;
-    float ds = abs(hsv_need[1] - hsv_now[1]);
-    float dv = abs(hsv_need[2] - hsv_now[2]) / 255.0;
+    float ds = hsv_need[1] - hsv_now[1];
+    float dv = hsv_need[2] - hsv_now[2] / 255.0;
     return 1 - sqrt(dh * dh + ds * ds); //+ dv * dv;
 }
 

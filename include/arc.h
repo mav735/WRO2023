@@ -1,8 +1,8 @@
 #include "stop.h"
 
-const float g_ArcKP = 1;
+const float g_ArcKP = 3;
 const float g_ArcKD = 6;
-const float g_ArcKI = 0.01;
+const float g_ArcKI = 0.02;
 
 bool checkEncForArc(float startVA, float startVB, float encA, float encB,
                     float enc) {

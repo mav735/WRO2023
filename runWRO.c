@@ -17,28 +17,30 @@ int encoders_elements[4] = {603, 733, 863, 993};
 void getCenterThenBorderElements(){
     setDefaultLine();
     lineFollowEncoder(30, 80, 30, 235);
-    arcEnc(-30, 30, 30, 20, 25);
-    changePosGrabberD(80, grabberD.openForwardMax);
+    arcEnc(-30, 30, 30, 30, 15);
+    changePosGrabberD(100, grabberD.openForwardMax);
+    stopMove(300);
     arcEnc(30, -30, 50, 20, 150);
     stopMove(200);
 
     arcAngle(30, 30, 70, 20, 20);
-
-    arcEnc(-30, 30, 40, 20, 85);
-    changePosGrabberD(80, grabberD.closeBoth);
+    stopMove(200);
+    arcEnc(-30, 30, 40, 20, 105);
+    changePosGrabberD(100, grabberD.closeBoth);
     stopMove(300);
-    arcEnc(30, -30, 40, 20, 165);
-
-    arcAngle(-30, -30, 70, 20, 33.5);
-
+    arcEnc(30, -30, 40, 20, 185);
+    stopMove(200);
+    arcAngle(-30, -30, -70, -20, 33.5);
+    stopMove(200);
     changePosGrabberD(80, grabberD.openForwardMax);
-    arcEnc(-30, 30, 40, 20, 170);
-    changePosGrabberD(80, grabberD.closeBoth);
-    stopMove(250);
-    arcEnc(30, -30, 40, 20, 280);
-    stopMove(250);
+    arcEnc(-30, 30, 40, 20, 190);
+    changePosGrabberD(100, grabberD.closeBoth);
+    stopMove(300);
+    arcEnc(30, -30, 40, 20, 300);
+    stopMove(200);
     changePosGrabberC(80, grabberC.maxUp);
-    arcAngle(30, 30, 40, 20, 16);
+    arcAngle(-30, -30, -100, -30, 164);
+    stopMove(0);
 }
 
 void getBorderThenCenterElements(){
@@ -46,26 +48,28 @@ void getBorderThenCenterElements(){
     arcAngle(40, 0, 100, 40, 40);
     arcEnc(-30, 30, 40, 40, 165);
     arcEnc(-75, 41, 50, 35, 175);
-    arcEnc(-35, 35, 35, 20, 50);
+    arcEnc(-35, 35, 35, 20, 65);
     changePosGrabberD(80, grabberD.openForwardMax);
     stopMove(200);
 
     arcAngle(50, 0, 100, 40, 90);
-    arcAngle(0, -50, 100, 40, 112);
+    arcAngle(0, -50, -100, -40, 112);
     changePosGrabberD(80, grabberD.openBackwardMin);
     stopMove(200);
 
-    arcEnc(-30, 30, 40, 20, 250);
+    arcEnc(-30, 30, 40, 20, 245);
     changePosGrabberD(80, grabberD.openForwardMax);
     stopMove(200);
 
-    arcAngle(0, -30, 100, 40, 76.5);
-    arcAngle(30, 0, 100, 40, 76.5);
-    stopMove(200);
-    lineFollowEncoder(20, 80, 20, 220);
+    arcEnc(0, -30, -100, -40, 420);
+    arcEnc(30, 0, 100, 40, 420);
+    stopMove(100);
+    lineFollowEncoder(20, 60, 20, 220);
     changePosGrabberD(80, grabberD.closeBoth);
     stopMove(250);
+    arcAngle(30, 30, 100, 30, 180);
     changePosGrabberC(80, grabberC.maxUp);
+    stopMove(0);
 }
 
 void getOneByOneFromLeft(){
@@ -74,79 +78,80 @@ void getOneByOneFromLeft(){
     stopMove(100);
     arcAngle(20, 20, 100, 20, 90);
     stopMove(200);
-    arcAngle(-80, 15, 80, 20, 90);
-    arcEnc(-20, 20, 20, 20, 60);
+    arcAngle(-80, 19, -80, -20, 90);
+    stopMove(200);
+    arcEnc(-20, 20, 20, 20, 45);
     changePosGrabberD(80, grabberD.openForwardMax);
     stopMove(200);
-    arcEnc(20, -20, 20, 20, 30);
+    arcEnc(20, -20, 20, 20, 15);
     stopMove(100);
     arcAngle(80, -15, 80, 20, 90);
     stopMove(100);
-    arcEnc(20, -20, 50, 20, 130);
+    arcEnc(20, -20, 50, 20, 160);
     stopMove(100);
     arcAngle(-20, -20, 100, 20, 90);
     stopMove(100);
-    arcEnc(-20, 20, 100, 15, 170);
+    arcEnc(-20, 20, 100, 15, 160);
     changePosGrabberD(80, grabberD.closeBoth);
     stopMove(200);
-    arcAngle(0, -90, 80, 50, 90);
-    arcEnc(-20, 20, 40, 15, 45);
+    arcAngle(0, -40, -100, -30, 90);
+    arcEnc(-30, 30, 40, 20, 30);
     stopMove(200);
 
     arcAngle(25, 25, 80, 25, 90);
-    changePosGrabberD(60, grabberD.openBackwardMax);
-    stopMove(550);
-
+    changePosGrabberD(100, grabberD.openBackwardMax);
+    stopMove(400);
     setDefaultLine();
-    lineFollowEncoder(25, 25, 20, 180);
-    changePosGrabberD(60, grabberD.openForwardMin);
-    arcEnc(-20, 20, 20, 20, 40);
-    stopMove(100);
-    arcEnc(20, -20, 20, 20, 40);
-    stopMove(100);
-    changePosGrabberD(80, grabberD.closeBoth);
-    stopMove(550);
+    lineFollowEncoder(25, 25, 20, 165);
+    changePosGrabberD(80, grabberD.openForwardMin);
+    stopMove(400);
+    arcEnc(20, -20, 40, 20, 20);
+    changePosGrabberD(100, grabberD.closeBoth);
+    stopMove(400);
     changePosGrabberC(100, grabberC.maxUp);
+    arcAngle(30, 30, 100, 30, 180);
+    stopMove(0);
 }
 
 void getOneByOneFromRight(){
     setDefaultLine();
     arcEnc(20, -20, 20, 20, 30);
-    arcAngle(-20, -20, 100, 20, 90);
     stopMove(100);
-    arcAngle(-14.8, 80, 80, 20, 90);
-    arcEnc(-20, 20, 20, 20, 60);
+    arcAngle(-20, -20, -100, -20, 90);
+    stopMove(200);
+    arcAngle(-16, 80, 80, 20, 90);
+    stopMove(200);
+    arcEnc(-20, 20, 20, 20, 70);
     changePosGrabberD(80, grabberD.openForwardMax);
-    stopMove(150);
+    stopMove(200);
     arcEnc(20, -20, 20, 20, 30);
-
-    arcAngle(14.8, -80, 80, 20, 90);
     stopMove(100);
-    arcEnc(20, -20, 50, 20, 180);
+    arcAngle(15, -80, -80, -20, 90);
     stopMove(100);
-    arcAngle(20, 20, 100, 20, 90);
+    arcEnc(20, -20, 50, 20, 175);
     stopMove(100);
-    arcEnc(-20, 20, 50, 20, 170);
+    arcAngle(20, 20, -100, -20, 90);
+    stopMove(100);
+    arcEnc(-20, 20, 100, 15, 185);
     changePosGrabberD(80, grabberD.closeBoth);
     stopMove(200);
-    arcAngle(90, 0, 80, 50, 90);
-    arcEnc(-20, 20, 20, 15, 20);
+    arcAngle(40, 0, 100, 30, 90);
+    arcEnc(-30, 30, -30, -30, 15);
     stopMove(200);
 
-    arcAngle(-25, -25, 80, 20, 90);
-    changePosGrabberD(60, grabberD.openBackwardMax);
-    stopMove(550);
-
+    arcAngle(-25, -25, -80, -25, 90);
+    changePosGrabberD(100, grabberD.openBackwardMax);
+    stopMove(400);
     setDefaultLine();
-    lineFollowEncoder(25, 25, 20, 180);
-    changePosGrabberD(60, grabberD.openForwardMin);
-    arcEnc(-20, 20, 20, 20, 40);
-    stopMove(100);
-    arcEnc(20, -20, 20, 20, 40);
-    stopMove(100);
-    changePosGrabberD(80, grabberD.closeBoth);
-    stopMove(550);
+    lineFollowEncoder(25, 25, 20, 170);
+    changePosGrabberD(80, grabberD.openForwardMin);
+    stopMove(400);
+    arcEnc(20, -20, 40, 20, 20);
+    changePosGrabberD(100, grabberD.closeBoth);
+    stopMove(400);
     changePosGrabberC(100, grabberC.maxUp);
+    arcAngle(30, 30, 100, 30, 180);
+    stopMove(0);
 }
 
 void getTwoPairsFromLeft(){
@@ -157,19 +162,18 @@ void getTwoPairsFromLeft(){
     arcAngle(-70, 20, 80, 40, 90);
     arcEnc(-20, 20, 40, 20, 185);
     changePosGrabberD(100, grabberD.openForwardMax);
-    stopMove(200);
+    stopMove(300);
 
     arcAngle(40, 0, 80, 40, 80);
     arcAngle(0, -40, 80, 40, 80);
     stopMove(200);
     arcEnc(-20, 20, 50, 20, 190);
     changePosGrabberD(100, grabberD.closeBoth);
-    stopMove(200);
+    stopMove(300);
 
     changePosGrabberC(80, grabberC.maxUp);
-    arcAngle(0, -20, 80, 20, 50);
-    arcAngle(20, 0, 80, 20, 50);
-    stopMove(200);
+    arcAngle(-23, -50, -100, -50, 180);
+    stopMove(0);
 }
 
 void getTwoPairsFromRight(){
@@ -178,28 +182,27 @@ void getTwoPairsFromRight(){
 
     arcAngle(0, -40, 80, 40, 90);
     arcAngle(-20, 80, 80, 40, 90);
-    arcEnc(-20, 20, 40, 20, 185);
+    arcEnc(-20, 20, 40, 20, 210);
     changePosGrabberD(100, grabberD.openForwardMax);
-    stopMove(200);
+    stopMove(300);
 
-    arcAngle(0, -40, 80, 20, 84);
+    arcAngle(0, -40, -80, -20, 84);
     arcAngle(40, 0, 80, 20, 84);
     stopMove(200);
-    arcEnc(-20, 20, 50, 20, 190);
+    arcEnc(-20, 20, 50, 20, 200);
     changePosGrabberD(100, grabberD.closeBoth);
-    stopMove(200);
+    stopMove(300);
 
-    changePosGrabberC(80, grabberC.maxUp);
-    arcAngle(20, 0, 80, 20, 60);
-    arcAngle(0, -20, 80, 20, 60);
-    stopMove(200);
+    changePosGrabberC(100, grabberC.maxUp);
+    arcAngle(50, 17, 100, 50, 180);
+    stopMove(0);
 }
 
 void start(){
     readColors(encoders_markers, markers, 2, &CDSensor3);
-    arcEnc(-40, 40, 40, 40, 150);
+    arcEnc(-40, 40, 50, 50, 150);
     setDefaultLine();
-    lineFollowEncoder(40, 70, 70, 270);
+    lineFollowEncoder(50, 70, 70, 270);
     arcEnc(-70, 70, 70, 20, 270);
     stopMove(100);
 
@@ -211,17 +214,13 @@ void start(){
     arcEnc(-30, 30, 100, 20, 150);
     changePosGrabberC(100, grabberC.maxUpWithoutShip);
     arcAngle(-5.25, 20, 100, 20, 180);
-    arcEnc(-20, 20, 100, 15, 60);
+    arcEnc(-20, 20, 100, 50, 60);
     changePosGrabberC(100, grabberC.maxUp);
-    stopMove(300);
-    arcEnc(20, -20, 100, 15, 60);
-    arcAngle(0, -70, -100, -70, 90);
-    arcEnc(70, -70, 100, 70, 240);
-    arcAngle(0, -70, -100, -40, 90);
-    stopMove(100);
-    lineFollowEncoder(20, 100, 100, 300);
-    lineFollowCross(MTVarsB.targetV, 70, 1);
-    lineFollowEncoder(70, 70, 20, 400);
+    arcAngle(0, 50, 100, 50, 130);
+    arcEnc(-50, 50, 100, 50, 300);
+    arcAngle(0, 50, 100, 50, 50);
+    lineFollowCross(50, 100, 1)
+    lineFollowEncoder(100, 100, 20, 400);
     changePosGrabberC(100, grabberC.maxUpWithoutShip);
     stopMove(300);
     arcEnc(30, -30, 100, 20, 400 - g_distBetweenSensorsAndWheelBase);
@@ -229,18 +228,18 @@ void start(){
     arcAngle(20, 20, 100, 20, 90);
     stopMove(100);
     lineFollowEncoder(20, 100, 20, 600);
-    stopMove(150);
-    int encElements[3] = {130, 200, 250};
+    int encElements[3] = {110, 165, 240};
     readColors(encElements, elements, 3, &CDSensor3, 1);
     arcAngle(-20, -20, -100, -20, 90);
-    stopMove(150);
+    stopMove(100);
+    changePosGrabberC(100, grabberC.upForShipPush);
     arcAngle(20, 20, 100, 20, 90);
     setDefaultLineGreyCross();
     lineFollowCross(20, 20, 1);
     stopMove(200);
-    changePosGrabberC(60, grabberC.maxDown);
+    changePosGrabberC(100, grabberC.maxDown);
     arcEnc(20, -20, 80, 20, 290);
-    
+    stopMove(200);
     elements[3] = 14 - elements[0] - elements[1] - elements[2];
 
     short markersIndexies[2] = {0, 0};
@@ -258,10 +257,10 @@ void start(){
         }
     }
 
-    eraseDisplay();
-    displayCenteredTextLine(1, "indexies_need: %d %d", markersIndexies[0], markersIndexies[1]);
-    displayCenteredTextLine(4, "elements: %d %d %d %d", elements[0], elements[1], elements[2], elements[3]);
-    displayCenteredTextLine(8, "markers: %d %d", markers[0], markers[1]);
+    // eraseDisplay();
+    // displayCenteredTextLine(1, "indexies_need: %d %d", markersIndexies[0], markersIndexies[1]);
+    // displayCenteredTextLine(4, "elements: %d %d %d %d", elements[0], elements[1], elements[2], elements[3]);
+    // displayCenteredTextLine(8, "markers: %d %d", markers[0], markers[1]);
 
     if ((markersIndexies[0] == 0 && markersIndexies[1] == 2) || (markersIndexies[1] == 0 && markersIndexies[0] == 2)){
         getOneByOneFromLeft();
@@ -281,11 +280,10 @@ void start(){
     else if ((markersIndexies[0] == 0 && markersIndexies[1] == 3) || (markersIndexies[1] == 0 && markersIndexies[0] == 3)){
         getBorderThenCenterElements();
     }
-
-    arcAngle(20, 20, 100, 20, 180);
-    lineFollowCross(20, 60, 1);
+    setDefaultLine();
+    lineFollowCross(40, 80, 1);
     changePosGrabberC(100, grabberC.upForDrop);
-    lineFollowEncoder(60, 80, 15, 430);
+    lineFollowEncoder(80, 80, 20, 430);
     stopMove(100);
     changePosGrabberD(30, grabberD.dropFirstTwo);
     stopMove(200);
@@ -307,57 +305,44 @@ void start(){
     arcEnc(20, -20, 40, 20, 250);
     changePosGrabberC(100, grabberC.maxUp);
     arcAngle(20, 20, 70, 20, 90);
-    setDefaultLineGreyCross();
-    lineFollowEncoder(20, 80, 80, 450);
-    lineFollowCross(80, 15, 1);
-
-    arcAngle(40, 0, 90, 40, 59);
     changePosGrabberC(100, grabberC.maxDown);
-    arcAngle(0, -40, 90, 40, 59);
-
-    arcEnc(-20, 20, 80, 15, 140);
-    changePosGrabberD(100, grabberD.closeBoth);
-    stopMove(100);
-    changePosGrabberC(100, grabberC.maxUpWithoutShip);
-
-    arcEnc(-20, 20, 80, 15, 80);
-    stopMove(100);
-    arcAngle(0, -40, 90, 40, 59);
-    arcAngle(40, 0, 90, 40, 59);
-
-    arcAngle(20, 20, 80, 20, 180);
     setDefaultLine();
-    lineFollowEncoder(20, 60, 60, 250);
-    lineFollowCross(60, 20, 1);
-    lineFollowEncoder(80, 80, 20, g_distBetweenSensorsAndWheelBase);
-    arcAngle(-20, -20, 80, 20, 90);
-    lineFollowEncoder(20, 40, 20, 280);
-    stopMove(100);
-    changePosGrabberC(100, grabberC.maxUp);
-
-
-    /* Написать отъезд в зону выгрузки
-    stopMove(350);
-    arcEnc(20, -20, 80, 15, 1200);
-    stopMove(5000);
-
-    arcAngle(0, 60, 90, 60, 90);
-    lineFollowEncoder(40, 80, 40, 580);
-    arcEnc(40, -40, 40, 40, 300);
+    lineFollowEncoder(20, 100, 40, 280);
+    arcEnc(-40, 20, -100, -40, 160);
+    arcEnc(-40, 40, -100, -40, 170);
+    changePosGrabberD(100, grabberD.closeBoth);
+    stopMove(300);
     changePosGrabberC(100, grabberC.maxUpWithoutShip);
-    stopMove(200);
-    arcEnc(20, -20, 40, 20, 50);
-    changePosGrabberC(60, grabberC.upForDrop);
-    stopMove(200);
-    changePosGrabberD(100, grabberD.openBackwardMax);
-    sleep(500);
+    arcEnc(-30, -50, -100, -50, 460);
+
+    setDefaultLine();
+    lineFollowEncoder(40, 100, 100, 250);
+    lineFollowCross(100, 40, 1);
+    lineFollowEncoder(40, 40, 20, g_distBetweenSensorsAndWheelBase);
+    arcAngle(-20, -20, 80, 20, 90);
+    lineFollowEncoder(20, 40, 30, 300);
     changePosGrabberC(100, grabberC.maxUp);
-    setDefaultLineWhiteCross();
-    arcEnc(20, -20, 80, 20, 200);
-    arcAngle(-20, -20, 80, 25, 180);
-    lineFollowEncoder(20, 80, 80, 400);
-    arcEnc(-80, 80, 80, 13, 400);
-    */
+    stopMove(400);
+    arcAngle(40, 40, 80, 30, 180);
+    lineFollowEncoder(70, 100, 100, 1200);
+    lineFollowCross(100, 50, 1);
+    stopMove(100);
+    arcEnc(0, -50, -100, -50, 200);
+    arcEnc(-50, 50, 100, 50, 100);
+    arcEnc(-50, 0, -100, -50, 200);
+    lineFollowEncoder(50, 50, 50, 400);
+    stopMove(200);
+    arcEnc(40, -40, 100, 40, 100);
+    changePosGrabberC(100, grabberC.upForDrop);
+    arcEnc(40, -40, 100, 30, 245);
+    stopMove(400);
+    changePosGrabberD(700, grabberD.openBackwardMax);
+    stopMove(500);
+    arcEnc(40, -40, 100, 40, 300);
+    changePosGrabberC(100, grabberC.maxUp);
+    arcAngle(40, 40, 100, 40, 180);
+    lineFollowEncoder(40, 60, 60, 300);
+    arcEnc(-60, 60, 60, 20, 300);
 }
 
 
@@ -372,7 +357,7 @@ task main(){
 
     unsigned long varPgmTime = nPgmTime;
 
-    start();
+start();
     eraseDisplay();
     displayCenteredTextLine(2, "%d", nPgmTime - varPgmTime);
 

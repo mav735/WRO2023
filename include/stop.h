@@ -1,6 +1,6 @@
-const float stopKP = 2;
+const float stopKP = 3;
 const float stopKI = 0.05;
-const float stopKD = 4;
+const float stopKD = 3;
 
 task stopA_task {
     float u, e, ee = 0, isum = 0;
