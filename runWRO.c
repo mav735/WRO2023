@@ -159,6 +159,7 @@ void getTwoPairsFromLeft(){
     stopMove(200);
 
     arcAngle(40, 0, 80, 40, 90);
+    stopMove(200);
     arcAngle(-70, 20, 80, 40, 90);
     arcEnc(-20, 20, 40, 20, 185);
     changePosGrabberD(100, grabberD.openForwardMax);
@@ -181,6 +182,7 @@ void getTwoPairsFromRight(){
     stopMove(200);
 
     arcAngle(0, -40, 80, 40, 90);
+    stopMove(200);
     arcAngle(-20, 80, 80, 40, 90);
     arcEnc(-20, 20, 40, 20, 210);
     changePosGrabberD(100, grabberD.openForwardMax);
