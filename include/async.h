@@ -17,7 +17,7 @@ task readingColors() {
             sleep(1);
         }
         getCDValues(CDSensorPtr, readingGlobal, readingAmountColors);
-        // colSound(CDSensorPtr->color);
+        colSound(CDSensorPtr->color);
         readingRes[nowEncIndex] = CDSensorPtr->color;
     }
     readingTask = false;
@@ -33,7 +33,7 @@ task readingColors_OneWheel() {
             sleep(1);
         }
         getCDValues(CDSensorPtr, readingGlobal, readingAmountColors);
-        // colSound(CDSensorPtr->color);
+        colSound(CDSensorPtr->color);
         readingRes[nowEncIndex] = CDSensorPtr->color;
     }
     readingTask = false;

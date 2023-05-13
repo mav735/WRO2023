@@ -359,11 +359,10 @@ task main(){
 
     unsigned long varPgmTime = nPgmTime;
 
-start();
+    start();
     eraseDisplay();
     displayCenteredTextLine(2, "%d", nPgmTime - varPgmTime);
 
     stopMove(20000);
     fileClose(fileHandle);
-
 }
