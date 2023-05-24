@@ -104,7 +104,7 @@ void setDefaultLineGreyCross() {
     lineCFG.maxLine = 255;
     lineCFG.minLine = 0;
     lineCFG.inverse = 1;
-    lineCFG.crossRoadMax = 190;
+    lineCFG.crossRoadMax = 195;
     lineCFG.crossRoadMin = 160;
     lineCFG.sensorsIndError = 2;
     lineCFG.sensorsIndCross = 2;

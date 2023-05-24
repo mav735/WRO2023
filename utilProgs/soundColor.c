@@ -27,7 +27,6 @@ task main (){
     setSoundVolume(10);
     while (!getButtonPress('C')) {
         getCDValues(CdSensor3);
-        colSound(CdSensor3.color);
         displayCenteredTextLine(10, "RGB_3: %d %d %d %d", CdSensor3.normRed, CdSensor3.normGreen, CdSensor3.normBlue, CdSensor3.color);
         sleep(250);
         eraseDisplay();

@@ -1,6 +1,6 @@
 #include "stop.h"
 
-const float g_ArcKP = 3;
+const float g_ArcKP = 3.3;
 const float g_ArcKD = 6;
 const float g_ArcKI = 0.02;
 

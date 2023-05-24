@@ -51,7 +51,7 @@ task main (){
         minR = 1000;
         minG = 1000;
         minB = 1000;
-        
+
         while (!getButtonPress('C')) {
             getCDValues(mass[j]);
             if (SensorType[mass[j]->nDeviceIndex] == 40){

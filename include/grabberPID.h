@@ -42,14 +42,14 @@ task initGrabber() {
     grabberC.maxDown = -1400;
     grabberC.upForShipThrow = -1000;
     grabberC.upForShipPush = -450;
-    grabberC.upForDrop = -1090;
+    grabberC.upForDrop = -1070;
 
     grabberD.closeBoth = -850;
     grabberD.openForwardMax = -480;
     grabberD.openForwardMin = -615;
     grabberD.openBackwardMax = 0;
     grabberD.openBackwardMin = -240;
-    grabberD.dropFirstTwo = -575;
+    grabberD.dropFirstTwo = -500;
     stopTask(initGrabber);
 }
 
