@@ -1,3 +1,6 @@
+bool motorAstop = false;
+bool motorBstop = false;
+
 #include "robotConfig.h"
 #include "common.h"
 #include "common-light.h"
@@ -14,6 +17,9 @@
 #include "async.h"
 
 void initAll(){
+    setMotorBrakeMode(motorA, motorCoast);
+    setMotorBrakeMode(motorB, motorCoast);
+    
     initMtVars();
     colorDetectInit();
 

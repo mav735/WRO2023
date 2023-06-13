@@ -12,7 +12,7 @@ task stopA_task {
     int curErrIdx = 0;
     int nwErrIdx;
     setMotorBrakeMode(motorA, motorCoast);
-    while (true) {
+    while (motorAstop) {
         e = nMotorEncoder[motorA] - MTVarsA.targetEnc;
 
         nwErrIdx = (curErrIdx + errSz - 1) % errSz;
@@ -26,6 +26,8 @@ task stopA_task {
         ee = e;
         sleep(1);
     }
+    
+    stopTask(stopA_task);
 }
 
 task stopB_task {
@@ -38,7 +40,7 @@ task stopB_task {
     int curErrIdx = 0;
     int nwErrIdx;
     setMotorBrakeMode(motorB, motorCoast);
-    while (true) {
+    while (motorBstop) {
         e = nMotorEncoder[motorB] - MTVarsB.targetEnc;
         nwErrIdx = (curErrIdx + errSz - 1) % errSz;
         err[nwErrIdx] = e;
@@ -50,10 +52,7 @@ task stopB_task {
         ee = e;
         sleep(1);
     }
-}
 
-void stopStopping() {
-    stopTask(stopA_task);
     stopTask(stopB_task);
 }
 

@@ -223,7 +223,11 @@ void calcKF(float power, float *kp, float *kd, float *ki) {
 
 void lineFollowCross(float startPower, float endPower, short crossCount,
                      float boost = gBoost) {
-    stopStopping();
+    motorAstop = false;
+    motorBstop = false;
+    setMotorBrakeMode(motorA, motorCoast);
+    setMotorBrakeMode(motorB, motorCoast);
+
     tPIDvalues PIDValues;
     PIDValues.cross = false;
     float e, ee = 0, U, P, I, D;
@@ -293,7 +297,11 @@ void lineFollowCross(float startPower, float endPower, short crossCount,
 
 void lineFollowEncoder(float startPower, float topPower, float endPower,
                        int encoder, float boost = gBoost) {
-    stopStopping();
+    motorAstop = false;
+    motorBstop = false;
+    setMotorBrakeMode(motorA, motorCoast);
+    setMotorBrakeMode(motorB, motorCoast);
+
     tPIDvalues PIDValues;
     PIDValues.cross = false;
     float e, ee = 0, U, P, I, D;

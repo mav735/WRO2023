@@ -1,18 +1,49 @@
-#define min2(a, b) (a < b ? a : b)
-#define min3(a, b, c) (a < b) ? ((a < c) ? a : c) : ((b < c) ? b : c)
-#define max2(a, b) (a > b ? a : b)
-#define max3(a, b, c) (a > b) ? ((a > c) ? a : c) : ((b > c) ? b : c)
+#define min2(a, b) ((a) < (b) ? (a) : (b))
+#define min3(a, b, c) ((a) < (b)) ? (((a) < (c)) ? (a) : (c)) : (((b) < (c)) ? (b) : (c))
+#define max2(a, b) ((a) > (b) ? (a) : (b))
+#define max3(a, b, c) ((a) > (b)) ? (((a) > (c)) ? (a) : (c)) : (((b) > (c)) ? (b) : (c))
 #define MAX_ARR_SIZE 17
+
+void saveRatioPID(float *va, float *vb) {
+
+    // if (fabs(*va) > 100){
+    //     short sgnA = sgn(*va);
+    //     *vb = *vb / *va * 100 * sgnA 
+    //     *va = 100 * sgnA 
+    // }
+    // else if (fabs(*vb) > 100){
+    //     short sgnB = sgn(*vb);
+    //     *va = *va / *vb * 100 * sgnB
+    //     *vb = 100 * sgnB
+    // }
+
+    if (*va < -100){
+        *vb = *vb / *va * -100;
+        *va = -100;
+    }
+    else if (*va > 100){
+        *vb = *vb / *va * 100;
+        *va = 100;
+    }
+    else if (*vb < -100){
+        *va = *va / *vb * -100;
+        *vb = -100;
+    }
+    else if (*vb > 100){
+        *va = *va / *vb * 100;
+        *vb = 100;
+    }
+}
 
 float mapping(float raw, float min, float max, float normMin, float normMax) {
     return (raw - min) / (max - min) * (normMax - normMin) + normMin;
 }
 
-float angleToEnc(float vB, float vC, float angle) {
+float angleToEnc(float *vb, float vC, float angle) {
     return angle / 180 * PI * g_wheelBase *
-           (vB == 0 || vC == 0
+           (*vb == 0 || vC == 0
                 ? 1
-                : (1 / fabs(-vB / vC - 1) + 1 / fabs(-vC / vB - 1)) / 2.);
+                : (1 / fabs(-*vb / vC - 1) + 1 / fabs(-vC / *vb - 1)) / 2.);
 }
 
 void waitTask(bool *taskFlag){

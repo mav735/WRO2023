@@ -1,5 +1,3 @@
-#include "stop.h"
-
 const float g_ArcKP = 2;
 const float g_ArcKD = 4;
 const float g_ArcKI = 0.02;
@@ -18,10 +16,8 @@ bool checkEncForArc(float startVA, float startVB, float encA, float encB,
 
 void arcEnc(float startVA, float startVB, float topVX, float stopVX, float enc,
             float boost = gBoost) {
-    stopStopping();
-    if (enc <= 0) {
-        return;
-    }
+    motorAstop = false;
+    motorBstop = false;
 
     setMotorBrakeMode(motorA, motorCoast);
     setMotorBrakeMode(motorB, motorCoast);
@@ -142,60 +138,25 @@ void arcEnc(float startVA, float startVB, float topVX, float stopVX, float enc,
         isum += ert[nwErtIdx];
         curErtIdx = (curErtIdx + 1) % ertSz;
 
-        u = (err - eold) * g_ArcKD + err * g_ArcKP + isum * g_ArcKI;
-        eold = err;
-
+        u = (err - eold) * stopKD + err * stopKP + isum * stopKI;
+        
         if (startVA == 0) {
-            u = (err - eold) * stopKD + err * stopKP + isum * stopKI;
             tempVA = -u;
             tempVB = MTVarsB.targetV;
-
-            if (tempVA < -100) {
-                tempVB = tempVB / tempVA * -100;
-                tempVA = -100;
-            } else if (tempVA > 100) {
-                tempVB = tempVB / tempVA * 100;
-                tempVA = 100;
-            }
-
-            motor[motorA] = tempVA;
-            motor[motorB] = tempVB;
         } else if (startVB == 0) {
-            u = (err - eold) * stopKD + err * stopKP + isum * stopKI;
             tempVA = MTVarsA.targetV;
             tempVB = -u;
-
-            if (tempVB < -100) {
-                tempVA = tempVA / tempVB * -100;
-                tempVB = -100;
-            } else if (tempVB > 100) {
-                tempVA = tempVA / tempVB * 100;
-                tempVB = 100;
-            }
-
-            motor[motorA] = tempVA;
-            motor[motorB] = tempVB;
         } else {
+            u = (err - eold) * g_ArcKD + err * g_ArcKP + isum * g_ArcKI;
             tempVA = MTVarsA.targetV - u * sign;
             tempVB = MTVarsB.targetV - u;
-
-            if (tempVA < -100) {
-                tempVB = tempVB / tempVA * -100;
-                tempVA = -100;
-            } else if (tempVA > 100) {
-                tempVB = tempVB / tempVA * 100;
-                tempVA = 100;
-            } else if (tempVB < -100) {
-                tempVA = tempVA / tempVB * -100;
-                tempVB = -100;
-            } else if (tempVB > 100) {
-                tempVA = tempVA / tempVB * 100;
-                tempVB = 100;
-            }
-
-            motor[motorA] = tempVA;
-            motor[motorB] = tempVB;
         }
+
+        saveRatioPID(*tempVA, *tempVB);
+        motor[motorA] = tempVA;
+        motor[motorB] = tempVB;
+
+        eold = err;
         sleep(1);
     }
 
@@ -209,283 +170,14 @@ void arcEnc(float startVA, float startVB, float topVX, float stopVX, float enc,
     }
 }
 
-void arcColor(float startVA, float startVB, float topVX, tCDValues *CDSensor,
-              float color, float boost = gBoost) {
-    stopStopping();
-    setMotorBrakeMode(motorA, motorCoast);
-    setMotorBrakeMode(motorB, motorCoast);
-
-    float ratio = 1;
-    if (startVB != 0 && startVA != 0) ratio = fabs(startVA / startVB);
-    float sign = fabs(startVA * startVB - 1) - fabs(startVA * startVB);
-
-    float err, u;
-    float eold = 0, isum = 0;
-
-    float tempVA, tempVB;
-
-    float startVX;
-    short signVX;
-
-    int ertSz = 20;
-    int ert[20];
-    for (int i = 0; i < ertSz; ++i) {
-        ert[i] = 0;
-    }
-    int curErtIdx = 0;
-    int nwErtIdx;
-
-    bool isSmoothA;
-
-    if (ratio > 1 || startVB == 0) {
-        startVX = startVA;
-        if (sgn(startVA) != sgn(topVX)) {
-            topVX *= -1;
-        }
-        signVX = sgn(startVA);
-        isSmoothA = true;
-    } else {
-        startVX = startVB;
-        if (sgn(startVB) != sgn(topVX)) {
-            topVX *= -1;
-        }
-        signVX = sgn(startVB);
-        isSmoothA = false;
-    }
-
-    float curEncA, curEncB;
-    getCDValues(CDSensor);
-    while (CDSensor->color != color) {
-        getCDValues(CDSensor);
-        curEncA = nMotorEncoder[motorA] - MTVarsA.targetEnc;
-        curEncB = nMotorEncoder[motorB] - MTVarsB.targetEnc;
-        if (isSmoothA) {
-            MTVarsA.targetV = smooth(startVA, topVX, curEncA, boost);
-            MTVarsB.targetV =
-                startVB == 0 ? 0 : MTVarsA.targetV * startVB / startVA;
-        } else {
-            MTVarsB.targetV = smooth(startVB, topVX, curEncB, boost);
-            MTVarsA.targetV =
-                startVA == 0 ? 0 : MTVarsB.targetV * startVA / startVB;
-        }
-
-        if (startVA == 0)
-            err = curEncA;
-        else if (startVB == 0)
-            err = curEncB;
-        else
-            err = curEncA * sign + curEncB * ratio;
-
-        nwErtIdx = (curErtIdx + ertSz - 1) % ertSz;
-        ert[nwErtIdx] = err;
-        isum -= ert[curErtIdx];
-        isum += ert[nwErtIdx];
-        curErtIdx = (curErtIdx + 1) % ertSz;
-        
-        u = (err - eold) * g_ArcKD + err * g_ArcKP + isum * g_ArcKI;
-        eold = err;
-
-        if (startVA == 0) {
-            u = (err - eold) * stopKD + err * stopKP + isum * stopKI;
-            tempVA = -u;
-            tempVB = MTVarsB.targetV;
-
-            if (tempVA < -100) {
-                tempVB = tempVB / tempVA * -100;
-                tempVA = -100;
-            } else if (tempVA > 100) {
-                tempVB = tempVB / tempVA * 100;
-                tempVA = 100;
-            }
-
-            motor[motorA] = tempVA;
-            motor[motorB] = tempVB;
-        } else if (startVB == 0) {
-            u = (err - eold) * stopKD + err * stopKP + isum * stopKI;
-            tempVA = MTVarsA.targetV;
-            tempVB = -u;
-
-            if (tempVB < -100) {
-                tempVA = tempVA / tempVB * -100;
-                tempVB = -100;
-            } else if (tempVB > 100) {
-                tempVA = tempVA / tempVB * 100;
-                tempVB = 100;
-            }
-
-            motor[motorA] = tempVA;
-            motor[motorB] = tempVB;
-        } else {
-            tempVA = MTVarsA.targetV - u * sign;
-            tempVB = MTVarsB.targetV - u;
-
-            if (tempVA < -100) {
-                tempVB = tempVB / tempVA * -100;
-                tempVA = -100;
-            } else if (tempVA > 100) {
-                tempVB = tempVB / tempVA * 100;
-                tempVA = 100;
-            } else if (tempVB < -100) {
-                tempVA = tempVA / tempVB * -100;
-                tempVB = -100;
-            } else if (tempVB > 100) {
-                tempVA = tempVA / tempVB * 100;
-                tempVB = 100;
-            }
-
-            motor[motorA] = tempVA;
-            motor[motorB] = tempVB;
-        }
-        sleep(1);
-    }
-
-    MTVarsA.targetEnc = nMotorEncoder[motorA];
-    MTVarsB.targetEnc = nMotorEncoder[motorB];
-}
-
-void arcColor2Sensors(float startVA, float startVB, float topVX, tCDValues *CDSensorFirst,
- tCDValues *CDSensorSecond, float color, float boost = gBoost) {
-    stopStopping();
-    setMotorBrakeMode(motorA, motorCoast);
-    setMotorBrakeMode(motorB, motorCoast);
-
-    float ratio = 1;
-    if (startVB != 0 && startVA != 0) ratio = fabs(startVA / startVB);
-    float sign = fabs(startVA * startVB - 1) - fabs(startVA * startVB);
-
-    float err, u;
-    float eold = 0, isum = 0;
-
-    float tempVA, tempVB;
-
-    float startVX;
-    short signVX;
-
-    int ertSz = 20;
-    int ert[20];
-    for (int i = 0; i < ertSz; ++i) {
-        ert[i] = 0;
-    }
-    int curErtIdx = 0;
-    int nwErtIdx;
-
-    bool isSmoothA;
-
-    if (ratio > 1 || startVB == 0) {
-        startVX = startVA;
-        if (sgn(startVA) != sgn(topVX)) {
-            topVX *= -1;
-        }
-        signVX = sgn(startVA);
-        isSmoothA = true;
-    } else {
-        startVX = startVB;
-        if (sgn(startVB) != sgn(topVX)) {
-            topVX *= -1;
-        }
-        signVX = sgn(startVB);
-        isSmoothA = false;
-    }
-
-    float curEncA, curEncB;
-    getCDValues(CDSensorFirst);
-    getCDValues(CDSensorSecond);
-    while ((CDSensorFirst->color != color) && (CDSensorSecond->color != color)){
-        getCDValues(CDSensorFirst);
-        getCDValues(CDSensorSecond);
-        curEncA = nMotorEncoder[motorA] - MTVarsA.targetEnc;
-        curEncB = nMotorEncoder[motorB] - MTVarsB.targetEnc;
-        if (isSmoothA) {
-            MTVarsA.targetV = smooth(startVA, topVX, curEncA, boost);
-            MTVarsB.targetV =
-                startVB == 0 ? 0 : MTVarsA.targetV * startVB / startVA;
-        } else {
-            MTVarsB.targetV = smooth(startVB, topVX, curEncB, boost);
-            MTVarsA.targetV =
-                startVA == 0 ? 0 : MTVarsB.targetV * startVA / startVB;
-        }
-
-        if (startVA == 0)
-            err = curEncA;
-        else if (startVB == 0)
-            err = curEncB;
-        else
-            err = curEncA * sign + curEncB * ratio;
-
-        nwErtIdx = (curErtIdx + ertSz - 1) % ertSz;
-        ert[nwErtIdx] = err;
-        isum -= ert[curErtIdx];
-        isum += ert[nwErtIdx];
-        curErtIdx = (curErtIdx + 1) % ertSz;
-
-        u = (err - eold) * g_ArcKD + err * g_ArcKP + isum * g_ArcKI;
-        eold = err;
-
-        if (startVA == 0) {
-            u = (err - eold) * stopKD + err * stopKP + isum * stopKI;
-            tempVA = -u;
-            tempVB = MTVarsB.targetV;
-
-            if (tempVA < -100) {
-                tempVB = tempVB / tempVA * -100;
-                tempVA = -100;
-            } else if (tempVA > 100) {
-                tempVB = tempVB / tempVA * 100;
-                tempVA = 100;
-            }
-
-            motor[motorA] = tempVA;
-            motor[motorB] = tempVB;
-        } else if (startVB == 0) {
-            u = (err - eold) * stopKD + err * stopKP + isum * stopKI;
-            tempVA = MTVarsA.targetV;
-            tempVB = -u;
-
-            if (tempVB < -100) {
-                tempVA = tempVA / tempVB * -100;
-                tempVB = -100;
-            } else if (tempVB > 100) {
-                tempVA = tempVA / tempVB * 100;
-                tempVB = 100;
-            }
-
-            motor[motorA] = tempVA;
-            motor[motorB] = tempVB;
-        } else {
-            tempVA = MTVarsA.targetV - u * sign;
-            tempVB = MTVarsB.targetV - u;
-
-            if (tempVA < -100) {
-                tempVB = tempVB / tempVA * -100;
-                tempVA = -100;
-            } else if (tempVA > 100) {
-                tempVB = tempVB / tempVA * 100;
-                tempVA = 100;
-            } else if (tempVB < -100) {
-                tempVA = tempVA / tempVB * -100;
-                tempVB = -100;
-            } else if (tempVB > 100) {
-                tempVA = tempVA / tempVB * 100;
-                tempVB = 100;
-            }
-
-            motor[motorA] = tempVA;
-            motor[motorB] = tempVB;
-        }
-        sleep(1);
-    }
-
-    MTVarsA.targetEnc = nMotorEncoder[motorA];
-    MTVarsB.targetEnc = nMotorEncoder[motorB];
-}
-
 void arcAngle(float startVA, float startVB, float topVX, float stopVX,
               float angle, float boost = gBoost) {
     arcEnc(startVA, startVB, topVX, stopVX, angleToEnc(startVA, startVB, angle),
            boost);
 }
 
-void lineAligning(int velocity, float targetAngle, bool type = true, int color = 2){ //type: 0 - N??�????????N???, 1 - 1 ?????�?�N?????
+/*
+void lineAligning(int velocity, float targetAngle, bool type = true, int color = 2){
     arcColor2Sensors(-20, 20, velocity, &CDSensor1, &CDSensor2, color);
     float zeroEnc = (nMotorEncoder[motorB] - nMotorEncoder[motorA]) / 2;
     bool flag = true;
@@ -557,3 +249,4 @@ void lineAligning(int velocity, float targetAngle, bool type = true, int color =
         }
     }
 }
+*/
