@@ -30,10 +30,10 @@ task main (){
         getCDValues(CDSensor3);
         getCDValues(CDSensor4);
 
-        displayCenteredTextLine(1, "HSV_1: %d %f %d", CDSensor1.hue, CDSensor1.sat, CDSensor1.val);
-        displayCenteredTextLine(3, "HSV_2: %d %f %d", CDSensor2.hue, CDSensor2.sat, CDSensor2.val);
-        displayCenteredTextLine(6, "HSV_3: %d %f %d", CDSensor3.hue, CDSensor3.sat, CDSensor3.val);
-        displayCenteredTextLine(9, "HSV_4: %d %f %d", CDSensor4.hue, CDSensor4.sat, CDSensor4.val);
+        displayCenteredTextLine(1, "HSVC_1: %d %.2f %d %d", CDSensor1.hue, CDSensor1.sat, CDSensor1.val, CDSensor1.color);
+        displayCenteredTextLine(3, "HSVC_2: %d %.2f %d %d", CDSensor2.hue, CDSensor2.sat, CDSensor2.val, CDSensor2.color);
+        displayCenteredTextLine(6, "HSVC_3: %d %.2f %d %d", CDSensor3.hue, CDSensor3.sat, CDSensor3.val, CDSensor3.color);
+        displayCenteredTextLine(9, "HSVC_4: %d %.2f %d %d", CDSensor4.hue, CDSensor4.sat, CDSensor4.val, CDSensor4.color);
 
         sleep(250);
         eraseDisplay();
