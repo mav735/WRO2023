@@ -7,6 +7,7 @@
 #pragma config(Motor, motorC, motorLeftGrabber, tmotorEV3_Medium, openLoop,encoder)
 #pragma config(Motor, motorD, motorRightGrabber, tmotorEV3_Medium, openLoop,encoder)
 
+#define CALIBRATION
 #define WRITE
 #include "../include/includes.h"
 
@@ -55,13 +56,13 @@ task main (){
         while (!getButtonPress('C')) {
             getCDValues(mass[j]);
             if (SensorType[mass[j]->nDeviceIndex] == 40){
-                mass[j]->maxRed =   256;
-                mass[j]->maxGreen = 256;
-                mass[j]->maxBlue =  256;
+                mass[j]->maxRed =   255;
+                mass[j]->maxGreen = 255;
+                mass[j]->maxBlue =  255;
 
-                mass[j]->minRed =   -1;
-                mass[j]->minGreen = -1;
-                mass[j]->minBlue =  -1;
+                mass[j]->minRed =   0;
+                mass[j]->minGreen = 0;
+                mass[j]->minBlue =  0;
 
                 maxR = 0;
                 maxG = 0;
@@ -80,20 +81,19 @@ task main (){
                 maxG = max2(maxG, mass[j]->rawGreen);
                 maxB = max2(maxB, mass[j]->rawBlue);
 
-                mass[j]->maxRed =   maxR + 2;
-                mass[j]->maxGreen = maxG + 2;
-                mass[j]->maxBlue =  maxB + 2;
+                mass[j]->maxRed =   maxR;
+                mass[j]->maxGreen = maxG;
+                mass[j]->maxBlue =  maxB;
 
-                mass[j]->minRed =   minR - 2;
-                mass[j]->minGreen = minG - 2;
-                mass[j]->minBlue =  minB - 2;
+                mass[j]->minRed =   minR;
+                mass[j]->minGreen = minG;
+                mass[j]->minBlue =  minB;
             }
-
+            sleep(1);
+            
             displayCenteredTextLine(6, "RGB_min: %d %d %d", minR, minG, minB);
             displayCenteredTextLine(7, "RGB_max: %d %d %d", maxR, maxG, maxB);
             displayCenteredTextLine(9, "RGB_normed: %d %d %d", mass[j]->normRed, mass[j]->normGreen, mass[j]->normBlue);
-
-            sleep(50);
         }
 
         writeRGB(mass[j]->maxRed, mass[j]->maxGreen, mass[j]->maxBlue);
