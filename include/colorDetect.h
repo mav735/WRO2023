@@ -98,13 +98,14 @@ void getCDValues(tCDValues *CDSensor, short *colorIndexies=baseColors, short amo
     // 3 - Green 
     // 4 - Blue 
     // 5 - Yellow
+
     if ((ratioRed > 35) && (ratioGreen < 30)){
         CDSensor->color = 2;
     }
     else if ((ratioRed > 40) && (15 < ratioGreen < 40)){
         CDSensor->color = 5;
     }
-    else if (((ratioGreen > 31) && (ratioBlue < 45) && (ratioRed < 35))){ //  && ((max3rat - min3rat) > 5)
+    else if (((ratioGreen > 30) && (ratioBlue < 45) && (ratioRed < 38))){ //  && ((max3rat - min3rat) > 5)
         CDSensor->color = 3;
     }
     else if ((ratioBlue > 45) && (ratioRed < 30)){

@@ -80,13 +80,13 @@ task main (){
                 maxG = max2(maxG, mass[j]->rawGreen);
                 maxB = max2(maxB, mass[j]->rawBlue);
 
-                mass[j]->maxRed =   maxR + 1;
-                mass[j]->maxGreen = maxG + 1;
-                mass[j]->maxBlue =  maxB + 1;
+                mass[j]->maxRed =   maxR + 2;
+                mass[j]->maxGreen = maxG + 2;
+                mass[j]->maxBlue =  maxB + 2;
 
-                mass[j]->minRed =   minR - 1;
-                mass[j]->minGreen = minG - 1;
-                mass[j]->minBlue =  minB - 1;
+                mass[j]->minRed =   minR - 2;
+                mass[j]->minGreen = minG - 2;
+                mass[j]->minBlue =  minB - 2;
             }
 
             displayCenteredTextLine(6, "RGB_min: %d %d %d", minR, minG, minB);
