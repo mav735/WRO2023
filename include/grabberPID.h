@@ -3,22 +3,16 @@ typedef struct {
     float maxDown;
     float maxUp;
     float maxUpWithoutShip;
-    float upForShipThrow;
-    float upForShipPush;
     float upForDrop;
     float maxV;
     float targetPos;
-    float onlysmallship;
 } tGrabberPositionC;
 
 typedef struct {
     tMotor nDeviceIndex;
-    float closeBoth;
-    float openForwardMax;
-    float openForwardMin;
-    float dropFirstTwo;
-    float openBackwardMax;
-    float openBackwardMin;
+    float close;
+    float openMax;
+    float openMin;
     float maxV;
     float targetPos;
 } tGrabberPositionD;
@@ -29,8 +23,9 @@ tGrabberPositionD grabberD;
 
 task initGrabber() {
     motor[motorC] = 100;
-    motor[motorD] = 100;
-    sleep(500);
+    motor[motorD] = -100;
+    sleep(250);
+
     setMotorBrakeMode(motorC, motorBrake);
     setMotorBrakeMode(motorD, motorBrake);
     motor[motorC] = 0;
@@ -39,19 +34,13 @@ task initGrabber() {
     nMotorEncoder[motorD] = 0;
 
     grabberC.maxUp = 0;
-    grabberC.maxUpWithoutShip = -600;
-    grabberC.maxDown = -1400;
-    grabberC.upForShipThrow = -1000;
-    grabberC.upForShipPush = -450;
-    grabberC.upForDrop = -1080;
-    grabberC.onlysmallship = -1000;
+    grabberC.maxUpWithoutShip = -390;
+    grabberC.maxDown = -820;
+    grabberC.upForDrop = -700;
 
-    grabberD.closeBoth = -850;
-    grabberD.openForwardMax = -480;
-    grabberD.openForwardMin = -615;
-    grabberD.openBackwardMax = 0;
-    grabberD.openBackwardMin = -240;
-    grabberD.dropFirstTwo = -500;
+    grabberD.close = 0;
+    grabberD.openMin = 180;
+    grabberD.openMax = 300;
     stopTask(initGrabber);
 }
 
@@ -61,7 +50,7 @@ task thr_changePosGrabberC() {
     float ckd = 3;
     cee = 0;
     clearTimer(T2);
-    while (time1[T2] < 2000 || abs(cU) < 2) {
+    while (time1[T2] < 5000) {
         ce = grabberC.targetPos - nMotorEncoder[motorC];
         cP = ce * ckp;
         cD = (ce - cee) * ckd;
@@ -85,7 +74,7 @@ task thr_changePosGrabberD() {
     float dkd = 3;
     dee = 0;
     clearTimer(T3);
-    while (time1[T3] < 2000 || abs(dU) < 5) {
+    while (time1[T3] < 5000) {
         de = grabberD.targetPos - nMotorEncoder[motorD];
         dP = de * dkp;
         dD = (de - dee) * dkd;

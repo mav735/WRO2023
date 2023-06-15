@@ -39,11 +39,11 @@ float mapping(float raw, float min, float max, float normMin, float normMax) {
     return (raw - min) / (max - min) * (normMax - normMin) + normMin;
 }
 
-float angleToEnc(float *vb, float vC, float angle) {
+float angleToEnc(float vB, float vC, float angle) {
     return angle / 180 * PI * g_wheelBase *
-           (*vb == 0 || vC == 0
+           (vB == 0 || vC == 0
                 ? 1
-                : (1 / fabs(-*vb / vC - 1) + 1 / fabs(-vC / *vb - 1)) / 2.);
+                : (1 / fabs(-vB / vC - 1) + 1 / fabs(-vC / vB - 1)) / 2.);
 }
 
 void waitTask(bool *taskFlag){
@@ -52,6 +52,13 @@ void waitTask(bool *taskFlag){
     }
 }
 
+
+// 0 - White
+// 1 - Black
+// 2 - Red
+// 3 - Green
+// 4 - Blue
+// 5 - Yellow
 void colSound(int col) {
     clearSounds();
     setSoundVolume(100);

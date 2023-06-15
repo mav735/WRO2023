@@ -28,12 +28,4 @@ typedef struct {
     short maxBlue;
 
     short color;
-    float colorExamples[6][3];
-    
-    float white[3];
-    float black[3];
-    float red[3];
-    float green[3];
-    float blue[3];
-    float yellow[3];
 } tCDValues;

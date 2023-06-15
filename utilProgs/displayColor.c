@@ -24,7 +24,7 @@ task main (){
     setMotorBrakeMode(motorB, motorCoast);
     setMotorBrakeMode(motorD, motorCoast);
     setMotorBrakeMode(motorC, motorCoast);
-    
+
     while (!getButtonPress('C')) {
         getCDValues(CDSensor1);
         getCDValues(CDSensor2);

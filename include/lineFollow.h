@@ -13,7 +13,6 @@ typedef struct {
     bool rgb[3];            // 1, 1, 1
     bool rgbCross[3];
     short inverse;
-    float coef;
 } tLFConfig, *tLFConfigPtr;
 
 typedef struct {
@@ -97,15 +96,14 @@ void setDefaultLine() {
     lineCFG.rgbCross[0] = true;
     lineCFG.rgbCross[1] = true;
     lineCFG.rgbCross[2] = true;
-    lineCFG.coef = 1;
 }
 
 void setDefaultLineGreyCross() {
     lineCFG.maxLine = 255;
     lineCFG.minLine = 0;
     lineCFG.inverse = 1;
-    lineCFG.crossRoadMax = 195;
-    lineCFG.crossRoadMin = 160;
+    lineCFG.crossRoadMax = 220;
+    lineCFG.crossRoadMin = 180;
     lineCFG.sensorsIndError = 2;
     lineCFG.sensorsIndCross = 2;
     lineCFG.rgb[0] = true;
@@ -114,7 +112,6 @@ void setDefaultLineGreyCross() {
     lineCFG.rgbCross[0] = true;
     lineCFG.rgbCross[1] = true;
     lineCFG.rgbCross[2] = true;
-    lineCFG.coef = 1;
 }
 
 void setLeftSensorBlackLineBlackStop(short side, short stopType) {
@@ -132,7 +129,6 @@ void setLeftSensorBlackLineBlackStop(short side, short stopType) {
     lineCFG.rgbCross[0] = false;
     lineCFG.rgbCross[1] = false;
     lineCFG.rgbCross[2] = true;
-    lineCFG.coef = 1;
 }
 
 void setDefaultLineWhiteCross() {
@@ -149,7 +145,6 @@ void setDefaultLineWhiteCross() {
     lineCFG.rgbCross[0] = true;
     lineCFG.rgbCross[1] = false;
     lineCFG.rgbCross[2] = false;
-    lineCFG.coef = 1;
 }
 
 void setLeftSensorBlueLineBlackStop(short side,
@@ -167,7 +162,6 @@ void setLeftSensorBlueLineBlackStop(short side,
     lineCFG.rgbCross[0] = false;
     lineCFG.rgbCross[1] = false;
     lineCFG.rgbCross[2] = true;
-    lineCFG.coef = 1;
 }
 
 void setRightSensorBlueGrayLineWhiteStop(short side, short stopType) {  // 1 - in -1 - out
@@ -188,8 +182,6 @@ void setRightSensorBlueGrayLineWhiteStop(short side, short stopType) {  // 1 - i
     lineCFG.rgbCross[0] = true;
     lineCFG.rgbCross[1] = true;
     lineCFG.rgbCross[2] = true;
-
-    lineCFG.coef = 1;
 }
 
 void setRightSensorBlueGrayLineBlueStop(short side, short stopType) {  // 1 - in -1 - out
@@ -210,8 +202,6 @@ void setRightSensorBlueGrayLineBlueStop(short side, short stopType) {  // 1 - in
     lineCFG.rgbCross[0] = false;
     lineCFG.rgbCross[1] = true;
     lineCFG.rgbCross[2] = false;
-
-    lineCFG.coef = 0.7;
 }
 
 void calcKF(float power, float *kp, float *kd, float *ki) {
@@ -278,13 +268,7 @@ void lineFollowCross(float startPower, float endPower, short crossCount,
         curPowerA = -curPower - U;
         curPowerB = curPower - U;
 
-        if (curPowerA < -100) {
-            curPowerB = curPowerB / curPowerA * (-100);
-            curPowerA = -100;
-        } else if (curPowerB > 100) {
-            curPowerA = curPowerA / curPowerB * 100;
-            curPowerB = 100;
-        }
+        saveRatioPID(&curPowerA, &curPowerB);
 
         motor[motorA] = curPowerA;
         motor[motorB] = curPowerB;
@@ -356,13 +340,7 @@ void lineFollowEncoder(float startPower, float topPower, float endPower,
         curPowerA = -curPower - U;
         curPowerB = curPower - U;
 
-        if (curPowerA < -100) {
-            curPowerB = curPowerB / curPowerA * (-100);
-            curPowerA = -100;
-        } else if (curPowerB > 100) {
-            curPowerA = curPowerA / curPowerB * 100;
-            curPowerB = 100;
-        }
+        saveRatioPID(&curPowerA, &curPowerB);
 
         motor[motorA] = curPowerA;
         motor[motorB] = curPowerB;
@@ -371,4 +349,9 @@ void lineFollowEncoder(float startPower, float topPower, float endPower,
     }
     MTVarsA.targetEnc = nMotorEncoder[motorA];
     MTVarsB.targetEnc = nMotorEncoder[motorB];
+}
+
+
+void lineBase(float startV, float endV, float boost=gBoost) {
+    lineFollowEncoder(startV, startV, endV, g_distBetweenSensorsAndWheelBase, boost);
 }

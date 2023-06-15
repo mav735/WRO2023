@@ -16,12 +16,6 @@ void colorDetectInit() {
     CDSensor1.maxGreen = 192;
     CDSensor1.minBlue = 0;
     CDSensor1.maxBlue = 136;
-    CDSensor1.h_min_blue = 210;
-    CDSensor1.h_max_blue = 240;
-    CDSensor1.s_min_blue = 0.7;
-    CDSensor1.s_max_blue = 0.92;
-    CDSensor1.h_min_green = 140;
-    CDSensor1.h_max_green = 170;
 
     CDSensor2.nDeviceIndex = S2;
     CDSensor2.minRed = 0;
@@ -30,12 +24,6 @@ void colorDetectInit() {
     CDSensor2.maxGreen = 309;
     CDSensor2.minBlue = 0;
     CDSensor2.maxBlue = 341; // change HT values
-    CDSensor2.h_min_blue = 210;
-    CDSensor2.h_max_blue = 240;
-    CDSensor2.h_min_green = 140;
-    CDSensor2.h_max_green = 170;
-
-
 
     CDSensor3.nDeviceIndex = S3;
     CDSensor3.minRed = 0;
@@ -45,12 +33,6 @@ void colorDetectInit() {
     CDSensor3.minBlue = 0;
     CDSensor3.maxBlue = 255;
 
-    CDSensor3.h_min_blue = 191;
-    CDSensor3.h_max_blue = 360;
-
-    CDSensor3.h_min_green = 0;
-    CDSensor3.h_max_green = 190;
-
 
     CDSensor4.nDeviceIndex = S4;
     CDSensor4.minRed = 0;
@@ -59,13 +41,9 @@ void colorDetectInit() {
     CDSensor4.maxGreen = 255;
     CDSensor4.minBlue = 0;
     CDSensor4.maxBlue = 255;
-    CDSensor4.h_min_blue = 200;
-    CDSensor4.h_max_blue = 250;
-    CDSensor4.h_min_green = 140;
-    CDSensor4.h_max_green = 170;
 }
 
-void getCDValues(tCDValues *CDSensor, short *colorIndexies=baseColors, short amountColors=6) {
+void getCDValues(tCDValues *CDSensor) {
     if (SensorType[CDSensor->nDeviceIndex] != 40) {
         getColorRawRGB(CDSensor->nDeviceIndex, CDSensor->rawRed, CDSensor->rawGreen,
                    CDSensor->rawBlue);
@@ -108,28 +86,6 @@ void getCDValues(tCDValues *CDSensor, short *colorIndexies=baseColors, short amo
     RGBtoHSV(CDSensor->normRed, CDSensor->normGreen, CDSensor->normBlue,
              &(CDSensor->hue), &(CDSensor->sat), &(CDSensor->val));
 
-    float hsv_now[3] = {CDSensor->hue, CDSensor->sat, CDSensor->val};
-
-    float ratioRed = 0;
-    float ratioGreen = 0;
-    float ratioBlue = 0;
-
-    if ((CDSensor->normGreen + CDSensor->normBlue + CDSensor->normRed) != 0){
-        ratioRed = CDSensor->normRed / (CDSensor->normGreen + CDSensor->normBlue + CDSensor->normRed) * 100;
-        ratioGreen = CDSensor->normGreen / (CDSensor->normGreen + CDSensor->normBlue + CDSensor->normRed) * 100;
-        ratioBlue = CDSensor->normBlue / (CDSensor->normGreen + CDSensor->normBlue + CDSensor->normRed) * 100;
-    }
-
-    float max3rat = max3(ratioBlue, ratioGreen, ratioRed);
-    float min3rat = min3(ratioBlue, ratioGreen, ratioRed);
-    float max3rgb = max3(CDSensor->normRed, CDSensor->normGreen, CDSensor->normBlue);
-
-    #ifdef DEBUG_COLOR_RATIO
-        displayCenteredTextLine(2, "ratioRed: %f", ratioRed);
-        displayCenteredTextLine(4, "ratioGreen: %f", ratioGreen);
-        displayCenteredTextLine(6, "ratioBlue: %f", ratioBlue);
-    #endif
-
     #ifdef DEBUG_HSV
         displayCenteredTextLine(2, "hue: %f", CDSensor->hue);
         displayCenteredTextLine(4, "sat: %f", CDSensor->sat);
@@ -143,15 +99,50 @@ void getCDValues(tCDValues *CDSensor, short *colorIndexies=baseColors, short amo
     // 4 - Blue
     // 5 - Yellow
 
-    CDSensor->color = -1;
-    if (CDSensor->sat <= 0) {
-        CDSensor->color = 0;
+
+    // [hue_min; hue_max)
+
+
+    if (SensorType[CDSensor->nDeviceIndex] != 40) {
+        if (CDSensor->val <= 40) {
+            CDSensor->color = 1;
+        } else if (CDSensor->sat <= 0.15 && CDSensor->val >= 150) {
+            CDSensor->color = 0;
+        }
+        else {
+            if (CDSensor->hue < 15 || CDSensor->hue >= 300) {
+                CDSensor->color = 2;
+            } else if (CDSensor->hue >= 15 && CDSensor->hue < 90) {
+                CDSensor->color = 5;
+            } else if (CDSensor->hue >= 90 && CDSensor->hue < 170) {
+                CDSensor->color = 3;
+            } else {
+                CDSensor->color = 4;
+            }
+        }
     }
-    if ((CDSensor->h_min_blue <= CDSensor->hue) && (CDSensor->hue <= CDSensor->h_max_blue)){
-        CDSensor->color = 4;
-    }
-    else if ((CDSensor->h_min_green <= CDSensor->hue) && (CDSensor->hue <= CDSensor->h_max_green)){
-        CDSensor->color = 3;
+    else {
+        if (CDSensor->normRed + CDSensor->normGreen + CDSensor->normBlue < 10) {
+            CDSensor->color = -1;
+        }
+        else if (CDSensor->sat <= 0.15) {
+            if (CDSensor->val < 50) {
+                CDSensor->color = 1;
+            } else {
+                CDSensor->color = 0;
+            }
+        }
+        else {
+            if (CDSensor->hue < 15 || CDSensor->hue >= 300) {
+                CDSensor->color = 2;
+            } else if (CDSensor->hue >= 15 && CDSensor->hue < 70) {
+                CDSensor->color = 5;
+            } else if (CDSensor->hue >= 70 && CDSensor->hue < 212) {
+                CDSensor->color = 3;
+            } else {
+                CDSensor->color = 4;
+            }
+        }
     }
 }
 

@@ -1,6 +1,6 @@
-const float stopKP = 3;
-const float stopKI = 0.05;
-const float stopKD = 3;
+const float stopKP = 4;
+const float stopKI = 0.06;
+const float stopKD = 6;
 
 task stopA_task {
     float u, e, ee = 0, isum = 0;
@@ -12,6 +12,7 @@ task stopA_task {
     int curErrIdx = 0;
     int nwErrIdx;
     setMotorBrakeMode(motorA, motorCoast);
+    motorAstop = true;
     while (motorAstop) {
         e = nMotorEncoder[motorA] - MTVarsA.targetEnc;
 
@@ -40,6 +41,7 @@ task stopB_task {
     int curErrIdx = 0;
     int nwErrIdx;
     setMotorBrakeMode(motorB, motorCoast);
+    motorBstop = true;
     while (motorBstop) {
         e = nMotorEncoder[motorB] - MTVarsB.targetEnc;
         nwErrIdx = (curErrIdx + errSz - 1) % errSz;

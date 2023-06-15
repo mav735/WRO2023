@@ -16,7 +16,7 @@ task readingColors() {
             nowEncWheels[2] = fabs(nMotorEncoder[motorB] - oldEncWheels[1]); 
             nowEncWheels[0] = (nowEncWheels[1] + nowEncWheels[2]) / 2;
         }
-        getCDValues(CDSensorPtr, readingGlobal, readingAmountColors);
+        getCDValues(CDSensorPtr);
         colSound(CDSensorPtr->color);
         readingRes[nowEncIndex] = CDSensorPtr->color;
     }

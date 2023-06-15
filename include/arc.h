@@ -1,6 +1,6 @@
-const float g_ArcKP = 2;
-const float g_ArcKD = 4;
-const float g_ArcKI = 0.02;
+const float g_ArcKP = 3;
+const float g_ArcKD = 6;
+const float g_ArcKI = 0.05;
 
 bool checkEncForArc(float startVA, float startVB, float encA, float encB,
                     float enc) {
@@ -139,7 +139,7 @@ void arcEnc(float startVA, float startVB, float topVX, float stopVX, float enc,
         curErtIdx = (curErtIdx + 1) % ertSz;
 
         u = (err - eold) * stopKD + err * stopKP + isum * stopKI;
-        
+
         if (startVA == 0) {
             tempVA = -u;
             tempVB = MTVarsB.targetV;
@@ -152,7 +152,7 @@ void arcEnc(float startVA, float startVB, float topVX, float stopVX, float enc,
             tempVB = MTVarsB.targetV - u;
         }
 
-        saveRatioPID(*tempVA, *tempVB);
+        saveRatioPID(&tempVA, &tempVB);
         motor[motorA] = tempVA;
         motor[motorB] = tempVB;
 
@@ -175,6 +175,170 @@ void arcAngle(float startVA, float startVB, float topVX, float stopVX,
     arcEnc(startVA, startVB, topVX, stopVX, angleToEnc(startVA, startVB, angle),
            boost);
 }
+
+void arcColor_enc(float startVA, float startVB, float topVX, float stopVX, float enc, tCDValues *CDSensor, short color, float boost = gBoost) {
+    motorAstop = false;
+    motorBstop = false;
+
+    setMotorBrakeMode(motorA, motorCoast);
+    setMotorBrakeMode(motorB, motorCoast);
+
+    float ratio = 1;
+    if (startVB != 0 && startVA != 0) ratio = fabs(startVA / startVB);
+    float sign = fabs(startVA * startVB - 1) - fabs(startVA * startVB);
+
+    float err, u;
+    float eold = 0, isum = 0;
+
+    float tempVA, tempVB;
+
+    enc *= 2;
+
+    float encX;
+    float excess;
+    float smoothStartEncX;
+    float maxVX;
+    float startVX;
+    short signVX;
+
+    int ertSz = 20;
+    int ert[20];
+    for (int i = 0; i < ertSz; ++i) {
+        ert[i] = 0;
+    }
+    int curErtIdx = 0;
+    int nwErtIdx;
+
+    bool isSmoothA;
+
+    if (ratio > 1 || startVB == 0) {
+        startVX = startVA;
+        if (sgn(startVA) != sgn(topVX)) {
+            topVX *= -1;
+            stopVX *= -1;
+        }
+        signVX = sgn(startVA);
+        encX = (float)enc / (1 + 1. / ratio);
+        excess =
+            encX - (2 * topVX * topVX - startVA * startVA - stopVX * stopVX) /
+                       2 / boost;
+        maxVX = min2(
+            sqrt(encX * boost + startVA * startVA / 2 + stopVX * stopVX / 2),
+            fabs(topVX));
+        smoothStartEncX =
+            (maxVX * maxVX - startVA * startVA) / 2 / boost + max2(excess, 0);
+        isSmoothA = true;
+    } else {
+        startVX = startVB;
+        if (sgn(startVB) != sgn(topVX)) {
+            topVX *= -1;
+            stopVX *= -1;
+        }
+        signVX = sgn(startVB);
+        encX = (float)enc / (1 + ratio);
+        excess =
+            encX - (2 * topVX * topVX - startVB * startVB - stopVX * stopVX) /
+                       2 / boost;
+        maxVX = min2(
+            sqrt(encX * boost + startVB * startVB / 2 + stopVX * stopVX / 2),
+            fabs(topVX));
+        smoothStartEncX =
+            (maxVX * maxVX - startVB * startVB) / 2 / boost + max2(excess, 0);
+        isSmoothA = false;
+    }
+
+    if (startVA == 0 || startVB == 0) enc /= 2;
+
+    maxVX *= signVX;
+
+    // if (fabs(maxVX) < fabs(startVX)) {
+    //     maxVX = startVX;
+    //     smoothStartEncX = 0;
+    //     boost = (maxVX * maxVX - stopVX * stopVX) / 2 / encX;
+    // }
+
+    float curEncA, curEncB;
+    float ptenc = enc / 2.0;
+    getCDValues(CDSensor);
+    while (checkEncForArc(
+        startVA, startVB, (curEncA = nMotorEncoder[motorA] - MTVarsA.targetEnc),
+        (curEncB = nMotorEncoder[motorB] - MTVarsB.targetEnc), ptenc) || CDSensor->color != color) {
+        getCDValues(CDSensor);
+        if (isSmoothA) {
+            if (fabs(curEncA) <= smoothStartEncX) {
+                MTVarsA.targetV = smooth(startVA, maxVX, curEncA, boost);
+                MTVarsB.targetV =
+                    startVB == 0 ? 0 : MTVarsA.targetV * startVB / startVA;
+            } else {
+                MTVarsA.targetV = smooth(
+                    maxVX, stopVX, curEncA - smoothStartEncX * signVX, boost);
+                MTVarsB.targetV =
+                    startVB == 0 ? 0 : MTVarsA.targetV * startVB / startVA;
+            }
+        } else {
+            if (fabs(curEncB) <= smoothStartEncX) {
+                MTVarsB.targetV = smooth(startVB, maxVX, curEncB, boost);
+                MTVarsA.targetV =
+                    startVA == 0 ? 0 : MTVarsB.targetV * startVA / startVB;
+            } else {
+                MTVarsB.targetV = smooth(
+                    maxVX, stopVX, curEncB - smoothStartEncX * signVX, boost);
+                MTVarsA.targetV =
+                    startVA == 0 ? 0 : MTVarsB.targetV * startVA / startVB;
+            }
+        }
+
+        if (startVA == 0)
+            err = curEncA;
+        else if (startVB == 0)
+            err = curEncB;
+        else
+            err = curEncA * sign + curEncB * ratio;
+
+        nwErtIdx = (curErtIdx + ertSz - 1) % ertSz;
+        ert[nwErtIdx] = err;
+        isum -= ert[curErtIdx];
+        isum += ert[nwErtIdx];
+        curErtIdx = (curErtIdx + 1) % ertSz;
+
+        u = (err - eold) * stopKD + err * stopKP + isum * stopKI;
+
+        if (startVA == 0) {
+            tempVA = -u;
+            tempVB = MTVarsB.targetV;
+        } else if (startVB == 0) {
+            tempVA = MTVarsA.targetV;
+            tempVB = -u;
+        } else {
+            u = (err - eold) * g_ArcKD + err * g_ArcKP + isum * g_ArcKI;
+            tempVA = MTVarsA.targetV - u * sign;
+            tempVB = MTVarsB.targetV - u;
+        }
+
+        saveRatioPID(&tempVA, &tempVB);
+        motor[motorA] = tempVA;
+        motor[motorB] = tempVB;
+
+        eold = err;
+        sleep(1);
+    } 
+
+    MTVarsA.targetEnc = nMotorEncoder[MotorA];
+    MTVarsB.targetEnc = nMotorEncoder[MotorB];
+}
+void arcColor_angle(float startVA, float startVB, float topVX, float stopVX, float angle, tCDValues *CDSensor, short color, float boost = gBoost) {
+    arcColor_enc(startVA, startVB, topVX, stopVX, angleToEnc(startVA, startVB, angle), CDSensor, color, boost);
+}
+
+// Only plus speed
+void smartTurnLeft(float startV, float topV, float stopV) {
+    arcColor_angle(startV, startV, topV, stopV, 90, &CDSensor1, 1);
+}
+
+void smartTurnRight(float startV, float topV, float stopV) {
+    arcColor_angle(-startV, -startV, -topV, -stopV, 90, &CDSensor2, 1);
+}
+
 
 /*
 void lineAligning(int velocity, float targetAngle, bool type = true, int color = 2){
