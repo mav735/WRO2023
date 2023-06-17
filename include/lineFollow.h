@@ -1,6 +1,6 @@
-float kpConst = 0.6;
+float kpConst = 0.4;
 float kdConst = 6;
-float kiConst = 0.01;
+float kiConst = 0.002;
 float calibrationPower = 50;
 
 typedef struct {
@@ -86,7 +86,7 @@ void setDefaultLine() {
     lineCFG.maxLine = 255;
     lineCFG.minLine = 0;
     lineCFG.inverse = 1;
-    lineCFG.crossRoadMax = 55;
+    lineCFG.crossRoadMax = 80;
     lineCFG.crossRoadMin = -100;
     lineCFG.sensorsIndError = 2;
     lineCFG.sensorsIndCross = 2;
@@ -102,8 +102,8 @@ void setDefaultLineGreyCross() {
     lineCFG.maxLine = 255;
     lineCFG.minLine = 0;
     lineCFG.inverse = 1;
-    lineCFG.crossRoadMax = 220;
-    lineCFG.crossRoadMin = 180;
+    lineCFG.crossRoadMax = 210;
+    lineCFG.crossRoadMin = 170;
     lineCFG.sensorsIndError = 2;
     lineCFG.sensorsIndCross = 2;
     lineCFG.rgb[0] = true;
@@ -213,8 +213,6 @@ void calcKF(float power, float *kp, float *kd, float *ki) {
 
 void lineFollowCross(float startPower, float endPower, short crossCount,
                      float boost = gBoost) {
-    motorAstop = false;
-    motorBstop = false;
     setMotorBrakeMode(motorA, motorCoast);
     setMotorBrakeMode(motorB, motorCoast);
 
@@ -240,6 +238,9 @@ void lineFollowCross(float startPower, float endPower, short crossCount,
             startPower, endPower,
             (nMotorEncoder[motorB] - nMotorEncoder[motorA]) / 2 - oldAveEnc,
             boost);
+
+        motorAstop = false;
+        motorBstop = false;
 
         MTVarsA.targetV = -curPower;
         MTVarsB.targetV = curPower;
@@ -281,8 +282,6 @@ void lineFollowCross(float startPower, float endPower, short crossCount,
 
 void lineFollowEncoder(float startPower, float topPower, float endPower,
                        int encoder, float boost = gBoost) {
-    motorAstop = false;
-    motorBstop = false;
     setMotorBrakeMode(motorA, motorCoast);
     setMotorBrakeMode(motorB, motorCoast);
 
@@ -320,6 +319,9 @@ void lineFollowEncoder(float startPower, float topPower, float endPower,
             curPower =
                 smooth(maxPower, endPower, curEnc - smoothStartEnc, boost);
         }
+        
+        motorAstop = false;
+        motorBstop = false;
 
         MTVarsA.targetV = -curPower;
         MTVarsB.targetV = curPower;

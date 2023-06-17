@@ -61,7 +61,6 @@ void waitTask(bool *taskFlag){
 // 5 - Yellow
 void colSound(int col) {
     clearSounds();
-    setSoundVolume(100);
     if (col == 0) {
         playSoundFile("White");
     } else if (col == 1) {

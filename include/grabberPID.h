@@ -24,7 +24,7 @@ tGrabberPositionD grabberD;
 task initGrabber() {
     motor[motorC] = 100;
     motor[motorD] = -100;
-    sleep(250);
+    sleep(350);
 
     setMotorBrakeMode(motorC, motorBrake);
     setMotorBrakeMode(motorD, motorBrake);
@@ -36,25 +36,33 @@ task initGrabber() {
     grabberC.maxUp = 0;
     grabberC.maxUpWithoutShip = -390;
     grabberC.maxDown = -820;
-    grabberC.upForDrop = -700;
+    grabberC.upForDrop = -680;
 
     grabberD.close = 0;
-    grabberD.openMin = 180;
+    grabberD.openMin = 220;
     grabberD.openMax = 300;
     stopTask(initGrabber);
 }
 
 task thr_changePosGrabberC() {
     float ce, cee, cP, cD, cU;
-    float ckp = 1;
-    float ckd = 3;
+    float cisum = 0;
+    float ckp = 2;
+    float ckd = 6;
+    float cki = 0.004;
     cee = 0;
-    clearTimer(T2);
-    while (time1[T2] < 5000) {
+    float ctt = nPgmTime;
+    while (nPgmTime - ctt < 5000) {
         ce = grabberC.targetPos - nMotorEncoder[motorC];
+        cisum += ce * cki;
+        if (cisum > 10) {
+            cisum = 10;
+        } else if (cisum < -10) {
+            cisum = -10;
+        }
         cP = ce * ckp;
         cD = (ce - cee) * ckd;
-        cU = cP + cD;
+        cU = cP + cD + cisum;
         if (cU > grabberC.maxV) {
             cU = grabberC.maxV;
         } else if (cU < (-1) * grabberC.maxV) {
@@ -62,6 +70,7 @@ task thr_changePosGrabberC() {
         }
         motor[motorC] = cU;
         cee = ce;
+        sleep(1);
     }
     setMotorBrakeMode(motorC, motorBrake);
     motor[motorC] = 0;
@@ -70,15 +79,23 @@ task thr_changePosGrabberC() {
 
 task thr_changePosGrabberD() {
     float de, dee, dP, dD, dU;
-    float dkp = 1;
-    float dkd = 3;
+    float disum = 0;
+    float dkp = 2;
+    float dkd = 6;
+    float dki = 0.004
     dee = 0;
-    clearTimer(T3);
-    while (time1[T3] < 5000) {
+    float dtt = nPgmTime;
+    while (nPgmTime - dtt < 5000) {
         de = grabberD.targetPos - nMotorEncoder[motorD];
+        disum += de * dki;
+        if (disum > 10) {
+            disum = 10;
+        } else if (disum < -10) {
+            disum = -10;
+        }
         dP = de * dkp;
         dD = (de - dee) * dkd;
-        dU = dP + dD;
+        dU = dP + dD + disum;
         if (dU > grabberD.maxV) {
             dU = grabberD.maxV;
         } else if (dU < (-1) * grabberD.maxV) {
@@ -86,9 +103,14 @@ task thr_changePosGrabberD() {
         }
         motor[motorD] = dU;
         dee = de;
+        sleep(1);
     }
-    setMotorBrakeMode(motorD, motorBrake);
-    motor[motorD] = 0;
+    if (grabberD.targetPos == grabberD.close) {
+        motor[motorD] = -100;
+    } else {
+        setMotorBrakeMode(motorD, motorBrake);
+        motor[motorD] = 0;
+    }
     stopTask(thr_changePosGrabberD);
 }
 void changePosGrabberC(float v, float pos) {

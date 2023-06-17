@@ -6,7 +6,6 @@
 // 5 - Yellow
 
 tCDValues CDSensor4, CDSensor3, CDSensor1, CDSensor2;
-short baseColors[6] = {0, 1, 2, 3, 4, 5};
 
 void colorDetectInit() {
     CDSensor1.nDeviceIndex = S1;
@@ -125,19 +124,19 @@ void getCDValues(tCDValues *CDSensor) {
         if (CDSensor->normRed + CDSensor->normGreen + CDSensor->normBlue < 10) {
             CDSensor->color = -1;
         }
-        else if (CDSensor->sat <= 0.15) {
-            if (CDSensor->val < 50) {
+        else if (CDSensor->sat <= 0.12) {
+            if (CDSensor->val < 30) {
                 CDSensor->color = 1;
             } else {
                 CDSensor->color = 0;
             }
         }
         else {
-            if (CDSensor->hue < 15 || CDSensor->hue >= 300) {
+            if (CDSensor->hue < 20 || CDSensor->hue >= 300) {
                 CDSensor->color = 2;
-            } else if (CDSensor->hue >= 15 && CDSensor->hue < 70) {
+            } else if (CDSensor->hue >= 20 && CDSensor->hue < 70) {
                 CDSensor->color = 5;
-            } else if (CDSensor->hue >= 70 && CDSensor->hue < 212) {
+            } else if (CDSensor->hue >= 70 && CDSensor->hue <= 205) {
                 CDSensor->color = 3;
             } else {
                 CDSensor->color = 4;
