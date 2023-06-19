@@ -1,6 +1,6 @@
-float kpConst = 0.5;
-float kdConst = 6;
-float kiConst = 0.003;
+float kpConst = 0.6;
+float kdConst = 8;
+float kiConst = 0.005;
 float calibrationPower = 50;
 
 typedef struct {

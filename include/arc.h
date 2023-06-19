@@ -360,7 +360,7 @@ void reactiveTurnRight() {
         motorBstop = false;
 
         getCDValues(&CDSensor2);
-        if (flag && nPgmTime - tt >= 155) {
+        if (flag && nPgmTime - tt >= 160) {
             flag = false;
             setMotorBrakeMode(motorB, motorBrake);
             motor[MotorB] = 0;
@@ -382,7 +382,7 @@ void reactiveTurnLeft() {
         motorBstop = false;
 
         getCDValues(&CDSensor1);
-        if (flag && nPgmTime - tt >= 155) {
+        if (flag && nPgmTime - tt >= 160) {
             flag = false;
             setMotorBrakeMode(motorA, motorBrake);
             motor[MotorA] = 0;
