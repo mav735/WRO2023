@@ -1,4 +1,4 @@
-const float gBoost = 17;
+const float gBoost = 15;
 
 float smooth(float v0, float targetV, float s, float a = gBoost) {
     if (fabs(v0) <= fabs(targetV)) {

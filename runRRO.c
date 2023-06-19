@@ -19,16 +19,15 @@ short welemsColors[2] = {0, 0};
 short gotElements[4] = {0, 0, 0, 0};
 
 void start(){
-    stopMove();
+    stopMove(250);
 	setDefaultLine();
     readColors(encodersMarkers, markerColors, 2, &CDSensor3, 0);
-    arcEnc(-20, 20, 50, 50, 135);
+    arcEnc(-30, 30, 50, 50, 135);
     changePosGrabberC(50, grabberC.maxUpWithoutShip);
-    lineFollowEncoder(50, 60, 60, 300);
-    arcEnc(-60, 60, 60, 20, 305);
+    lineFollowEncoder(50, 55, 55, 300);
+    arcEnc(-55, 55, 55, 20, 305);
     stopMove(100);
-    arcEnc(20, -20, 80, 20, 165);
-    changePosGrabberC(50, grabberC.maxUp);
+    arcEnc(25, -25, 80, 20, 165);
     smartTurnRight_enc(40, 80, 60);
     soundColOfElements(markerColors, 2);
     lineFollowCross(100, 100, 1);
@@ -36,33 +35,33 @@ void start(){
     changePosGrabberC(50, grabberC.maxUpWithoutShip);
     setDefaultLineGreyCross();
     lineFollowEncoder(100, 100, 30, 450);
-    lineFollowCross(30, 20, 1);
+    lineFollowCross(30, 25, 1);
     stopMove(200);
 }
 
 void readingElements(){
-    arcEnc(20, -20, 60, 20, 65);
+    arcEnc(25, -25, 60, 25, 65);
     stopMove(150);
-    arcAngle(-20, -20, -80, -20, 80);
-    arcAngle(-20, -20, -20, -20, 10);
+    arcAngle(-25, -25, -80, -25, 80);
+    arcAngle(-25, -25, -25, -25, 10);
     stopMove(150);
-    arcEnc(20, -20, 20, 20, 115);
+    arcEnc(25, -25, 25, 25, 100);
     stopMove(200);
     readColors(encodersElements, elementsColors, 4, &CDSensor3, 0);
-    arcEnc(-20, 20, 60, 20, 380);
-    arcEnc(-20, 20, 20, 20, 35);
+    arcEnc(-25, 25, 60, 25, 365);
+    arcEnc(-25, 25, 25, 25, 35);
     soundColOfElements(elementsColors, 4);
     stopMove(150);
-    arcAngle(40, -11.2, 60, 20, 85);
-    arcAngle(30, -8.4, 30, 20, 5);
+    arcAngle(40, -11.2, 60, 30, 85);
+    arcAngle(30, -8.4, 30, 30, 5);
     stopMove(150);
     changePosGrabberC(50, grabberC.maxDown);
-    lineFollowEncoder(20, 20, 20, 120);
+    lineFollowEncoder(25, 25, 25, 110);
     stopMove(200);
 }
 
 void getElements(short firstColor, short secondColor, short finalPos=0, short getLast=0){
-    short turnsEncElements[4] = {67, 25, -25, -67};
+    short turnsEncElements[4] = {70, 25, -25, -70};
     short degreesElements[4] = {203, 180, 180, 203};
     bool markersFound[2] = {false, false};
     short nowPosition = 0;
@@ -99,19 +98,19 @@ void getElements(short firstColor, short secondColor, short finalPos=0, short ge
     for (short i = 0; i < 2; i++){
         short angle = turnsEncElements[indexesNeed[i]] - nowPosition;
         short way = sgn(angle);
-        arcEnc(way * 20, way * 20, way * 50, way * 20, fabs(angle));
+        arcEnc(way * 25, way * 25, way * 30, way * 25, fabs(angle));
 
 
         stopMove(150);
-        arcEnc(-20, 20, 20, 20, 20);
+        arcEnc(-25, 25, 25, 25, 20);
         changePosGrabberD(100, grabberD.openMin);
         stopMove(100);
-        arcEnc(-20, 20, 40, 20, degreesElements[indexesNeed[i]] - 60);
+        arcEnc(-25, 25, 40, 25, degreesElements[indexesNeed[i]] - 60);
         changePosGrabberD(100, grabberD.close);
-        arcEnc(-20, 20, 20, 20, 40);
+        arcEnc(-25, 25, 25, 25, 40);
         stopMove(150);
-        arcEnc(20, -20, 40, 20, degreesElements[indexesNeed[i]] - 20);
-        arcEnc(20, -20, 20, 20, 20);
+        arcEnc(25, -25, 40, 25, degreesElements[indexesNeed[i]] - 20);
+        arcEnc(25, -25, 25, 25, 20);
         stopMove(150);
         nowPosition = turnsEncElements[indexesNeed[i]];
         elementsColors[indexesNeed[i]] = -1;
@@ -147,7 +146,7 @@ void takeSmallShipAndThrowOn() {
     lineFollowEncoder(100, 100, 100, 50);
     changePosGrabberC(100, grabberC.maxUpWithoutShip);
     lineFollowEncoder(100, 100, 100, 110);
-    lineFollowCross(100, 20, 1);
+    lineFollowCross(100, 25, 1);
     stopMove(100);
     changePosGrabberC(100, grabberC.maxUp);
     stopMove(300);
@@ -160,7 +159,9 @@ void takeSmallShipAndThrowOn() {
     arcAngle(0, 50, 100, 40, 80);
     changePosGrabberC(100, grabberC.upForDrop);
     arcAngle(0, 40, 40, 40, 10);
-    stopMove(500);
+    stopMove(50);
+    arcEnc(30, -30, 30, 30, 25);
+    stopMove(450);
     changePosGrabberD(100, grabberD.openMin);
     stopMove(200);
     changePosGrabberC(100, grabberC.maxUpWithoutShip);
@@ -195,54 +196,56 @@ void fromSmallShipToElement() {
 void takeTwoLastElems() {
     setDefaultLineGreyCross();
     lineFollowEncoder(100, 100, 30, 350);
-    lineFollowCross(30, 20, 1);
+    lineFollowCross(30, 25, 1);
     stopMove(250);
-    arcEnc(20, -20, 50, 20, 195);
+    arcEnc(25, -25, 50, 25, 160);
     changePosGrabberC(100, grabberC.maxDown);
-    arcEnc(20, -20, 20, 20, 30);
+    arcEnc(25, -25, 25, 25, 30);
     stopMove(250);
     getElements(markerColors[0], markerColors[1], 1, 1);
     lineFollowEncoder(30, 30, 30, 10);
     changePosGrabberD(100, grabberD.openMin);
     lineFollowEncoder(30, 30, 30, 50);
     changePosGrabberD(100, grabberD.close);
-    lineFollowCross(30, 20, 1);
+    lineFollowCross(30, 25, 1);
     changePosGrabberC(100, grabberC.maxUpWithoutShip);
     stopMove(200);
 }
 
 void takeBigShipAndThrowOn() {
     setDefaultLine();
-    arcEnc(20, -20, 20, 20, 70);
+    arcEnc(25, -25, 25, 25, 90);
     stopMove(200);
-    arcAngle(30, 30, 100, 20, 80);
-    arcAngle(20, 20, 20, 20, 10);
-    stopMove(150);
-    arcEnc(-40, 40, 100, 20, 615);
+    arcAngle(30, 30, 100, 30, 80);
+    arcAngle(30, 30, 30, 30, 10);
+    stopMove(250);
+    arcEnc(-40, 40, 100, 25, 615);
     arcEnc(-20, 20, 20, 20, 80);
-    stopMove(50);
+    stopMove(25);
     changePosGrabberC(100, grabberC.maxUp);
     arcEnc(-25, 25, 25, 25, 60);
     stopMove(50);
-    arcEnc(40, 40, 100, 40, 350);
-    arcColor_enc(-50, 50, 100, 55, 600, &CDSensor1, 1);
-    arcEnc(-55, 55, 55, 55, 50);
-    arcColor_enc(0, 55, 100, 70, 600, &CDSensor1, 1);
+    arcEnc(35, 35, 100, 35, 350);
+    arcColor_enc(-40, 40, 100, 45, 580, &CDSensor1, 1);
+    arcEnc(-45, 45, 45, 45, 50);
+    arcColor_enc(0, 45, 100, 70, 600, &CDSensor1, 1);
     lineFollowEncoder(70, 100, 100, 300, 20);
     lineFollowCross(100, 100, 1, 20);
     lineFollowEncoder(100, 100, 100, 950, 20);
     lineFollowCross(100, 40, 1, 20);
-    arcAngle(-50, 0, -100, -40, 90);
-    lineFollowEncoder(50, 100, 30, 315);
+    arcAngle(-40, 0, -100, -40, 90);
+    lineFollowEncoder(40, 60, 30, 315);
 
     stopMove(200);
     arcEnc(40, -40, 100, 30, 325);
     changePosGrabberC(100, grabberC.upForDrop);
-    stopMove(550);
+    stopMove(500);
+    arcEnc(30, -30, 30, 30, 25);
+    stopMove(50);
     changePosGrabberD(100, grabberD.openMin);
     stopMove(250);
     changePosGrabberC(100, grabberC.maxUpWithoutShip);
-    arcEnc(40, -40, 100, 60, 135);
+    arcEnc(40, -40, 100, 60, 115);
     smartTurnRight_angle(60, 100, 60);
     stopMove(0);
 }
@@ -277,7 +280,7 @@ void getRightWelem(int f=0) {
 
 void takeLastWhiteAndFinish() {
     lineFollowCross(70, 100, 1);
-    changePosGrabberD(100, grabberD.openMin);
+    changePosGrabberD(100, grabberD.openMax);
     reactiveTurnRight();
     setDefaultLineGreyCross();
     lineFollowEncoder(100, 100, 30, 450);
@@ -285,14 +288,16 @@ void takeLastWhiteAndFinish() {
 
     stopMove(200);
     changePosGrabberC(30, grabberC.maxDown);
-    arcEnc(30, -30, 100, 20, 160);
+    arcEnc(30, -30, 100, 25, 160); 
     stopMove(300);
-    arcEnc(20, 20, 20, 20, 35);
+    arcEnc(30, 30, 30, 30, 35);
+    changePosGrabberD(100, grabberD.openMin);
     stopMove(200);
-    arcEnc(-30, 30, 30, 30, 90);
+    arcEnc(-30, 30, 30, 30, 100);
     changePosGrabberD(100, grabberD.close);
     stopMove(200);
-    arcEnc(30, -30, 30, 30, 90);
+    changePosGrabberC(60, grabberC.maxUpWithoutShip);
+    arcEnc(30, -30, 30, 30, 100);
     smartTurnLeft_angle(60, 100, 60, 170);
 
     // stopMove(200);
@@ -309,31 +314,31 @@ void takeLastWhiteAndFinish() {
     lineFollowCross(100, 100, 1);
     changePosGrabberC(100, grabberC.upForDrop);
     arcEnc(-100, 100, 100, 40, 90);
-    arcAngle(-40, 0, -100, -40, 90);
-    stopMove(200);
-    changePosGrabberD(100, grabberD.openMin);
+    arcAngle(-40, 0, -100, -40, 82);
+    stopMove(250);
+    changePosGrabberD(60, grabberD.openMin);
     stopMove(200);
     changePosGrabberC(100, grabberC.maxUp);
     arcEnc(30, -30, 60, 30, 30);
-    arcAngle(50, 0, 100, 50, 80);
-    smartTurnLeft_angle(50, 100, 50, 100);
+    arcAngle(50, 0, 100, 50, 65);
+    smartTurnLeft_angle(50, 100, 50, 107);
     lineFollowEncoder(50, 50, 50, 340);
-    arcEnc(-50, 50, 50, 20, 345);
+    arcEnc(-50, 50, 50, 25, 340);
     stopMove(200);
 }
 
 void readWelems() {
     setDefaultLineGreyCross();
-    lineFollowCross(30, 20, 1);
+    lineFollowCross(30, 25, 1);
     stopMove(250);
-    arcEnc(20, -20, 60, 20, 65);
+    arcEnc(25, -25, 60, 25, 65);
     stopMove(150);
-    arcAngle(-20, -20, -80, -20, 80);
-    arcAngle(-20, -20, -20, -20, 10);
+    arcAngle(-25, -25, -80, -25, 80);
+    arcAngle(-25, -25, -25, -25, 10);
     stopMove(200);
     readColors(encodersWelems, welemsColors, 2, &CDSensor3, 0);
-    arcEnc(-20, 20, 60, 20, 120);
-    arcEnc(-20, 20, 20, 20, 35);
+    arcEnc(-25, 25, 60, 25, 120);
+    arcEnc(-25, 25, 25, 25, 35);
     stopMove(150);
     arcAngle(40, 0, 100, 30, 80);
     arcAngle(30, 0, 30, 30, 10);
@@ -341,6 +346,27 @@ void readWelems() {
     stopMove(450);
 }
 
+
+void takeBigShipFromCrossToElements() {
+    setDefaultLine();
+
+    lineFollowEncoder(40, 100, 40, 415);
+    arcAngle(0, 40, 100, 40, 90);
+    changePosGrabberC(100, grabberC.maxUpWithoutShip);
+    arcEnc(-40, 40, 100, 25, 560);
+    arcEnc(-25, 25, 25, 25, 80);
+    changePosGrabberC(100, grabberC.maxUp);
+
+    arcEnc(-25, 25, 25, 25, 40);
+    stopMove(250);
+    arcAngle(40, 40, 100, 40, 90);
+    stopMove(100);
+    arcColor_enc(-40, 40, 100, 40, 400, &CDSensor1, 1);
+    arcToBase(40, 40, 40);
+    stopMove(200);
+    arcAngle(40, 40, 100, 40, 90);
+    stopMove(200);
+}
 
 
 task main(){
@@ -351,11 +377,10 @@ task main(){
     if (now < 7.8){
         playSound(soundException);
     }
-    stopMove(50);
 
-    // stopMove(500);
-    // takeLastWhiteAndFinish();
-    // stopMove(340432032);
+    //stopMove(500);
+    //takeBigShipFromCrossToElements();
+    //stopMove(340432032);
 
     start();
     readingElements();

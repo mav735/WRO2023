@@ -39,8 +39,8 @@ task initGrabber() {
     grabberC.upForDrop = -680;
 
     grabberD.close = 0;
-    grabberD.openMin = 220;
-    grabberD.openMax = 300;
+    grabberD.openMin = 205;
+    grabberD.openMax = 400;
     stopTask(initGrabber);
 }
 

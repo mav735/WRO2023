@@ -136,7 +136,7 @@ void getCDValues(tCDValues *CDSensor) {
                 CDSensor->color = 2;
             } else if (CDSensor->hue >= 20 && CDSensor->hue < 70) {
                 CDSensor->color = 5;
-            } else if (CDSensor->hue >= 70 && CDSensor->hue <= 205) {
+            } else if (CDSensor->hue >= 70 && CDSensor->hue <= 210) {
                 CDSensor->color = 3;
             } else {
                 CDSensor->color = 4;
