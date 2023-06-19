@@ -230,12 +230,14 @@ void fromSmallShipToElement() {
 
 void takeTwoLastElems() {
     setDefaultLineGreyCross();
+    changePosGrabberD(100, grabberD.openMax);
+    changePosGrabberC(60, grabberC.upForDrop);
     lineFollowEncoder(100, 100, 30, 320);
     lineFollowCross(30, 20, 1);
     stopMove(250);
     arcEnc(25, -25, 50, 20, 175);
-    changePosGrabberC(100, grabberC.maxDown);
     arcEnc(20, -20, 20, 20, 30);
+    changePosGrabberC(30, grabberC.maxDown);
     stopMove(250);
     getElements(markerColors[0], markerColors[1], 1, 1);
     lineFollowEncoder(30, 30, 30, 10);
