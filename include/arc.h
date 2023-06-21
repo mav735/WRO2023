@@ -98,10 +98,10 @@ void arcEnc(float startVA, float startVB, float topVX, float stopVX, float enc,
     while (checkEncForArc(
         startVA, startVB, (curEncA = nMotorEncoder[motorA] - MTVarsA.targetEnc),
         (curEncB = nMotorEncoder[motorB] - MTVarsB.targetEnc), enc)) {
-        
+
         motorAstop = false;
         motorBstop = false;
-    
+
         if (isSmoothA) {
             if (fabs(curEncA) <= smoothStartEncX) {
                 MTVarsA.targetV = smooth(startVA, maxVX, curEncA, boost);
@@ -324,8 +324,8 @@ void arcColor_enc(float startVA, float startVB, float topVX, float stopVX, float
         sleep(1);
     }
 
-    MTVarsA.targetEnc = nMotorEncoder[MotorA];
-    MTVarsB.targetEnc = nMotorEncoder[MotorB];
+    MTVarsA.targetEnc = nMotorEncoder[motorA];
+    MTVarsB.targetEnc = nMotorEncoder[motorB];
 }
 void arcColor_angle(float startVA, float startVB, float topVX, float stopVX, float angle, tCDValues *CDSensor, short color, float boost = gBoost) {
     arcColor_enc(startVA, startVB, topVX, stopVX, angleToEnc(startVA, startVB, angle), CDSensor, color, boost);
@@ -350,12 +350,12 @@ void smartTurnRight_angle(float startV, float topV, float stopV, float angle=90)
 }
 
 void reactiveTurnRight() {
-    motor[MotorA] = -100;
-    motor[MotorB] = -100;
+    motor[motorA] = -100;
+    motor[motorB] = -100;
     getCDValues(&CDSensor2);
     unsigned long tt = nPgmTime;
     bool flag = true;
-    while (-nMotorEncoder[MotorA] + MTVarsA.targetEnc < 140 || CDSensor2.color != 1){ 
+    while (-nMotorEncoder[motorA] + MTVarsA.targetEnc < 140 || CDSensor2.color != 1){
         motorAstop = false;
         motorBstop = false;
 
@@ -363,21 +363,21 @@ void reactiveTurnRight() {
         if (flag && nPgmTime - tt >= 160) {
             flag = false;
             setMotorBrakeMode(motorB, motorBrake);
-            motor[MotorB] = 0;
+            motor[motorB] = 0;
         }
         sleep(1);
     }
-    MTVarsA.targetEnc = nMotorEncoder[MotorA];
-    MTVarsB.targetEnc = nMotorEncoder[MotorB];
+    MTVarsA.targetEnc = nMotorEncoder[motorA];
+    MTVarsB.targetEnc = nMotorEncoder[motorB];
 }
 
 void reactiveTurnLeft() {
-    motor[MotorA] = 100;
-    motor[MotorB] = 100;
+    motor[motorA] = 100;
+    motor[motorB] = 100;
     getCDValues(&CDSensor1);
     unsigned long tt = nPgmTime;
     bool flag = true;
-    while (nMotorEncoder[MotorB] - MTVarsB.targetEnc < 140 || CDSensor1.color != 1){
+    while (nMotorEncoder[motorB] - MTVarsB.targetEnc < 140 || CDSensor1.color != 1){
         motorAstop = false;
         motorBstop = false;
 
@@ -385,12 +385,12 @@ void reactiveTurnLeft() {
         if (flag && nPgmTime - tt >= 160) {
             flag = false;
             setMotorBrakeMode(motorA, motorBrake);
-            motor[MotorA] = 0;
+            motor[motorA] = 0;
         }
         sleep(1);
     }
-    MTVarsA.targetEnc = nMotorEncoder[MotorA];
-    MTVarsB.targetEnc = nMotorEncoder[MotorB];
+    MTVarsA.targetEnc = nMotorEncoder[motorA];
+    MTVarsB.targetEnc = nMotorEncoder[motorB];
 }
 
 void arcToBase(int startV, int topV, int endV) {

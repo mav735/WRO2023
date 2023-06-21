@@ -39,7 +39,7 @@ task initGrabber() {
     grabberC.upForDrop = -660;
 
     grabberD.close = 0;
-    grabberD.openMin = 210;
+    grabberD.openMin = 204;
     grabberD.openMax = 400;
     stopTask(initGrabber);
 }
@@ -65,7 +65,7 @@ task thr_changePosGrabberC() {
 
         cisum += ce * cki;
 
-        
+
 
         cP = ce * ckp;
         cD = (ce - cee) * ckd;
@@ -89,7 +89,7 @@ task thr_changePosGrabberD() {
     float disum = 0;
     float dkp = 2;
     float dkd = 6;
-    float dki = 0.004
+    float dki = 0.004;
     dee = 0;
     float dtt = nPgmTime;
     while (nPgmTime - dtt < 5000) {
