@@ -36,10 +36,10 @@ task initGrabber() {
     grabberC.maxUp = 0;
     grabberC.maxUpWithoutShip = -390;
     grabberC.maxDown = -820;
-    grabberC.upForDrop = -680;
+    grabberC.upForDrop = -660;
 
     grabberD.close = 0;
-    grabberD.openMin = 205;
+    grabberD.openMin = 210;
     grabberD.openMax = 400;
     stopTask(initGrabber);
 }
@@ -54,12 +54,19 @@ task thr_changePosGrabberC() {
     float ctt = nPgmTime;
     while (nPgmTime - ctt < 5000) {
         ce = grabberC.targetPos - nMotorEncoder[motorC];
-        cisum += ce * cki;
-        if (cisum > 10) {
-            cisum = 10;
-        } else if (cisum < -10) {
-            cisum = -10;
+
+        if (ce == 0) {
+            cisum = 0;
+        } else if (ce > 0 && cee <= 0) {
+            cisum = 0;
+        } else if (ce < 0 && cee >= 0) {
+            cisum = 0;
         }
+
+        cisum += ce * cki;
+
+        
+
         cP = ce * ckp;
         cD = (ce - cee) * ckd;
         cU = cP + cD + cisum;
@@ -87,12 +94,14 @@ task thr_changePosGrabberD() {
     float dtt = nPgmTime;
     while (nPgmTime - dtt < 5000) {
         de = grabberD.targetPos - nMotorEncoder[motorD];
-        disum += de * dki;
-        if (disum > 10) {
-            disum = 10;
-        } else if (disum < -10) {
-            disum = -10;
+        if (de == 0) {
+            disum = 0;
+        } else if (de > 0 && dee <= 0) {
+            disum = 0;
+        } else if (de < 0 && dee >= 0) {
+            disum = 0;
         }
+        disum += de * dki;
         dP = de * dkp;
         dD = (de - dee) * dkd;
         dU = dP + dD + disum;

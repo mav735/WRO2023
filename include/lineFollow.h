@@ -1,6 +1,15 @@
-float kpConst = 0.6;
-float kdConst = 8;
-float kiConst = 0.005;
+float kpNow = 0.55;
+float kdNow = 6;
+float kiNow = 0.002;
+
+const float kpConstBase = 0.55;
+const float kdConstBase = 6;
+const float kiConstBase = 0.002;
+
+const float kpConstOne = 0.4;
+const float kdConstOne = 5;
+const float kiConstOne = 0.005;
+
 float calibrationPower = 50;
 
 typedef struct {
@@ -52,8 +61,8 @@ void countValues(tCDValues *firstCD, tCDValues *secondCD,
     secondValue = mapping(secondValue / amountValues, lineCFG.minLine,
                           lineCFG.maxLine, 0, 100);
 
-    float errors[3] = {(firstValue - 50) * lineCFG.inverse * 1.41,
-                       (secondValue - 50) * lineCFG.inverse * 1.41,
+    float errors[3] = {(firstValue - 50) * lineCFG.inverse,
+                       (secondValue - 50) * lineCFG.inverse,
                        (firstValue - secondValue) * lineCFG.inverse};
 
     firstValue = 0;
@@ -82,7 +91,20 @@ void countValues(tCDValues *firstCD, tCDValues *secondCD,
 
 }
 
+void setBaseCoef(){
+    kpNow = kpConstBase;
+    kdNow = kdConstBase;
+    kiNow = kiConstBase;
+}
+
+void setOneSensorCoef(){
+    kpNow = kpConstOne;
+    kdNow = kdConstOne;
+    kiNow = kiConstOne;
+}
+
 void setDefaultLine() {
+    setBaseCoef();
     lineCFG.maxLine = 255;
     lineCFG.minLine = 0;
     lineCFG.inverse = 1;
@@ -99,6 +121,7 @@ void setDefaultLine() {
 }
 
 void setDefaultLineGreyCross() {
+    setBaseCoef();
     lineCFG.maxLine = 255;
     lineCFG.minLine = 0;
     lineCFG.inverse = 1;
@@ -116,6 +139,7 @@ void setDefaultLineGreyCross() {
 
 void setLeftSensorBlackLineBlackStop(short side, short stopType) {
     // 1 - in -1 - out ||| stop - 0(left) 1(right) 2(both)
+    setOneSensorCoef();
     lineCFG.maxLine = 255;
     lineCFG.minLine = 0;
     lineCFG.inverse = side;
@@ -132,6 +156,7 @@ void setLeftSensorBlackLineBlackStop(short side, short stopType) {
 }
 
 void setDefaultLineWhiteCross() {
+    setBaseCoef();
     lineCFG.maxLine = 255;
     lineCFG.minLine = 0;
     lineCFG.inverse = 1;
@@ -149,6 +174,7 @@ void setDefaultLineWhiteCross() {
 
 void setLeftSensorBlueLineBlackStop(short side,
                                     short stopType) {  // 1 - in -1 - out
+    setOneSensorCoef();
     lineCFG.maxLine = 255;
     lineCFG.minLine = 0;
     lineCFG.inverse = side;
@@ -158,13 +184,32 @@ void setLeftSensorBlueLineBlackStop(short side,
     lineCFG.sensorsIndCross = stopType;
     lineCFG.rgb[0] = true;
     lineCFG.rgb[1] = true;
-    lineCFG.rgb[2] = true;
+    lineCFG.rgb[2] = false;
+    lineCFG.rgbCross[0] = false;
+    lineCFG.rgbCross[1] = false;
+    lineCFG.rgbCross[2] = true;
+}
+
+void setRightSensorBlueLineBlackStop(short side,
+                                    short stopType) {  // 1 - in -1 - out
+    setOneSensorCoef();
+    lineCFG.maxLine = 255;
+    lineCFG.minLine = 0;
+    lineCFG.inverse = side;
+    lineCFG.crossRoadMax = 50;
+    lineCFG.crossRoadMin = -100;
+    lineCFG.sensorsIndError = 1;
+    lineCFG.sensorsIndCross = stopType;
+    lineCFG.rgb[0] = true;
+    lineCFG.rgb[1] = true;
+    lineCFG.rgb[2] = false;
     lineCFG.rgbCross[0] = false;
     lineCFG.rgbCross[1] = false;
     lineCFG.rgbCross[2] = true;
 }
 
 void setRightSensorBlueGrayLineWhiteStop(short side, short stopType) {  // 1 - in -1 - out
+    setOneSensorCoef();
     lineCFG.maxLine = 170;
     lineCFG.minLine = 45;
     lineCFG.inverse = side;
@@ -185,6 +230,7 @@ void setRightSensorBlueGrayLineWhiteStop(short side, short stopType) {  // 1 - i
 }
 
 void setRightSensorBlueGrayLineBlueStop(short side, short stopType) {  // 1 - in -1 - out
+    setOneSensorCoef();
     lineCFG.maxLine = 170;
     lineCFG.minLine = 45;
     lineCFG.inverse = side;
@@ -206,9 +252,9 @@ void setRightSensorBlueGrayLineBlueStop(short side, short stopType) {  // 1 - in
 
 void calcKF(float power, float *kp, float *kd, float *ki) {
     float temp = sqrt(power / calibrationPower);
-    *kp = temp * kpConst;
-    *kd = temp * kdConst;
-    *ki = temp * kiConst;
+    *kp = temp * kpNow;
+    *kd = temp * kdNow;
+    *ki = temp * kiNow;
 }
 
 void lineFollowCross(float startPower, float endPower, short crossCount,

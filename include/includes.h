@@ -15,6 +15,7 @@ bool motorBstop = false;
 #include "grabberPID.h"
 #include "logs.h"
 #include "async.h"
+#include "templatesDop.h"
 
 void initAll(){
     setMotorBrakeMode(motorA, motorCoast);
