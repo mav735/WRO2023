@@ -28,7 +28,7 @@ void start(){
     stopMove(250);
 	setDefaultLine();
     readColors(encodersMarkers, markerColors, 2, &CDSensor3, 0);
-    arcEnc(-30, 30, 50, 50, 135);
+    arcEnc(-50, 50, 50, 50, 135);
     changePosGrabberC(50, grabberC.maxUpWithoutShip);
     lineFollowEncoder(50, 55, 55, 300);
     arcEnc(-55, 55, 55, 20, 305);
@@ -299,66 +299,15 @@ void takeRightWelem_norm() {
 
 void takeSmallShipAndThrowOn() {
     setDefaultLine();
-    lineFollowEncoder(70, 70, 70, 50);
+    lineFollowEncoder(70, 70, 70, 50)
     changePosGrabberD(100, grabberD.openMin);
+    lineFollowCross(70, 100, 1);
     lineFollowEncoder(100, 100, 100, 50);
     changePosGrabberD(100, grabberD.close);
     lineFollowEncoder(100, 100, 100, 50);
     changePosGrabberC(100, grabberC.maxUpWithoutShip);
     lineFollowEncoder(100, 100, 100, 95);
-
-    lineFollowCross(70, 100, 1);
-
-
-    
-
-    lineFollowEncoder(100, 100, 60, 100);
-    lineFollowCross(60, 20, 1);
-    stopMove(150);
-    changePosGrabberC(100, grabberC.maxUp);
-    stopMove(300);
-    arcEnc(60, 60, 100, 60, 400);
-    arcColor_enc(-60, 60, 100, 80, 700, &CDSensor2, 1);
-    arcEnc(-80, 80, 80, 80, 30);
-    arcColor_enc(-80, 0, -100, -100, 40, &CDSensor2, 1);
-    lineFollowCross(100, 100, 1);
-    lineFollowEncoder(100, 100, 50, 850);
-    arcAngle(0, 50, 100, 40, 80);
-    changePosGrabberC(100, grabberC.upForDrop);
-    arcAngle(0, 40, 40, 40, 10);
-    stopMove(50);
-    arcEnc(30, -30, 30, 30, 25);
-    stopMove(450);
-    changePosGrabberD(100, grabberD.openMin);
-    stopMove(200);
-    changePosGrabberC(100, grabberC.maxUpWithoutShip);
-    stopMove(200);
-    arcColor_angle(70, 0, 100, 50, 80, &CDSensor1, 1);
-}
-
-void takeSmallShipAndThrowOn_fast() {
-    setDefaultLine();
-    lineFollowEncoder(70, 70, 70, 50);
-    lineFollowCross(70, 100, 1);
-    reactiveTurnLeft();
-    changePosGrabberD(100, grabberD.openMin);
-    lineFollowEncoder(100, 100, 100, 150);
-    changePosGrabberD(100, grabberD.close);
-    lineFollowEncoder(100, 100, 100, 50);
-    changePosGrabberC(100, grabberC.maxUpWithoutShip);
-    lineFollowEncoder(100, 100, 100, 95);
-    lineFollowCross(100, 100, 1);
-    reactiveTurnLeft();
-    takeRightWelem_norm();
-
-    setDefaultLine();
-    lineFollowCross(80, 100, 1);
-
-    reactiveTurnRight();
-    lineFollowCross(100, 100, 1);
-
-    reactiveTurnLeft();
-    lineFollowCross(70, 25, 1);
+    lineFollowCross(100, 20, 1);
     stopMove(150);
     changePosGrabberC(100, grabberC.maxUp);
     stopMove(300);
@@ -401,7 +350,7 @@ void takeTwoLastElems() {
     arcEnc(20, -20, 20, 20, 30);
     changePosGrabberC(30, grabberC.maxDown);
     stopMove(250);
-    getElements(markerColors[0], markerColors[1], 2, 1); // 1, 1
+    getElements(markerColors[0], markerColors[1], 2, 1, 1);
     lineFollowEncoder(30, 30, 30, 10);
     changePosGrabberD(100, grabberD.openMin);
     lineFollowEncoder(30, 30, 30, 50);
@@ -417,7 +366,7 @@ void takeTwoLastElems() {
 
 void takeBigShipAndThrowOn() {
     setDefaultLine();
-    arcEnc(25, -25, 25, 25, 90);
+    arcEnc(25, -25, 25, 25, 100);
     stopMove(200);
     arcAngle(30, 30, 100, 30, 80);
     arcAngle(30, 30, 30, 30, 10);
@@ -435,15 +384,12 @@ void takeBigShipAndThrowOn() {
     lineFollowCross(100, 100, 1, 20);
     lineFollowEncoder(100, 100, 100, 950, 20);
 
-    newThrowRed_fast();
-    for (int jur = 0; jur < 4; ++jur) {
-        if (elementsColors[jur] == 2) {
-            getRed_fast(3 - jur);
-            break;
-        }
-    }
-    lineFollowEncoder(45, 45, 45, 30);
-    stopMove(100);
+    lineFollowCross(100, 40, 1, 20);
+    arcAngle(-40, 0, -100, -40, 90);
+    lineFollowEncoder(40, 60, 30, 315);
+
+    stopMove(200);
+    arcEnc(40, -40, 100, 30, 300);
     changePosGrabberC(100, grabberC.upForDrop);
     stopMove(500);
     arcEnc(30, -30, 30, 30, 25);
@@ -451,7 +397,7 @@ void takeBigShipAndThrowOn() {
     changePosGrabberD(100, grabberD.openMin);
     stopMove(250);
     changePosGrabberC(100, grabberC.maxUpWithoutShip);
-    arcEnc(40, -40, 100, 60, 115);
+    arcEnc(40, -40, 100, 60, 90);
     smartTurnRight_angle(60, 100, 60);
     stopMove(0);
 }
@@ -505,73 +451,6 @@ void takeLastWhiteAndFinish() {
     stopMove(200);
 }
 
-
-void takeLastWhiteAndFinish_fast() {
-    lineFollowCross(70, 100, 1);
-    changePosGrabberD(100, grabberD.openMax);
-    changePosGrabberC(100, grabberC.maxDown);
-    reactiveTurnRight();
-    setDefaultLineGreyCross();
-    lineFollowEncoder(100, 100, 40, 450);
-    lineFollowCross(40, 30, 1);
-    stopMove(100);
-    changePosGrabberD(50, grabberD.close);
-    arcAngle(50, 0, 100, 50, 20);
-    stopMove(200);
-    changePosGrabberC(100, grabberC.upForDrop);
-
-    smartTurnLeft_angle(80, 100, 80, 160);
-
-    // stopMove(200);
-    // changePosGrabberC(60, grabberC.maxDown);
-    // arcEnc(40, -40, 100, 25, 220);
-    // stopMove(300);
-    // getLeftWelem();
-    // changePosGrabberC(90, grabberC.maxUpWithoutShip);
-    // smartTurnLeft_angle(80, 100, 60, 180);
-
-    setDefaultLine();
-    lineFollowCross(80, 100, 1);
-    reactiveTurnLeft();
-    lineFollowCross(100, 100, 1);
-    changePosGrabberC(100, grabberC.upForDrop);
-    arcEnc(-100, 100, 100, 40, 90);
-    arcAngle(-40, 0, -100, -40, 85);
-    stopMove(250);
-    changePosGrabberD(60, grabberD.openMin);
-    stopMove(200);
-    changePosGrabberC(100, grabberC.maxUp);
-    arcEnc(30, -30, 60, 30, 30);
-    arcAngle(50, 0, 100, 50, 68);
-    smartTurnLeft_angle(50, 100, 50, 107);
-    lineFollowEncoder(50, 50, 50, 340);
-    arcEnc(-50, 50, 50, 25, 340);
-    stopMove(200);
-}
-
-
-void takeBigShipFromCrossToElements() {
-    setDefaultLine();
-
-    lineFollowEncoder(40, 100, 40, 415);
-    arcAngle(0, 40, 100, 40, 90);
-    changePosGrabberC(100, grabberC.maxUpWithoutShip);
-    arcEnc(-40, 40, 100, 25, 560);
-    arcEnc(-25, 25, 25, 25, 80);
-    changePosGrabberC(100, grabberC.maxUp);
-
-    arcEnc(-25, 25, 25, 25, 40);
-    stopMove(250);
-    arcAngle(40, 40, 100, 40, 90);
-    stopMove(100);
-    arcColor_enc(-40, 40, 100, 40, 400, &CDSensor1, 1);
-    arcToBase(40, 40, 40);
-    stopMove(200);
-    arcAngle(40, 40, 100, 40, 90);
-    stopMove(200);
-}
-
-
 task main(){
     initAll();
     unsigned long varPgmTime = nPgmTime;
@@ -599,7 +478,7 @@ task main(){
 
     takeBigShipAndThrowOn();
 
-    takeLastWhiteAndFinish_fast();
+    takeLastWhiteAndFinish();
 
     eraseDisplay();
     displayCenteredTextLine(2, "%d", nPgmTime - varPgmTime);

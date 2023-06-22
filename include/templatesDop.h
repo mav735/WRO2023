@@ -382,3 +382,24 @@ void throwRedCont_fast(int pos) {
     }
 
 }
+
+void takeBigShipFromCrossToElements() {
+    setDefaultLine();
+
+    lineFollowEncoder(40, 100, 40, 415);
+    arcAngle(0, 40, 100, 40, 90);
+    changePosGrabberC(100, grabberC.maxUpWithoutShip);
+    arcEnc(-40, 40, 100, 25, 560);
+    arcEnc(-25, 25, 25, 25, 80);
+    changePosGrabberC(100, grabberC.maxUp);
+
+    arcEnc(-25, 25, 25, 25, 40);
+    stopMove(250);
+    arcAngle(40, 40, 100, 40, 90);
+    stopMove(100);
+    arcColor_enc(-40, 40, 100, 40, 400, &CDSensor1, 1);
+    arcToBase(40, 40, 40);
+    stopMove(200);
+    arcAngle(40, 40, 100, 40, 90);
+    stopMove(200);
+}
