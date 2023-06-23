@@ -30,7 +30,7 @@ task readingColors() {
 task showColorsElements(){
     for(short i = 0; i < amountToShow; i++){
         if (elementsColToShow[i] == 0) {
-            setLEDColor(ledOff);
+            setLEDColor(ledRed);
         } else if (elementsColToShow[i] == 1) {
             setLEDColor(ledOff);
         } else if (elementsColToShow[i] == 2) {
