@@ -1,6 +1,6 @@
-const float g_ArcKP = 3;
-const float g_ArcKD = 6;
-const float g_ArcKI = 0.05;
+const float g_ArcKP = 4;
+const float g_ArcKD = 8;
+const float g_ArcKI = 0.07;
 
 bool checkEncForArc(float startVA, float startVB, float encA, float encB,
                     float enc) {

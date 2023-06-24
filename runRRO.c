@@ -369,7 +369,7 @@ void takeBigShipAndThrowOn() {
     stopMove(0);
 }
 
-void takeLastWhiteAndFinish() {
+void takeLastWhiteAndFinish(short position=0) {
     lineFollowCross(70, 100, 1);
     changePosGrabberD(100, grabberD.openMax);
     reactiveTurnRight();
@@ -381,7 +381,13 @@ void takeLastWhiteAndFinish() {
     changePosGrabberC(30, grabberC.maxDown);
     arcEnc(30, -30, 100, 25, 160);
     stopMove(300);
-    arcEnc(30, 30, 30, 30, 35);
+    if (!position){
+        arcEnc(30, 30, 30, 30, 35);
+    }
+    else{
+        arcEnc(-30, -30, -30, -30, 35);
+    }
+
     changePosGrabberD(100, grabberD.openMin);
     stopMove(200);
     arcEnc(-30, 30, 30, 30, 100);
@@ -389,8 +395,13 @@ void takeLastWhiteAndFinish() {
     stopMove(200);
     changePosGrabberC(60, grabberC.maxUpWithoutShip);
     arcEnc(30, -30, 30, 30, 100);
-    smartTurnLeft_angle(60, 100, 60, 170);
 
+    if(!position){
+        smartTurnLeft_angle(60, 100, 60, 170);
+    }
+    else{
+        smartTurnRight_angle(60, 100, 60, 170);
+    }
     // stopMove(200);
     // changePosGrabberC(60, grabberC.maxDown);
     // arcEnc(40, -40, 100, 25, 220);
@@ -403,6 +414,43 @@ void takeLastWhiteAndFinish() {
     lineFollowCross(80, 100, 1);
     reactiveTurnLeft();
     lineFollowCross(100, 100, 1);
+    changePosGrabberC(100, grabberC.upForDrop);
+    arcEnc(-100, 100, 100, 40, 90);
+    arcAngle(-40, 0, -100, -40, 85);
+    stopMove(250);
+    changePosGrabberD(60, grabberD.openMin);
+    stopMove(200);
+    changePosGrabberC(100, grabberC.maxUp);
+    arcEnc(30, -30, 60, 30, 30);
+    arcAngle(50, 0, 100, 50, 68);
+    smartTurnLeft_angle(50, 100, 50, 107);
+    lineFollowEncoder(50, 50, 50, 340);
+    arcEnc(-50, 50, 50, 25, 340);
+    stopMove(200);
+}
+
+void takeLastElemAndFinish(short position=0) {
+    lineFollowCross(70, 100, 2);
+    changePosGrabberC(60, grabberC.maxUpWithoutShip);
+    changePosGrabberD(100, grabberD.openMin);
+    reactiveTurnRight();
+    setDefaultLineGreyCross();
+    lineFollowEncoder(100, 100, 30, 450);
+    lineFollowCross(30, 20, 1);
+
+    stopMove(200);
+    arcEnc(25, -25, 50, 20, 175);
+    arcEnc(20, -20, 20, 20, 30);
+    changePosGrabberC(50, grabberC.maxDown);
+    stopMove(500);
+
+    getElementsByPos(position, 1, 1, 1);
+    smartTurnLeft_angle(70, 100, 100, 170);
+
+    setDefaultLine();
+    lineFollowCross(80, 100, 1);
+    reactiveTurnLeft();
+    lineFollowCross(100, 100, 2);
     changePosGrabberC(100, grabberC.upForDrop);
     arcEnc(-100, 100, 100, 40, 90);
     arcAngle(-40, 0, -100, -40, 85);
@@ -580,10 +628,10 @@ void fullRandom() {
             }
             else if (posesToGrab[idx] == 1){
                 takeRightWelem_norm();
-            }  
+            }
         }
 
-        
+
         arcAngle(0, -50, -100, -50, 93);
         arcEnc(50, -50, 100, 50, 700);
         arcColor_enc(0, -50, 100, 50, 100, &CDSensor2, 1);
@@ -613,30 +661,36 @@ void fullRandom() {
             if ((welemsColors[i] == markerColors[0]) && (!markerOnBigShip[0])){
                 if (posesBigGrab[0] == -1){
                     posesBigGrab[0] = i;
+                    welemsColors[i] = -1
                     markerOnBigShip[0] = true;
                 }
                 else if(posesBigGrab[1] == -1){
-                    posesBigGrab[1] = i; 
+                    posesBigGrab[1] = i;
+                    welemsColors[i] = -1
                     markerOnBigShip[0] = true;
                 }
             }
             else if ((welemsColors[i] == markerColors[1]) && (!markerOnBigShip[1])){
                 if (posesBigGrab[0] == -1){
                     posesBigGrab[0] = i;
+                    welemsColors[i] = -1
                     markerOnBigShip[1] = true;
                 }
                 else if(posesBigGrab[1] == -1){
-                    posesBigGrab[1] = i;
+	                    posesBigGrab[1] = i;
+                    welemsColors[i] = -1
                     markerOnBigShip[1] = true;
                 }
             }
             else if ((welemsColors[i] == 0) && (!whiteOnBigShip)){
                 if (posesBigGrab[0] == -1){
                     posesBigGrab[0] = i;
+                    welemsColors[i] = -1
                     whiteOnBigShip = true;
                 }
                 else if(posesBigGrab[1] == -1){
                     posesBigGrab[1] = i;
+                    welemsColors[i] = -1
                     whiteOnBigShip = true;
                 }
             }
@@ -648,7 +702,7 @@ void fullRandom() {
             }
             else if (posesBigGrab[idx] == 1){
                 takeRightWelem_norm();
-            }  
+            }
         }
 
         smartTurnLeft_angle(50, 100, 80);
@@ -661,7 +715,7 @@ void fullRandom() {
         lineFollowCross(80, 100, 2);
         reactiveTurnRight();
     }
-    
+
 
     setDefaultLineGreyCross();
     lineFollowEncoder(100, 100, 30, 380);
@@ -683,30 +737,36 @@ void fullRandom() {
         if ((elementsColors[i] == markerColors[0]) && (!markerOnBigShip[0])){
             if (posesBigGrab[0] == -1){
                 posesBigGrab[0] = i;
+                elementsColors[i] = -1;
                 markerOnBigShip[0] = true;
             }
             else if(posesBigGrab[1] == -1){
-                posesBigGrab[1] = i; 
+                posesBigGrab[1] = i;
+                elementsColors[i] = -1;
                 markerOnBigShip[0] = true;
             }
         }
         else if ((elementsColors[i] == markerColors[1]) && (!markerOnBigShip[1])){
             if (posesBigGrab[0] == -1){
                 posesBigGrab[0] = i;
+                elementsColors[i] = -1;
                 markerOnBigShip[1] = true;
             }
             else if(posesBigGrab[1] == -1){
                 posesBigGrab[1] = i;
+                elementsColors[i] = -1;
                 markerOnBigShip[1] = true;
             }
         }
         else if ((elementsColors[i] == 0) && (!whiteOnBigShip)){
             if (posesBigGrab[0] == -1){
                 posesBigGrab[0] = i;
+                elementsColors[i] = -1;
                 whiteOnBigShip = true;
             }
             else if(posesBigGrab[1] == -1){
                 posesBigGrab[1] = i;
+                elementsColors[i] = -1;
                 whiteOnBigShip = true;
             }
         }
@@ -728,10 +788,47 @@ void fullRandom() {
         else{
             secondPos = posesBigGrab[1];
         }
-        
+
     }
 
     getElementsByPos(firstPos, secondPos, amountToTake, 1);
+
+    arcEnc(20, -20, 30, 20, 120);
+    stopMove(200);
+    lineFollowEncoder(30, 30, 30, 10);
+    changePosGrabberD(100, grabberD.openMin);
+    lineFollowEncoder(30, 30, 30, 50);
+    changePosGrabberD(100, grabberD.close);
+    lineFollowEncoder(30, 30, 30, 10);
+    changePosGrabberC(100, grabberC.maxUpWithoutShip);
+    lineFollowCross(30, 25, 1);
+    stopMove(200);
+
+    takeBigShipAndThrowOn();
+
+    short posLastElem = -1;
+    short needColor = -2;
+
+    if (!markerOnBigShip[0]){
+        needColor = markerColors[0];
+    }
+    else if(!markerOnBigShip[1]){
+        needColor = markerColors[1];
+    }
+    else if(!whiteOnBigShip){
+        needColor = 0;
+    }
+
+
+    if (posLastElem == -1){
+        for (short i = 0; i < 4; i++){
+            if (elementsColors[i] == needColor){
+                posLastElem = i;
+            }
+        }
+    }
+
+    takeLastElemAndFinish(posLastElem);
 }
 
 task main(){
@@ -742,6 +839,11 @@ task main(){
     if (now < 7.8){
         playSound(soundException);
     }
+
+    // stopMove(500);
+    // arcAngle(-10, 30, 100, 30, 90);
+
+    // stopMove(123081320);
 
     stopMove(500);
     fullRandom();
