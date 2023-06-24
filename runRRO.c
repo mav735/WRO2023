@@ -29,7 +29,7 @@ bool elemsOnSmallShip[3] = {false, false, false};
 short colorsForSmallShip[3] = {-2, -2, 0}
 
 short nowGrab[2] = {-1, -1};
-//----------------------------------------
+//-------------------------------------------
 
 #include "include/includes.h"
 
