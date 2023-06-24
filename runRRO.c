@@ -728,6 +728,7 @@ void fullRandom() {
     takeLastElemAndFinish(nowGrab[0]);
 }
 
+
 task main(){
     initAll();
     stopMove(300);
