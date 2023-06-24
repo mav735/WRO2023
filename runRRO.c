@@ -21,19 +21,55 @@ int encodersWelems[2] = {0, 150};
 short welemsColors[2] = {0, 0};
 short gotElements[4] = {0, 0, 0, 0};
 
+//Full Random-----------------------------
+bool elemsOnBigShip[3] = {false, false, false};
+short colorsForBigShip[3] = {-2, -2, 0};
 
-bool markerOnBigShip[2] = {false, false};
-bool whiteOnBigShip = false;
-int elemsBigShip = 0;
+bool elemsOnSmallShip[3] = {false, false, false};
+short colorsForSmallShip[3] = {-2, -2, 0}
 
-
-bool inverseMarkerOnSmallShip[2] = {false, false};
-bool whiteOnSmallShip = false;
-int elemsSmallShip = 0;
+short nowGrab[2] = {-1, -1};
+//----------------------------------------
 
 #include "include/includes.h"
 
+void findPosInElems(short *colorsToFind, bool *colorsStatus, short amount=3){
+    for (short idx = 0; idx < 4; idx++){
+        for (short j = 0; j < amount; j++){
+            if ((elementsColors[idx] == colorsToFind[j]) && (!colorsStatus[j])){
+                if (nowGrab[0] == -1){
+                    nowGrab[0] = idx;
+                    colorsStatus[j] = true;
+                    elementsColors[idx] = -1;
+                }
+                else if (nowGrab[1] == -1){
+                    nowGrab[1] = idx;
+                    colorsStatus[j] = true;
+                    elementsColors[idx] = -1;
+                }
+            }
+        }
+    }
+}
 
+void findPosInWelems(short *colorsToFind, bool *colorsStatus, short amount=3){
+    for (short idx = 0; idx < 2; idx++){
+        for (short j = 0; j < amount; j++){
+            if ((welemsColors[idx] == colorsToFind[j]) && (!colorsStatus[j])){
+                if (nowGrab[0] == -1){
+                    nowGrab[0] = idx;
+                    colorsStatus[j] = true;
+                    welemsColors[idx] = -1;
+                }
+                else if (nowGrab[1] == -1){
+                    nowGrab[1] = idx;
+                    colorsStatus[j] = true;
+                    welemsColors[idx] = -1;
+                }
+            }
+        }
+    }
+}
 
 void start(){
     stopMove(250);
@@ -234,7 +270,7 @@ void getElementsByPos(short pos1, short pos2, short amount=2, short finalPos=0){
 
 void takeLeftWelem_norm() {
     stopMove(200);
-    arcEnc(30, 30, 100, 30, 35);
+    arcEnc(30, 30, 100, 30, 30);
     stopMove(200);
     changePosGrabberD(100, grabberD.openMin);
     stopMove(200);
@@ -245,14 +281,14 @@ void takeLeftWelem_norm() {
     // changePosGrabberC(60, grabberC.maxUpWithoutShip);
     arcEnc(30, -30, 100, 30, 160);
     stopMove(200);
-    arcEnc(-30, -30, -100, -30, 35);
+    arcEnc(-30, -30, -100, -30, 30);
     stopMove(200);
 }
 
 
 void takeRightWelem_norm() {
     stopMove(200);
-    arcEnc(-30, -30, -100, -30, 35);
+    arcEnc(-30, -30, -100, -30, 30);
     stopMove(300);
     changePosGrabberD(100, grabberD.openMin);
     stopMove(200);
@@ -263,7 +299,7 @@ void takeRightWelem_norm() {
     // changePosGrabberC(60, grabberC.maxUpWithoutShip);
     arcEnc(30, -30, 100, 30, 160);
     stopMove(200);
-    arcEnc(30, 30, 100, 30, 35);
+    arcEnc(30, 30, 100, 30, 30);
     stopMove(200);
 }
 
@@ -327,23 +363,23 @@ void takeTwoLastElems() {
     changePosGrabberD(100, grabberD.close);
     lineFollowCross(30, 25, 1);
     changePosGrabberC(100, grabberC.maxUpWithoutShip);
-    stopMove(200);
+    stopMove(250);
 }
 
 
 void takeBigShipAndThrowOn() {
     setDefaultLine();
-    arcEnc(25, -25, 25, 25, 100);
+    arcEnc(30, -30, 30, 30, 100);
     stopMove(200);
     arcAngle(30, 30, 100, 30, 80);
     arcAngle(30, 30, 30, 30, 10);
     stopMove(250);
-    arcEnc(-40, 40, 100, 20, 595);
-    arcEnc(-20, 20, 20, 20, 100);
+    arcEnc(-40, 40, 100, 30, 595);
+    arcEnc(-30, 30, 30, 30, 100);
     changePosGrabberC(100, grabberC.maxUp);
     arcEnc(-25, 25, 25, 25, 60);
     stopMove(150);
-    arcEnc(35, 35, 100, 35, 350);
+    arcEnc(40, 40, 100, 40, 350);
     arcColor_enc(-40, 40, 100, 45, 580, &CDSensor1, 1);
     arcEnc(-45, 45, 45, 45, 50);
     arcColor_enc(0, 45, 100, 70, 600, &CDSensor1, 1);
@@ -446,6 +482,7 @@ void takeLastElemAndFinish(short position=0) {
 
     getElementsByPos(position, 1, 1, 1);
     smartTurnLeft_angle(70, 100, 100, 170);
+    changePosGrabberC(60, grabberC.maxUpWithoutShip);
 
     setDefaultLine();
     lineFollowCross(80, 100, 1);
@@ -507,59 +544,24 @@ void fromElemesToWelems(){
 
 void fullRandom() {
     start();
+
+    colorsForSmallShip[0] = 7 - markerColors[0];
+    colorsForSmallShip[1] = 7 - markerColors[1];
+    colorsForBigShip[0] = markerColors[0];
+    colorsForBigShip[1] = markerColors[1];
+    
     readingElements();
-    int posesToGrab[2] = {-1, -1};
-    for (int idx = 0; idx < 4; ++idx) {
-        if ((7 - markerColors[0] == elementsColors[idx]) && (!inverseMarkerOnSmallShip[0])){
-            if (posesToGrab[0] == -1){
-                posesToGrab[0] = idx;
-                elementsColors[idx] = -1
-                inverseMarkerOnSmallShip[0] = true;
-            }
-            else if (posesToGrab[1] == -1){
-                posesToGrab[1] = idx;
-                elementsColors[idx] = -1
-                inverseMarkerOnSmallShip[0] = true;
-            }
-        }
 
-        else if ((7 - markerColors[1] == elementsColors[idx]) && (!inverseMarkerOnSmallShip[1])){
-            if (posesToGrab[0] == -1){
-                posesToGrab[0] = idx;
-                elementsColors[idx] = -1
-                inverseMarkerOnSmallShip[1] = true;
-            }
-            else if (posesToGrab[1] == -1){
-                posesToGrab[1] = idx;
-                elementsColors[idx] = -1
-                inverseMarkerOnSmallShip[1] = true;
-            }
-        }
+    findPosInElems(colorsForSmallShip, elemsOnSmallShip, 3);
 
-        else if ((elementsColors[idx] == 0) && (!whiteOnSmallShip)){
-            if (posesToGrab[0] == -1){
-                posesToGrab[0] = idx;
-                elementsColors[idx] = -1
-                whiteOnSmallShip = true;
-            }
-            else if (posesToGrab[1] == -1){
-                whiteOnSmallShip = true;
-                elementsColors[idx] = -1
-                posesToGrab[1] = idx;
-            }
-        }
-    }
-
-    elemsSmallShip = (int)whiteOnSmallShip + (int)inverseMarkerOnSmallShip[0] + (int)inverseMarkerOnSmallShip[1];
-
-    eraseDisplay();
-    displayCenteredTextLine(5, "%d %d", posesToGrab[0], posesToGrab[1]);
-    sleep(2000);
-    getElementsByPos(posesToGrab[0], posesToGrab[1], elemsSmallShip);
     bool flagElemsForBigShipInWelems = false;
+    short elemsSmallShip = (int)elemsOnSmallShip[0] + (int)elemsOnSmallShip[1] + (int)elemsOnSmallShip[2];
+    getElementsByPos(nowGrab[0], nowGrab[1], elemsSmallShip);
 
     if (elemsSmallShip == 2){
         takeSmallShipAndThrowOn();
+        nowGrab[0] = -1;
+        nowGrab[1] = -1;
         changePosGrabberC(100, grabberC.maxUpWithoutShip);
         setDefaultLine();
         lineFollowCross(80, 100, 1);
@@ -567,6 +569,8 @@ void fullRandom() {
         setDefaultLineGreyCross();
         lineFollowEncoder(100, 100, 40, 450);
         readWelems();
+
+        findPosInWelems(colorsForBigShip, elemsOnBigShip, 3);
         flagElemsForBigShipInWelems = true;
     }
     else{
@@ -574,59 +578,20 @@ void fullRandom() {
         fromElemesToWelems();
         readWelems();
 
-        if (posesToGrab[0] != -1){
-            posesToGrab[0] = -2;
+        if (nowGrab[0] != -1){
+            nowGrab[0] = -2;
         }
-        if (posesToGrab[1] != -1){
-            posesToGrab[1] = -2;
+        if (nowGrab[1] != -1){
+            nowGrab[1] = -2;
         }
-
-        for (int idx = 0; idx < 2; ++idx) {
-            if ((7 - markerColors[0] == welemsColors[idx]) && (!inverseMarkerOnSmallShip[0])){
-                if (posesToGrab[0] == -1){
-                    posesToGrab[0] = idx;
-                    welemsColors[idx] = -1
-                    inverseMarkerOnSmallShip[0] = true;
-                }
-                else if (posesToGrab[1] == -1){
-                    posesToGrab[1] = idx;
-                    welemsColors[idx] = -1
-                    inverseMarkerOnSmallShip[0] = true;
-                }
-            }
-
-            else if ((7 - markerColors[1] == welemsColors[idx]) && (!inverseMarkerOnSmallShip[1])){
-                if (posesToGrab[0] == -1){
-                    posesToGrab[0] = idx;
-                    welemsColors[idx] = -1
-                    inverseMarkerOnSmallShip[1] = true;
-                }
-                else if (posesToGrab[1] == -1){
-                    posesToGrab[1] = idx;
-                    welemsColors[idx] = -1
-                    inverseMarkerOnSmallShip[1] = true;
-                }
-            }
-
-            else if ((welemsColors[idx] == 0) && (!whiteOnSmallShip)){
-                if (posesToGrab[0] == -1){
-                    posesToGrab[0] = idx;
-                    welemsColors[idx] = -1
-                    whiteOnSmallShip = true;
-                }
-                else if (posesToGrab[1] == -1){
-                    whiteOnSmallShip = true;
-                    welemsColors[idx] = -1
-                    posesToGrab[1] = idx;
-                }
-            }
-        }
+        
+        findPosInWelems(colorsForSmallShip, elemsOnSmallShip, 3);
 
         for (short idx = 0; idx < 2; idx++){
-            if (posesToGrab[idx] == 0){
+            if (nowGrab[idx] == 0){
                 takeLeftWelem_norm();
             }
-            else if (posesToGrab[idx] == 1){
+            else if (nowGrab[idx] == 1){
                 takeRightWelem_norm();
             }
         }
@@ -634,15 +599,17 @@ void fullRandom() {
 
         arcAngle(0, -50, -100, -50, 93);
         arcEnc(50, -50, 100, 50, 700);
-        arcColor_enc(0, -50, 100, 50, 100, &CDSensor2, 1);
+        arcColor_enc(0, -50, -100, -50, 100, &CDSensor2, 1);
         takeSmallShipAndThrowOn();
+        nowGrab[0] = -1;
+        nowGrab[1] = -1;
 
-        if ((welemsColors[0] == markerColors[0]) || (welemsColors[0] == markerColors[1]) || (welemsColors[0] == 0)){
+        findPosInWelems(colorsForBigShip, elemsOnBigShip, 3);
+
+        if ((nowGrab[0] + nowGrab[1]) != -2){
             flagElemsForBigShipInWelems = true;
         }
-        else if ((welemsColors[1] == markerColors[0]) || (welemsColors[1] == markerColors[1]) || (welemsColors[1] == 0)){
-            flagElemsForBigShipInWelems = true
-        }
+
         if (flagElemsForBigShipInWelems){
             changePosGrabberC(100, grabberC.maxUpWithoutShip);
             setDefaultLine();
@@ -655,52 +622,12 @@ void fullRandom() {
 
     }
 
-    int posesBigGrab[2] = {-1, -1};
     if (flagElemsForBigShipInWelems){
-        for (short i = 0; i < 2; i++){
-            if ((welemsColors[i] == markerColors[0]) && (!markerOnBigShip[0])){
-                if (posesBigGrab[0] == -1){
-                    posesBigGrab[0] = i;
-                    welemsColors[i] = -1
-                    markerOnBigShip[0] = true;
-                }
-                else if(posesBigGrab[1] == -1){
-                    posesBigGrab[1] = i;
-                    welemsColors[i] = -1
-                    markerOnBigShip[0] = true;
-                }
-            }
-            else if ((welemsColors[i] == markerColors[1]) && (!markerOnBigShip[1])){
-                if (posesBigGrab[0] == -1){
-                    posesBigGrab[0] = i;
-                    welemsColors[i] = -1
-                    markerOnBigShip[1] = true;
-                }
-                else if(posesBigGrab[1] == -1){
-	                    posesBigGrab[1] = i;
-                    welemsColors[i] = -1
-                    markerOnBigShip[1] = true;
-                }
-            }
-            else if ((welemsColors[i] == 0) && (!whiteOnBigShip)){
-                if (posesBigGrab[0] == -1){
-                    posesBigGrab[0] = i;
-                    welemsColors[i] = -1
-                    whiteOnBigShip = true;
-                }
-                else if(posesBigGrab[1] == -1){
-                    posesBigGrab[1] = i;
-                    welemsColors[i] = -1
-                    whiteOnBigShip = true;
-                }
-            }
-        }
-
         for (short idx = 0; idx < 2; idx++){
-            if (posesBigGrab[idx] == 0){
+            if (nowGrab[idx] == 0){
                 takeLeftWelem_norm();
             }
-            else if (posesBigGrab[idx] == 1){
+            else if (nowGrab[idx] == 1){
                 takeRightWelem_norm();
             }
         }
@@ -721,118 +648,66 @@ void fullRandom() {
     lineFollowEncoder(100, 100, 30, 380);
     lineFollowCross(30, 20, 1);
     stopMove(250);
-    arcEnc(25, -25, 50, 20, 175);
-    arcEnc(20, -20, 20, 20, 30);
-    changePosGrabberC(50, grabberC.maxDown);
-    stopMove(500);
 
-    if (posesBigGrab[0] != -1){
-        posesBigGrab[0] = -2;
+    if (nowGrab[0] >= 0){
+        nowGrab[0] = -2;
     }
-    if (posesBigGrab[1] != -1){
-        posesBigGrab[1] = -2;
+    if (nowGrab[1] >= 0){
+        nowGrab[1] = -2;
     }
 
-    for (short i = 0; i < 4; i++){
-        if ((elementsColors[i] == markerColors[0]) && (!markerOnBigShip[0])){
-            if (posesBigGrab[0] == -1){
-                posesBigGrab[0] = i;
-                elementsColors[i] = -1;
-                markerOnBigShip[0] = true;
-            }
-            else if(posesBigGrab[1] == -1){
-                posesBigGrab[1] = i;
-                elementsColors[i] = -1;
-                markerOnBigShip[0] = true;
-            }
-        }
-        else if ((elementsColors[i] == markerColors[1]) && (!markerOnBigShip[1])){
-            if (posesBigGrab[0] == -1){
-                posesBigGrab[0] = i;
-                elementsColors[i] = -1;
-                markerOnBigShip[1] = true;
-            }
-            else if(posesBigGrab[1] == -1){
-                posesBigGrab[1] = i;
-                elementsColors[i] = -1;
-                markerOnBigShip[1] = true;
-            }
-        }
-        else if ((elementsColors[i] == 0) && (!whiteOnBigShip)){
-            if (posesBigGrab[0] == -1){
-                posesBigGrab[0] = i;
-                elementsColors[i] = -1;
-                whiteOnBigShip = true;
-            }
-            else if(posesBigGrab[1] == -1){
-                posesBigGrab[1] = i;
-                elementsColors[i] = -1;
-                whiteOnBigShip = true;
-            }
-        }
-    }
+    findPosInElems(colorsForBigShip, elemsOnBigShip, 3);
 
-    short amountToTake = 0;
     short firstPos = -1;
     short secondPos = -1;
+    short amountToTake = 0;
 
-    if (posesBigGrab[0] >= 0){
+    if (nowGrab[0] >= 0){
+        firstPos = nowGrab[0];
         amountToTake++;
-        firstPos = posesBigGrab[0];
+        if (nowGrab[1] >= 0){
+            secondPos = nowGrab[1];
+            amountToTake++;
+        }
     }
-    if (posesBigGrab[1] >= 0){
+    if ((firstPos == -1) && (nowGrab[1] >= 0)){
+        firstPos = nowGrab[1];
         amountToTake++;
-        if (firstPos == -1){
-            firstPos = posesBigGrab[1];
-        }
-        else{
-            secondPos = posesBigGrab[1];
-        }
-
     }
 
-    getElementsByPos(firstPos, secondPos, amountToTake, 1);
-
-    arcEnc(20, -20, 30, 20, 120);
-    stopMove(200);
-    lineFollowEncoder(30, 30, 30, 10);
-    changePosGrabberD(100, grabberD.openMin);
-    lineFollowEncoder(30, 30, 30, 50);
-    changePosGrabberD(100, grabberD.close);
-    lineFollowEncoder(30, 30, 30, 10);
-    changePosGrabberC(100, grabberC.maxUpWithoutShip);
-    lineFollowCross(30, 25, 1);
-    stopMove(200);
+    if (amountToTake){
+        arcEnc(25, -25, 50, 20, 175);
+        arcEnc(20, -20, 20, 20, 30);
+        changePosGrabberC(50, grabberC.maxDown);
+        stopMove(500);
+        getElementsByPos(firstPos, secondPos, amountToTake, 1);
+        arcEnc(20, -20, 30, 20, 120);
+        stopMove(200);
+        lineFollowEncoder(30, 30, 30, 10);
+        changePosGrabberD(100, grabberD.openMin);
+        lineFollowEncoder(30, 30, 30, 50);
+        changePosGrabberD(100, grabberD.close);
+        lineFollowEncoder(30, 30, 30, 10);
+        changePosGrabberC(100, grabberC.maxUpWithoutShip);
+        lineFollowCross(30, 25, 1);
+        stopMove(200);
+    }
 
     takeBigShipAndThrowOn();
+
+    nowGrab[0] = -1;
+    nowGrab[1] = -1
 
     short posLastElem = -1;
     short needColor = -2;
 
-    if (!markerOnBigShip[0]){
-        needColor = markerColors[0];
-    }
-    else if(!markerOnBigShip[1]){
-        needColor = markerColors[1];
-    }
-    else if(!whiteOnBigShip){
-        needColor = 0;
-    }
-
-
-    if (posLastElem == -1){
-        for (short i = 0; i < 4; i++){
-            if (elementsColors[i] == needColor){
-                posLastElem = i;
-            }
-        }
-    }
-
-    takeLastElemAndFinish(posLastElem);
+    findPosInElems(colorsForBigShip, elemsOnBigShip, 3);
+    takeLastElemAndFinish(nowGrab[0]);
 }
 
 task main(){
     initAll();
+    stopMove(300);
     unsigned long varPgmTime = nPgmTime;
     float now = getBatteryVoltage();
     now = getBatteryVoltage();
@@ -845,16 +720,13 @@ task main(){
 
     // stopMove(123081320);
 
-    stopMove(500);
-    fullRandom();
-    stopMove(123081320);
+    // fullRandom();
 
 
 
 
     start();
     readingElements();
-
 
     getElements(7 - markerColors[0], 7 - markerColors[1], 2);
 

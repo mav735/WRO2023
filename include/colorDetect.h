@@ -124,7 +124,7 @@ void getCDValues(tCDValues *CDSensor) {
         if (CDSensor->normRed + CDSensor->normGreen + CDSensor->normBlue < 10) {
             CDSensor->color = -1;
         }
-        else if (CDSensor->sat <= 0.19) {
+        else if (CDSensor->sat <= 0.18) {
             if (CDSensor->val < 10) {
                 CDSensor->color = 1;
             } else {
