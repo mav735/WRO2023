@@ -1,4 +1,4 @@
-#pragma config(Sensor, S1,     ,               sensorEV3_Color, modeEV3Color_RGB_Raw)
+ #pragma config(Sensor, S1,     ,               sensorEV3_Color, modeEV3Color_RGB_Raw)
 #pragma config(Sensor, S2,     ,               sensorEV3_Color, modeEV3Color_RGB_Raw)
 #pragma config(Sensor, S3,     ,               sensorI2CCustom9V)
 #pragma config(Sensor, S4,     ,               sensorI2CCustom9V)
@@ -81,8 +81,8 @@ void start(){
 
     arcEnc(-50, 50, 50, 50, 135);
     changePosGrabberC(50, grabberC.maxUpWithoutShip);
-    lineFollowEncoder(50, 55, 55, 300);
-    arcEnc(-55, 55, 55, 20, 305);
+    lineFollowEncoder(40, 45, 45, 300);
+    arcEnc(-45, 45, 45, 20, 305);
     stopMove(100);
     arcEnc(25, -25, 80, 20, 165);
     smartTurnRight_enc(40, 80, 60);
@@ -324,10 +324,10 @@ void takeSmallShipAndThrowOn() {
     lineFollowCross(100, 100, 1);
     lineFollowEncoder(100, 100, 50, 850);
     arcAngle(0, 50, 100, 40, 80);
-    changePosGrabberC(100, grabberC.upForDrop);
+    changePosGrabberC(80, grabberC.upForDrop);
     arcAngle(0, 40, 40, 40, 10);
     stopMove(50);
-    arcEnc(30, -30, 30, 30, 25);
+    arcEnc(30, -30, 30, 30, 35);
     stopMove(450);
     changePosGrabberD(100, grabberD.openMin);
     stopMove(200);
@@ -366,10 +366,47 @@ void takeTwoLastElems() {
     stopMove(250);
 }
 
+void defaultPushBigShip() {
+    arcAngle(-60, 0, -100, -60, 90);
+    lineFollowEncoder(60, 60, 30, 315);
+
+    stopMove(200);
+    arcEnc(40, -40, 100, 30, 300);
+    changePosGrabberC(80, grabberC.upForDrop);
+    stopMove(500);
+    arcEnc(30, -30, 30, 30, 35);
+    stopMove(50);
+    changePosGrabberD(100, grabberD.openMin);
+    stopMove(250);
+    changePosGrabberC(100, grabberC.maxUpWithoutShip);
+    arcEnc(40, -40, 100, 60, 120);
+    smartTurnRight_angle(60, 100, 60);
+    stopMove(0);
+}
+
+void veryStablePushBigShip() {
+    arcToBase(60, 60, 30);
+    stopMove(200);
+    arcAngle(-50, -50, -100, -50, 90);
+    stopMove(100);
+    lineFollowEncoder(40, 100, 40, 485);
+    stopMove(200);
+    arcEnc(40, -40, 100, 30, 300);
+    changePosGrabberC(80, grabberC.upForDrop);
+    stopMove(500);
+    arcEnc(30, -30, 30, 30, 35);
+    stopMove(50);
+    changePosGrabberD(100, grabberD.openMin);
+    stopMove(250);
+    changePosGrabberC(100, grabberC.maxUpWithoutShip);
+    arcEnc(40, -40, 100, 60, 120);
+    smartTurnRight_angle(60, 100, 60);
+    stopMove(0);
+}
 
 void takeBigShipAndThrowOn() {
     setDefaultLine();
-    arcEnc(30, -30, 30, 30, 100);
+    arcEnc(30, -30, 30, 30, 80);
     stopMove(200);
     arcAngle(30, 30, 100, 30, 80);
     arcAngle(30, 30, 30, 30, 10);
@@ -383,26 +420,12 @@ void takeBigShipAndThrowOn() {
     arcColor_enc(-40, 40, 100, 45, 580, &CDSensor1, 1);
     arcEnc(-45, 45, 45, 45, 50);
     arcColor_enc(0, 45, 100, 70, 600, &CDSensor1, 1);
-    lineFollowEncoder(70, 100, 100, 300, 20);
-    lineFollowCross(100, 100, 1, 20);
-    lineFollowEncoder(100, 100, 100, 950, 20);
+    lineFollowEncoder(70, 100, 100, 300);
+    lineFollowCross(100, 100, 1);
+    lineFollowEncoder(100, 100, 100, 950);
 
-    lineFollowCross(100, 40, 1, 20);
-    arcAngle(-40, 0, -100, -40, 90);
-    lineFollowEncoder(40, 60, 30, 315);
-
-    stopMove(200);
-    arcEnc(40, -40, 100, 30, 300);
-    changePosGrabberC(100, grabberC.upForDrop);
-    stopMove(500);
-    arcEnc(30, -30, 30, 30, 25);
-    stopMove(50);
-    changePosGrabberD(100, grabberD.openMin);
-    stopMove(250);
-    changePosGrabberC(100, grabberC.maxUpWithoutShip);
-    arcEnc(40, -40, 100, 60, 90);
-    smartTurnRight_angle(60, 100, 60);
-    stopMove(0);
+    lineFollowCross(100, 60, 1);
+    veryStablePushBigShip();
 }
 
 void takeLastWhiteAndFinish(short position=0) {
@@ -549,7 +572,7 @@ void fullRandom() {
     colorsForSmallShip[1] = 7 - markerColors[1];
     colorsForBigShip[0] = markerColors[0];
     colorsForBigShip[1] = markerColors[1];
-    
+
     readingElements();
 
     findPosInElems(colorsForSmallShip, elemsOnSmallShip, 3);
@@ -584,7 +607,7 @@ void fullRandom() {
         if (nowGrab[1] != -1){
             nowGrab[1] = -2;
         }
-        
+
         findPosInWelems(colorsForSmallShip, elemsOnSmallShip, 3);
 
         for (short idx = 0; idx < 2; idx++){
@@ -715,12 +738,11 @@ task main(){
         playSound(soundException);
     }
 
-    // stopMove(500);
-    // arcAngle(-10, 30, 100, 30, 90);
+    stopMove(500);
 
-    // stopMove(123081320);
+    takeElemFromSupRightBigShip();
 
-    // fullRandom();
+    stopMove(123081320);
 
 
 

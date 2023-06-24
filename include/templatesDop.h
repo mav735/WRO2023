@@ -403,3 +403,148 @@ void takeBigShipFromCrossToElements() {
     arcAngle(40, 40, 100, 40, 90);
     stopMove(200);
 }
+
+void takeTwoMarkersInLeftCoridor() {
+    changePosGrabberD(100, grabberD.openMax);
+    changePosGrabberC(100, grabberC.maxDown);
+    setDefaultLine();
+    lineFollowCross(40, 40, 1);
+    arcEnc(-40, 40, 40, 40, 165);
+    changePosGrabberD(60, grabberD.close);
+    stopMove(500);
+    arcEnc(40, -40, 100, 30, 800);
+    stopMove(100);
+    changePosGrabberD(60, grabberD.openMax);
+    stopMove(300);
+    changePosGrabberC(50, grabberC.maxUpWithoutShip);
+    arcAngle(0, -40, -100, -40, 188);
+    stopMove(100);
+    arcAngle(40, 0, 100, 40, 98);
+    stopMove(150);
+    changePosGrabberC(50, grabberC.maxUp);
+    stopMove(100);
+    arcEnc(-40, 40, 100, 30, 500);
+    changePosGrabberC(50, grabberC.maxUpWithoutShip);
+    arcEnc(-30, 30, 30, 30, 150);
+    stopMove(200);
+    arcAngle(0, -40, -100, -40, 90);
+    stopMove(250);
+
+}
+
+void takeElemFromCenterOfBigShip() {
+    changePosGrabberD(60, grabberD.openMin);
+    setDefaultLine();
+    lineFollowCross(40, 40, 1);
+    stopMove(100);
+    changePosGrabberC(70, grabberC.upForTakeFromShip);
+    stopMove(600);
+    changePosGrabberD(100, grabberD.close);
+    stopMove(200);
+    changePosGrabberC(70, grabberC.maxUpWithoutShip);
+}
+
+void takeElemFromDefLeftBigShip() {
+    changePosGrabberD(60, grabberD.openMin);
+    setDefaultLine();
+    lineFollowCross(40, 40, 1);
+    stopMove(100);
+    changePosGrabberC(70, grabberC.maxUpWithoutShip);
+    stopMove(200);
+    arcEnc(0, -40, -60, -40, 190);
+    stopMove(100);
+    arcEnc(40, 0, 60, 40, 190);
+    stopMove(100);
+    arcEnc(-30, 30, 50, 30, 180);
+    changePosGrabberC(70, grabberC.upForTakeFromShip);
+    stopMove(600);
+    changePosGrabberD(100, grabberD.close);
+    stopMove(200);
+    changePosGrabberC(70, grabberC.maxUpWithoutShip);
+    stopMove(200);
+    arcEnc(30, -30, 50, 30, 180);
+    stopMove(200);
+    arcEnc(-40, 0, -60, -40, 190);
+    stopMove(200);
+    arcEnc(0, 40, 60, 40, 190);
+    stopMove(200);
+
+}
+
+void takeElemFromDefRightBigShip() {
+    changePosGrabberD(60, grabberD.openMin);
+    setDefaultLine();
+    lineFollowCross(40, 40, 1);
+    stopMove(100);
+    changePosGrabberC(70, grabberC.maxUpWithoutShip);
+    stopMove(200);
+    arcEnc(40, 0, 60, 40, 190);
+    stopMove(100);
+    arcEnc(0, -40, -60, -40, 190);
+    stopMove(100);
+    arcEnc(-30, 30, 50, 30, 180);
+    changePosGrabberC(70, grabberC.upForTakeFromShip);
+    stopMove(600);
+    changePosGrabberD(100, grabberD.close);
+    stopMove(200);
+    changePosGrabberC(70, grabberC.maxUpWithoutShip);
+    stopMove(200);
+    arcEnc(30, -30, 50, 30, 180);
+    stopMove(200);
+    arcEnc(0, 40, 60, 40, 190);
+    stopMove(200);
+    arcEnc(-40, 0, -60, -40, 190);
+    stopMove(200);
+}
+
+void takeElemFromSupLeftBigShip() {
+    changePosGrabberD(60, grabberD.openMin);
+    setDefaultLine();
+    lineFollowCross(40, 40, 1);
+    stopMove(100);
+    changePosGrabberC(70, grabberC.maxUpWithoutShip);
+    stopMove(200);
+    arcEnc(0, -40, -60, -40, 350);
+    stopMove(100);
+    arcEnc(40, 0, 60, 40, 350);
+    stopMove(100);
+    arcEnc(-30, 30, 50, 30, 290);
+    changePosGrabberC(70, grabberC.upForTakeFromShip);
+    stopMove(600);
+    changePosGrabberD(100, grabberD.close);
+    stopMove(200);
+    changePosGrabberC(70, grabberC.maxUpWithoutShip);
+    stopMove(200);
+    arcEnc(30, -30, 50, 30, 290);
+    stopMove(200);
+    arcEnc(-40, 0, -60, -40, 350);
+    stopMove(200);
+    arcEnc(0, 40, 60, 40, 350);
+    stopMove(200);
+}
+
+void takeElemFromSupRightBigShip() {
+    changePosGrabberD(60, grabberD.openMin);
+    setDefaultLine();
+    lineFollowCross(40, 40, 1);
+    stopMove(100);
+    changePosGrabberC(70, grabberC.maxUpWithoutShip);
+    stopMove(200);
+    arcEnc(40, 0, 60, 40, 350);
+    stopMove(100);
+    arcEnc(0, -40, -60, -40, 350);
+    stopMove(100);
+    arcEnc(-30, 30, 50, 30, 290);
+    changePosGrabberC(70, grabberC.upForTakeFromShip);
+    stopMove(600);
+    changePosGrabberD(100, grabberD.close);
+    stopMove(200);
+    changePosGrabberC(70, grabberC.maxUpWithoutShip);
+    stopMove(200);
+    arcEnc(30, -30, 50, 30, 290);
+    stopMove(200);
+    arcEnc(0, 40, 60, 40, 350);
+    stopMove(200);
+    arcEnc(-40, 0, -60, -40, 350);
+    stopMove(200);
+}

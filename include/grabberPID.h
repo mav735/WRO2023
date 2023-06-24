@@ -6,6 +6,7 @@ typedef struct {
     float upForDrop;
     float maxV;
     float targetPos;
+    float upForTakeFromShip;
 } tGrabberPositionC;
 
 typedef struct {
@@ -36,7 +37,8 @@ task initGrabber() {
     grabberC.maxUp = 0;
     grabberC.maxUpWithoutShip = -390;
     grabberC.maxDown = -820;
-    grabberC.upForDrop = -660;
+    grabberC.upForDrop = -670;
+    grabberC.upForTakeFromShip = -690;
 
     grabberD.close = 0;
     grabberD.openMin = 220;
