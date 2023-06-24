@@ -745,8 +745,6 @@ task main(){
     stopMove(123081320);
 
 
-
-
     start();
     readingElements();
 
