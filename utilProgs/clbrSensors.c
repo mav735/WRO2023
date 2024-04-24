@@ -33,7 +33,7 @@ task main (){
     mass[2] = &CDSensor3;
     mass[3] = &CDSensor4;
 
-    for(short j = 0; j < 4; j++){
+    for(short j = 0; j < 2; j++){
         string senType;
 
         if (SensorType[mass[j]->nDeviceIndex] == 40){

@@ -25,19 +25,8 @@ task main (){
     setMotorBrakeMode(motorD, motorCoast);
     setMotorBrakeMode(motorC, motorCoast);
 
-    while (!getButtonPress('C')) {
-        getCDValues(CDSensor1);
-        getCDValues(CDSensor2);
-        getCDValues(CDSensor3);
-        getCDValues(CDSensor4);
+    displayCenteredTextLine(1, "%d", SensorRaw[S3])
+    sleep(20000);
 
-        displayCenteredTextLine(1, "RGB_1: %d %d %d %d", CDSensor1.normRed, CDSensor1.normGreen, CDSensor1.normBlue, CDSensor1.color);
-        displayCenteredTextLine(3, "RGB_2: %d %d %d %d", CDSensor2.normRed, CDSensor2.normGreen, CDSensor2.normBlue, CDSensor2.color);
-        displayCenteredTextLine(6, "RGB_3: %d %d %d %d", CDSensor3.normRed, CDSensor3.normGreen, CDSensor3.normBlue, CDSensor3.color);
-        displayCenteredTextLine(9, "RGB_4: %d %d %d %d", CDSensor4.normRed, CDSensor4.normGreen, CDSensor4.normBlue, CDSensor4.color);
-
-        sleep(250);
-        eraseDisplay();
-    }
     fileClose(fileHandle);
 }

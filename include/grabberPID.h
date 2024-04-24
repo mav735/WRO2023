@@ -1,9 +1,12 @@
 typedef struct {
     tMotor nDeviceIndex;
-    float maxDown;
+    float first;
+    float second;
     float maxUp;
-    float maxUpWithoutShip;
-    float upForDrop;
+    float third;
+    float fourth;
+    float kran;
+    float closeClaws;
     float maxV;
     float targetPos;
     float upForTakeFromShip;
@@ -11,11 +14,14 @@ typedef struct {
 
 typedef struct {
     tMotor nDeviceIndex;
-    float close;
-    float openMax;
-    float openMin;
+    float openBack;
+    float openFront;
+    float closeBack;
+    float closeFront;
     float maxV;
     float targetPos;
+    float openMax;
+    float openKran;
 } tGrabberPositionD;
 
 tGrabberPositionC grabberC;
@@ -23,9 +29,9 @@ tGrabberPositionD grabberD;
 
 
 task initGrabber() {
-    motor[motorC] = 100;
-    motor[motorD] = -100;
-    sleep(350);
+    motor[motorC] = 10;
+    motor[motorD] = -30;
+    sleep(400);
 
     setMotorBrakeMode(motorC, motorBrake);
     setMotorBrakeMode(motorD, motorBrake);
@@ -34,15 +40,20 @@ task initGrabber() {
     nMotorEncoder[motorC] = 0;
     nMotorEncoder[motorD] = 0;
 
-    grabberC.maxUp = 0;
-    grabberC.maxUpWithoutShip = -390;
-    grabberC.maxDown = -820;
-    grabberC.upForDrop = -670;
-    grabberC.upForTakeFromShip = -690;
+    grabberC.maxUp = -300;
+    grabberC.first= -1700;
+    grabberC.closeClaws = -1600;
+    grabberC.second = grabberC.first + 315;
+    grabberC.third =  grabberC.first + 640;
+    grabberC.fourth = grabberC.first + 835;
+    grabberC.kran = -1746;
 
-    grabberD.close = 0;
-    grabberD.openMin = 220;
-    grabberD.openMax = 400;
+
+    grabberD.openFront = 450;
+    grabberD.openMax = 0;
+    grabberD.openKran = 200;
+    grabberD.closeFront = 710;
+    grabberD.openBack = 140;
     stopTask(initGrabber);
 }
 
@@ -116,12 +127,14 @@ task thr_changePosGrabberD() {
         dee = de;
         sleep(1);
     }
-    if (grabberD.targetPos == grabberD.close) {
-        motor[motorD] = -100;
+    if (grabberD.targetPos == grabberD.closeFront) {
+        motor[motorD] = 100;
     } else {
         setMotorBrakeMode(motorD, motorBrake);
         motor[motorD] = 0;
     }
+
+
     stopTask(thr_changePosGrabberD);
 }
 void changePosGrabberC(float v, float pos) {

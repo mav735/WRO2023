@@ -15,11 +15,12 @@ bool motorBstop = false;
 #include "grabberPID.h"
 #include "logs.h"
 #include "async.h"
-#include "templatesDop.h"
 
 void initAll(){
     setMotorBrakeMode(motorA, motorCoast);
     setMotorBrakeMode(motorB, motorCoast);
+    setMotorBrakeMode(motorC, motorBrake);
+    setMotorBrakeMode(motorD, motorBrake);
     
     initMtVars();
     colorDetectInit();
@@ -29,13 +30,6 @@ void initAll(){
 	#endif
 
     setDefaultLine();
-    setMotorBrakeMode(motorA, motorBrake);
-    setMotorBrakeMode(motorB, motorBrake);
-    setMotorBrakeMode(motorC, motorBrake);
-    setMotorBrakeMode(motorD, motorBrake);
-
-	initSensor(&CDSensor3, HTCS2_MODE_ACTIVE);
-	initSensor(&CDSensor4, HTCS2_MODE_ACTIVE);
     startTask(initGrabber, kLowPriority);
     setLEDColor(ledOff);
 	setSoundVolume(100);

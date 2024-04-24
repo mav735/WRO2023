@@ -5,33 +5,15 @@
 #define MAX_ARR_SIZE 17
 
 void saveRatioPID(float *va, float *vb) {
-
-    // if (fabs(*va) > 100){
-    //     short sgnA = sgn(*va);
-    //     *vb = *vb / *va * 100 * sgnA 
-    //     *va = 100 * sgnA 
-    // }
-    // else if (fabs(*vb) > 100){
-    //     short sgnB = sgn(*vb);
-    //     *va = *va / *vb * 100 * sgnB
-    //     *vb = 100 * sgnB
-    // }
-
-    if (*va < -100){
-        *vb = *vb / *va * -100;
-        *va = -100;
+    if (fabs(*va) > 100){
+        short sgnA = sgn(*va);
+        *vb = *vb / *va * 100 * sgnA;
+        *va = 100 * sgnA;
     }
-    else if (*va > 100){
-        *vb = *vb / *va * 100;
-        *va = 100;
-    }
-    else if (*vb < -100){
-        *va = *va / *vb * -100;
-        *vb = -100;
-    }
-    else if (*vb > 100){
-        *va = *va / *vb * 100;
-        *vb = 100;
+    else if (fabs(*vb) > 100){
+        short sgnB = sgn(*vb);
+        *va = *va / *vb * 100 * sgnB;
+        *vb = 100 * sgnB;
     }
 }
 
@@ -40,10 +22,7 @@ float mapping(float raw, float min, float max, float normMin, float normMax) {
 }
 
 float angleToEnc(float vB, float vC, float angle) {
-    return angle / 180 * PI * g_wheelBase *
-           (vB == 0 || vC == 0
-                ? 1
-                : (1 / fabs(-vB / vC - 1) + 1 / fabs(-vC / vB - 1)) / 2.);
+    return angle / 180 * PI * g_wheelBase * (vB == 0 || vC == 0 ? 1 : (1 / fabs(-vB / vC - 1) + 1 / fabs(-vC / vB - 1)) / 2.);
 }
 
 void waitTask(bool *taskFlag){

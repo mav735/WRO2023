@@ -11,7 +11,7 @@ task stopA_task {
     }
     int curErrIdx = 0;
     int nwErrIdx;
-    setMotorBrakeMode(motorA, motorCoast);
+
     motorAstop = true;
     while (motorAstop) {
         e = nMotorEncoder[motorA] - MTVarsA.targetEnc;
@@ -40,7 +40,7 @@ task stopB_task {
     }
     int curErrIdx = 0;
     int nwErrIdx;
-    setMotorBrakeMode(motorB, motorCoast);
+    
     motorBstop = true;
     while (motorBstop) {
         e = nMotorEncoder[motorB] - MTVarsB.targetEnc;

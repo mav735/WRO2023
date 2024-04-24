@@ -1,14 +1,14 @@
-float kpNow = 0.55;
-float kdNow = 6;
+float kpNow = 0.6;
+float kdNow = 8;
 float kiNow = 0.002;
 
 const float kpConstBase = 0.55;
 const float kdConstBase = 6;
 const float kiConstBase = 0.002;
 
-const float kpConstOne = 0.4;
-const float kdConstOne = 5;
-const float kiConstOne = 0.005;
+const float kpConstOne = 0.7;
+const float kdConstOne = 6;
+const float kiConstOne = 0.0015;
 
 float calibrationPower = 50;
 
@@ -120,15 +120,16 @@ void setDefaultLine() {
     lineCFG.rgbCross[2] = true;
 }
 
-void setDefaultLineGreyCross() {
-    setBaseCoef();
+void setLeftSensorBlackLineBlackStop(short side, short stopType) {
+    // 1 - in -1 - out ||| stop - 0(left) 1(right) 2(both)
+    setOneSensorCoef();
     lineCFG.maxLine = 255;
     lineCFG.minLine = 0;
-    lineCFG.inverse = 1;
-    lineCFG.crossRoadMax = 200;
-    lineCFG.crossRoadMin = 160;
-    lineCFG.sensorsIndError = 2;
-    lineCFG.sensorsIndCross = 2;
+    lineCFG.inverse = -side;
+    lineCFG.crossRoadMax = 40;
+    lineCFG.crossRoadMin = -100;
+    lineCFG.sensorsIndError = 1;
+    lineCFG.sensorsIndCross = stopType;
     lineCFG.rgb[0] = true;
     lineCFG.rgb[1] = true;
     lineCFG.rgb[2] = true;
@@ -137,8 +138,8 @@ void setDefaultLineGreyCross() {
     lineCFG.rgbCross[2] = true;
 }
 
-void setLeftSensorBlackLineBlackStop(short side, short stopType) {
-    // 1 - in -1 - out ||| stop - 0(left) 1(right) 2(both)
+void setRightSensorBlackLineBlackStop(short side, short stopType) {
+    // 1 - in -1 - out ||| stop - 0(right) 1(left) 2(both)
     setOneSensorCoef();
     lineCFG.maxLine = 255;
     lineCFG.minLine = 0;
@@ -150,8 +151,8 @@ void setLeftSensorBlackLineBlackStop(short side, short stopType) {
     lineCFG.rgb[0] = true;
     lineCFG.rgb[1] = true;
     lineCFG.rgb[2] = true;
-    lineCFG.rgbCross[0] = false;
-    lineCFG.rgbCross[1] = false;
+    lineCFG.rgbCross[0] = true;
+    lineCFG.rgbCross[1] = true;
     lineCFG.rgbCross[2] = true;
 }
 
@@ -169,84 +170,6 @@ void setDefaultLineWhiteCross() {
     lineCFG.rgb[2] = true;
     lineCFG.rgbCross[0] = true;
     lineCFG.rgbCross[1] = false;
-    lineCFG.rgbCross[2] = false;
-}
-
-void setLeftSensorBlueLineBlackStop(short side,
-                                    short stopType) {  // 1 - in -1 - out
-    setOneSensorCoef();
-    lineCFG.maxLine = 255;
-    lineCFG.minLine = 0;
-    lineCFG.inverse = side;
-    lineCFG.crossRoadMax = 50;
-    lineCFG.crossRoadMin = -100;
-    lineCFG.sensorsIndError = 0;
-    lineCFG.sensorsIndCross = stopType;
-    lineCFG.rgb[0] = true;
-    lineCFG.rgb[1] = true;
-    lineCFG.rgb[2] = false;
-    lineCFG.rgbCross[0] = false;
-    lineCFG.rgbCross[1] = false;
-    lineCFG.rgbCross[2] = true;
-}
-
-void setRightSensorBlueLineBlackStop(short side,
-                                    short stopType) {  // 1 - in -1 - out
-    setOneSensorCoef();
-    lineCFG.maxLine = 255;
-    lineCFG.minLine = 0;
-    lineCFG.inverse = side;
-    lineCFG.crossRoadMax = 50;
-    lineCFG.crossRoadMin = -100;
-    lineCFG.sensorsIndError = 1;
-    lineCFG.sensorsIndCross = stopType;
-    lineCFG.rgb[0] = true;
-    lineCFG.rgb[1] = true;
-    lineCFG.rgb[2] = false;
-    lineCFG.rgbCross[0] = false;
-    lineCFG.rgbCross[1] = false;
-    lineCFG.rgbCross[2] = true;
-}
-
-void setRightSensorBlueGrayLineWhiteStop(short side, short stopType) {  // 1 - in -1 - out
-    setOneSensorCoef();
-    lineCFG.maxLine = 170;
-    lineCFG.minLine = 45;
-    lineCFG.inverse = side;
-    lineCFG.crossRoadMax = 255;
-    lineCFG.crossRoadMin = 50;
-
-    lineCFG.sensorsIndError = 1;
-
-    lineCFG.sensorsIndCross = stopType;
-
-    lineCFG.rgb[0] = true;
-    lineCFG.rgb[1] = true;
-    lineCFG.rgb[2] = true;
-
-    lineCFG.rgbCross[0] = true;
-    lineCFG.rgbCross[1] = true;
-    lineCFG.rgbCross[2] = true;
-}
-
-void setRightSensorBlueGrayLineBlueStop(short side, short stopType) {  // 1 - in -1 - out
-    setOneSensorCoef();
-    lineCFG.maxLine = 170;
-    lineCFG.minLine = 45;
-    lineCFG.inverse = side;
-    lineCFG.crossRoadMax = 70;
-    lineCFG.crossRoadMin = 10;
-
-    lineCFG.sensorsIndError = 1;
-
-    lineCFG.sensorsIndCross = stopType;
-
-    lineCFG.rgb[0] = true;
-    lineCFG.rgb[1] = true;
-    lineCFG.rgb[2] = true;
-
-    lineCFG.rgbCross[0] = false;
-    lineCFG.rgbCross[1] = true;
     lineCFG.rgbCross[2] = false;
 }
 
@@ -278,6 +201,7 @@ void lineFollowCross(float startPower, float endPower, short crossCount,
     }
     int curErrIdx = 0;
     int nwErrIdx;
+    
     I = 0;
     while (curCnt < crossCount) {
         curPower = smooth(
@@ -292,7 +216,9 @@ void lineFollowCross(float startPower, float endPower, short crossCount,
         MTVarsB.targetV = curPower;
 
         calcKF(curPower, &kp, &kd, &ki);
+
         countValues(&CDSensor1, &CDSensor2, &PIDValues);
+
         if (PIDValues.cross) {
             if (!flag) {
                 ++curCnt;
@@ -301,6 +227,7 @@ void lineFollowCross(float startPower, float endPower, short crossCount,
         } else {
             flag = false;
         }
+
         e = PIDValues.error;
         P = e * kp;
 
