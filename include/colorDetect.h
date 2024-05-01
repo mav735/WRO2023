@@ -1,3 +1,5 @@
+#pragma once
+
 // 0 - White
 // 1 - Black
 // 2 - Red

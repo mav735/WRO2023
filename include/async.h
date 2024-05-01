@@ -1,3 +1,5 @@
+#pragma once
+
 int amountReading = 0;
 short *readingRes;
 int *encValues;
@@ -11,7 +13,7 @@ task readingColors() {
     float nowEncWheels[3] = {0, 0, 0};
     
     float oldEncWheels[2] = {nMotorEncoder[motorA],
-                             nMotorEncoder[motorB]}
+                             nMotorEncoder[motorB]};
 
     for(short nowEncIndex = 0; nowEncIndex < amountReading; nowEncIndex++){
         while (nowEncWheels[moveTypeIndex] < encValues[nowEncIndex]){
@@ -53,7 +55,7 @@ task showColorsElements(){
 // 0 - Both wheels
 // 1 - Motor A
 // 2 - Motor B
-void readColors(int *encRead, short *readingPtr, short amountValues, tCDValues *CDSensorsPTR, bool typeMove = 0){
+void readColors(int *encRead, short *readingPtr, short amountValues, tCDValues *CDSensorsPTR, short typeMove = 0){
     CDSensorPtr = CDSensorsPTR;
     amountReading = amountValues;
     readingRes = readingPtr;

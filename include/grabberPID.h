@@ -1,3 +1,5 @@
+#pragma once
+
 typedef struct {
     tMotor nDeviceIndex;
     float first;

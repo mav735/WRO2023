@@ -1,3 +1,5 @@
+#pragma once
+
 #define min2(a, b) ((a) < (b) ? (a) : (b))
 #define min3(a, b, c) ((a) < (b)) ? (((a) < (c)) ? (a) : (c)) : (((b) < (c)) ? (b) : (c))
 #define max2(a, b) ((a) > (b) ? (a) : (b))

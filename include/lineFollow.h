@@ -1,3 +1,5 @@
+#pragma once
+
 float kpNow = 0.6;
 float kdNow = 8;
 float kiNow = 0.002;
@@ -6,9 +8,9 @@ const float kpConstBase = 0.55;
 const float kdConstBase = 6;
 const float kiConstBase = 0.002;
 
-const float kpConstOne = 0.7;
-const float kdConstOne = 6;
-const float kiConstOne = 0.0015;
+const float kpConstOne = 0.4;
+const float kdConstOne = 4;
+const float kiConstOne = 0.001;
 
 float calibrationPower = 50;
 
@@ -58,6 +60,7 @@ void countValues(tCDValues *firstCD, tCDValues *secondCD,
 
     firstValue = mapping(firstValue / amountValues, lineCFG.minLine,
                          lineCFG.maxLine, 0, 100);
+
     secondValue = mapping(secondValue / amountValues, lineCFG.minLine,
                           lineCFG.maxLine, 0, 100);
 
@@ -312,10 +315,15 @@ void lineFollowEncoder(float startPower, float topPower, float endPower,
 
         D = (e - ee) * kd;
         U = P + I * ki + D;
+        // curPowerA = -curPower - U * 1.308;
+        // curPowerB = curPower - U * 0.692;
         curPowerA = -curPower - U;
         curPowerB = curPower - U;
-
         saveRatioPID(&curPowerA, &curPowerB);
+        // displayCenteredTextLine(1, "%d", e);
+        // displayCenteredTextLine(2, "%d", curPowerA);
+        // displayCenteredTextLine(3, "%d", curPowerB);
+
 
         motor[motorA] = curPowerA;
         motor[motorB] = curPowerB;

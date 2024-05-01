@@ -1,3 +1,5 @@
+#pragma once
+
 char * filename = "RGB_min_max.txt";
 
 #ifdef READ

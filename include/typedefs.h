@@ -1,3 +1,5 @@
+#pragma once
+
 typedef struct {
   tI2CData I2CData;
   ubyte _cmd;

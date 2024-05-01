@@ -1,3 +1,5 @@
+#pragma once
+
 bool motorAstop = false;
 bool motorBstop = false;
 

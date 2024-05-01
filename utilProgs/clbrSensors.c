@@ -14,15 +14,13 @@
 task main (){
 	initAll();
     sleep(2000);
+    setMotorBrakeMode(motorD, motorCoast);
+    setMotorBrakeMode(motorC, motorCoast);
+
     motor[motorA] = 0;
     motor[motorB] = 0;
     motor[motorC] = 0;
     motor[motorD] = 0;
-
-    setMotorBrakeMode(motorA, motorCoast);
-    setMotorBrakeMode(motorB, motorCoast);
-    setMotorBrakeMode(motorD, motorCoast);
-    setMotorBrakeMode(motorC, motorCoast);
 
     long maxR = 0, maxG = 0, maxB = 0;
     long minR = 1000, minG = 1000, minB = 1000;

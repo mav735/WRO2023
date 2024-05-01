@@ -40,7 +40,7 @@ task stopB_task {
     }
     int curErrIdx = 0;
     int nwErrIdx;
-    
+
     motorBstop = true;
     while (motorBstop) {
         e = nMotorEncoder[motorB] - MTVarsB.targetEnc;
@@ -58,6 +58,26 @@ task stopB_task {
     stopTask(stopB_task);
 }
 
+void stopMoveA(int delayMsec = 0, bool reset = false){
+    startTask(stopA_task, kLowPriority);
+    sleep(delayMsec);
+    if (reset) {
+        nMotorEncoder[motorA] = 0;
+        MTVarsA.targetEnc = 0;
+        MTVarsA.targetV = 0;
+    }
+}
+
+void stopMoveB(int delayMsec = 0, bool reset = false){
+    startTask(stopB_task, kLowPriority);
+    sleep(delayMsec);
+    if (reset) {
+        nMotorEncoder[motorB] = 0;
+        MTVarsB.targetEnc = 0;
+        MTVarsB.targetV = 0;
+    }
+}
+
 void stopMove(int delayMsec = 0, bool reset = false, bool mode = true) {
     startTask(stopA_task, kLowPriority);
     startTask(stopB_task, kLowPriority);
@@ -65,8 +85,8 @@ void stopMove(int delayMsec = 0, bool reset = false, bool mode = true) {
     sleep(delayMsec);
 
     if (reset) {
-        resetMotorEncoder(motorA);
-        resetMotorEncoder(motorB);
+        nMotorEncoder[motorA] = 0;
+        nMotorEncoder[motorB] = 0;
         MTVarsA.targetEnc = 0;
         MTVarsB.targetEnc = 0;
         MTVarsA.targetV = 0;

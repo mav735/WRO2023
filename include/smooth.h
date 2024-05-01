@@ -1,3 +1,5 @@
+#pragma once
+
 const float gBoost = 15;
 
 float smooth(float v0, float targetV, float s, float a = gBoost) {

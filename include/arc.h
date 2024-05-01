@@ -1,19 +1,26 @@
-const float g_ArcKP = 2.8;
-const float g_ArcKD = 7;
-const float g_ArcKI = 0.03;
+#pragma once
+
+const float g_ArcKP = 2;
+const float g_ArcKD = 5;
+const float g_ArcKI = 0.01;
 
 bool checkEncForArc(float startVA, float startVB, float encA, float encB, float enc) {
     return fabs(encA) + fabs(encB) < enc;
 }
 
-bool flagStillMove(float startVA, float startVB, float encA, float encB, float enc, tCDValues *CDSensor, short color = -1){
-    if (color != -2){
-        return ((CDSensor->color != color) || checkEncForArc(startVA, startVB, encA, encB, enc / 3.));
+bool flagStillMove(float startVA, float startVB, float encA, float encB, float enc, tCDValues *CDSensor, short color = -1, bool align = false){
+    if ((color != -2) && (!align)) {
+        getCDValues(CDSensor);
+        return ((CDSensor->color != color) || checkEncForArc(startVA, startVB, encA, encB, enc));
+    } else if ((align) && (color != -2)) {
+        getCDValues(CDSensor1);
+        getCDValues(CDSensor2);
+        return (((CDSensor1.color != color) && (CDSensor2.color != color)) || checkEncForArc(startVA, startVB, encA, encB, enc / 3.));
     }
     return checkEncForArc(startVA, startVB, encA, encB, enc);
 }
 
-void arcEnc(float startVA, float startVB, float topVX, float stopVX, float enc, tCDValues *CDSensor = &CDSensor1, short color = -2, float boost = gBoost) {
+void arcEnc(float startVA, float startVB, float topVX, float stopVX, float enc, tCDValues *CDSensor = &CDSensor1, short color = -2, float boost = gBoost, bool align = false) {
     float ratio = 1;
     if (startVB != 0 && startVA != 0) ratio = fabs(startVA / startVB);
     float sign = -1 * sgn(startVA * startVB);
@@ -59,20 +66,12 @@ void arcEnc(float startVA, float startVB, float topVX, float stopVX, float enc, 
 
     float curEncA, curEncB;
 
-    if (color != -2){
-        getCDValues(CDSensor);
-    }
-
     while (flagStillMove(
         startVA, startVB, (curEncA = nMotorEncoder[motorA] - MTVarsA.targetEnc),
-        (curEncB = nMotorEncoder[motorB] - MTVarsB.targetEnc), enc, CDSensor, color)) {
+        (curEncB = nMotorEncoder[motorB] - MTVarsB.targetEnc), enc, CDSensor, color, align)) {
 
         motorAstop = false;
         motorBstop = false;
-
-        if (color != -2) {
-            getCDValues(CDSensor);
-        }
 
         if (isSmoothA) {
             MTVarsA.targetV = smooth(maxVX, stopVX, curEncA - smoothStartEncX * signVX, boost);
@@ -87,7 +86,7 @@ void arcEnc(float startVA, float startVB, float topVX, float stopVX, float enc, 
             }
             MTVarsA.targetV = startVA == 0 ? 0 : MTVarsB.targetV * startVA / startVB;
         }
-        
+
         err = curEncA * sign + curEncB * ratio;
         if (startVA == 0) err = curEncA;
         else if (startVB == 0) err = curEncB;
@@ -119,7 +118,7 @@ void arcEnc(float startVA, float startVB, float topVX, float stopVX, float enc, 
         eold = err;
         sleep(1);
     }
-    
+
     if (color == -2){
         if (startVA == 0)
             MTVarsB.targetEnc += enc * sgn(startVB);
@@ -136,16 +135,20 @@ void arcEnc(float startVA, float startVB, float topVX, float stopVX, float enc, 
     }
 }
 
-void arcAngle(float startVA, float startVB, float topVX, float stopVX, float angle, tCDValues *CDSensor = 0, short color = -2, float boost = gBoost) {
+void arcColor2Sensors(float startVA, float startVB, float topVX, float stopVX, float encoder, short color = -2, float boost = gBoost){
+    arcEnc(startVA, startVB, topVX, stopVX, encoder, &CDSensor1, color, boost, true);
+}
+
+void arcAngle(float startVA, float startVB, float topVX, float stopVX, float angle, tCDValues *CDSensor = &CDSensor1, short color = -2, float boost = gBoost) {
     arcEnc(startVA, startVB, topVX, stopVX, angleToEnc(startVA, startVB, angle), CDSensor, color, boost);
 }
 
 void smartTurnLeft(float startV, float topV, float stopV, float angle=90) {
-    arcAngle(-startV, -startV, topV, stopV, angle, &CDSensor2, 1);
+    arcAngle(startV, startV, topV, stopV, angle, &CDSensor2, 1);
 }
 
 void smartTurnRight(float startV, float topV, float stopV, float angle=90) {
-    arcAngle(startV, startV, -topV, -stopV, angle, &CDSensor1, 1);
+    arcAngle(-startV, -startV, -topV, -stopV, angle, &CDSensor1, 1);
 }
 
 void reactiveTurnRight() {
@@ -154,18 +157,18 @@ void reactiveTurnRight() {
     getCDValues(&CDSensor1);
     unsigned long tt = nPgmTime;
     bool flag = true;
-    while (nMotorEncoder[motorB] - MTVarsB.targetEnc < 140 || CDSensor1.color != 1){
-        motorAstop = false;
-        motorBstop = false;
+    motorAstop = false;
+    motorBstop = false;
 
+    while (nMotorEncoder[motorB] - MTVarsB.targetEnc < 140 || CDSensor1.color != 1){
         getCDValues(&CDSensor1);
         if (flag && nPgmTime - tt >= 170) {
             flag = false;
-            setMotorBrakeMode(motorA, motorBrake);
-            motor[motorA] = 0;
+            stopMoveA();
         }
         sleep(1);
     }
+
     MTVarsA.targetEnc = nMotorEncoder[motorA];
     MTVarsB.targetEnc = nMotorEncoder[motorB];
 }
@@ -176,18 +179,18 @@ void reactiveTurnLeft() {
     getCDValues(&CDSensor2);
     unsigned long tt = nPgmTime;
     bool flag = true;
-    while (-nMotorEncoder[motorA] + MTVarsA.targetEnc < 140 || CDSensor2.color != 1){
-        motorAstop = false;
-        motorBstop = false;
+    motorAstop = false;
+    motorBstop = false;
 
+    while (-nMotorEncoder[motorA] + MTVarsA.targetEnc < 140 || CDSensor2.color != 1){
         getCDValues(&CDSensor2);
         if (flag && nPgmTime - tt >= 170) {
             flag = false;
-            setMotorBrakeMode(motorB, motorBrake);
-            motor[motorB] = 0;
+            stopMoveB();
         }
         sleep(1);
     }
+
     MTVarsA.targetEnc = nMotorEncoder[motorA];
     MTVarsB.targetEnc = nMotorEncoder[motorB];
 }
@@ -196,20 +199,25 @@ void arcToBase(int startV, int topV, int endV) {
     arcEnc(-startV, startV, topV, endV, g_distBetweenSensorsAndWheelBase);
 }
 
-/*
-void lineAligning(int velocity, float targetAngle, bool type = true, int color = 2){
-    arcColor2Sensors(-20, 20, velocity, &CDSensor1, &CDSensor2, color);
-    float zeroEnc = (nMotorEncoder[motorB] - nMotorEncoder[motorA]) / 2;
+
+void lineAligning(int startSpeed, int topSpeed, int stopSpeed, int encoder, float targetAngle, bool type = true, int color = 1){
+    arcColor2Sensors(-startSpeed, startSpeed, topSpeed, stopSpeed, encoder, color);
+    playSound(soundException);
+    float zeroEnc = (fabs(nMotorEncoder[motorB]) + fabs(nMotorEncoder[motorA])) / 2;
     bool flag = true;
 
     tCDValues *lastSensor = &CDSensor1;
-    if (CDSensor1.color == 5){
+    if (CDSensor1.color == color){
         lastSensor = &CDSensor2;
         flag = false;
     }
 
-    arcColor(motor[motorA], motor[motorA] * -1, motor[motorA], lastSensor, color);
-    float angle = radiansToDegrees(atan((((nMotorEncoder[motorB] - nMotorEncoder[motorA]) / 2 - zeroEnc) * ((g_wheelDiameter * PI) / 360)) / g_distBetweenSensors));
+    arcEnc(-stopSpeed, stopSpeed, stopSpeed, stopSpeed, 10, lastSensor, color);
+    float angle = radiansToDegrees(atan(((fabs(nMotorEncoder[motorB]) + fabs(nMotorEncoder[motorA])) / 2. - zeroEnc) / (float)g_distBetweenSensors));
+    
+    stopMove(500);
+    displayCenteredTextLine(2, "%f", angle);
+    stopMove(2000);
 
     if (flag){
         angle = 360 - angle;
@@ -250,17 +258,16 @@ void lineAligning(int velocity, float targetAngle, bool type = true, int color =
     }
 
     if (type){
-        stopMove(0, false, false);
         if (w_angle > 0){
-            arcAngle(-30, 0, 80, 20, fabs(w_angle));
+            arcAngle(-stopSpeed, 0, stopSpeed, stopSpeed, fabs(w_angle));
         }
         else if (w_angle < 0){
-            arcAngle(0, 30, 80, 20, fabs(w_angle));
+            arcAngle(0, stopSpeed, stopSpeed, stopSpeed, fabs(w_angle));
         }
     }
     else{
-        arcEnc(-30, 30, 30, 20, (g_distBetweenSensorsAndWheelBase) / g_wheelDiameter / PI * 360);
-        stopMove(0);
+        arcEnc(-stopSpeed, stopSpeed, stopSpeed, 20, (g_distBetweenSensorsAndWheelBase) / g_wheelDiameter / PI * 360);
+        stopMove(200);
         if (w_angle > 0){
             arcAngle(-20, -20, 80, 20, fabs(w_angle));
         }
@@ -269,4 +276,3 @@ void lineAligning(int velocity, float targetAngle, bool type = true, int color =
         }
     }
 }
-*/
