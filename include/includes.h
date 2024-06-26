@@ -19,13 +19,15 @@ bool motorBstop = false;
 #include "async.h"
 
 void initAll(){
+  colorDetectInit();
     setMotorBrakeMode(motorA, motorCoast);
     setMotorBrakeMode(motorB, motorCoast);
     setMotorBrakeMode(motorC, motorBrake);
     setMotorBrakeMode(motorD, motorBrake);
-    
+		initSensor(&CDSensor3);
+		//initSensor(&CDSensor4);
+
     initMtVars();
-    colorDetectInit();
 
 	#ifdef READ
     	readMinMax();

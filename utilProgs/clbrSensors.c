@@ -13,7 +13,7 @@
 
 task main (){
 	initAll();
-    sleep(2000);
+    sleep(3000);
     setMotorBrakeMode(motorD, motorCoast);
     setMotorBrakeMode(motorC, motorCoast);
 
@@ -31,7 +31,7 @@ task main (){
     mass[2] = &CDSensor3;
     mass[3] = &CDSensor4;
 
-    for(short j = 0; j < 2; j++){
+    for(short j = 0; j < 3; j++){
         string senType;
 
         if (SensorType[mass[j]->nDeviceIndex] == 40){
@@ -88,7 +88,7 @@ task main (){
                 mass[j]->minBlue =  minB;
             }
             sleep(1);
-            
+
             displayCenteredTextLine(6, "RGB_min: %d %d %d", minR, minG, minB);
             displayCenteredTextLine(7, "RGB_max: %d %d %d", maxR, maxG, maxB);
             displayCenteredTextLine(9, "RGB_normed: %d %d %d", mass[j]->normRed, mass[j]->normGreen, mass[j]->normBlue);

@@ -123,17 +123,17 @@ void getCDValues(tCDValues *CDSensor) {
         }
     }
     else {
-        if (CDSensor->normRed + CDSensor->normGreen + CDSensor->normBlue < 10) {
-            CDSensor->color = -1;
-        }
-        else if (CDSensor->sat <= 0.165) {
-            if (CDSensor->val < 10) {
-                CDSensor->color = 1;
-            } else {
-                CDSensor->color = 0;
-            }
-        }
-        else {
+        // if (CDSensor->normRed + CDSensor->normGreen + CDSensor->normBlue < 10) {
+        //     CDSensor->color = -1;
+        // }
+        // else if (CDSensor->sat <= 0.165) {
+        //     if (CDSensor->val < 10) {
+        //         CDSensor->color = 1;
+        //     } else {
+        //         CDSensor->color = 0;
+        //     }
+        // }
+        // else {
             if (CDSensor->hue < 20 || CDSensor->hue >= 300) {
                 CDSensor->color = 2;
             } else if (CDSensor->hue >= 20 && CDSensor->hue < 70) {
@@ -143,7 +143,7 @@ void getCDValues(tCDValues *CDSensor) {
             } else {
                 CDSensor->color = 4;
             }
-        }
+        // }
     }
 }
 

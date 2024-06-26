@@ -1,15 +1,15 @@
 #pragma once
 
-float kpNow = 0.6;
-float kdNow = 8;
-float kiNow = 0.002;
+float kpNow = 0.2;
+float kdNow = 1;
+float kiNow = 0;
 
-const float kpConstBase = 0.55;
-const float kdConstBase = 6;
-const float kiConstBase = 0.002;
+const float kpConstBase = 0.6;
+const float kdConstBase = 6.6;
+const float kiConstBase = 0.01;
 
 const float kpConstOne = 0.4;
-const float kdConstOne = 4;
+const float kdConstOne = 5;
 const float kiConstOne = 0.001;
 
 float calibrationPower = 50;
@@ -66,7 +66,8 @@ void countValues(tCDValues *firstCD, tCDValues *secondCD,
 
     float errors[3] = {(firstValue - 50) * lineCFG.inverse,
                        (secondValue - 50) * lineCFG.inverse,
-                       (firstValue - secondValue) * lineCFG.inverse};
+                       (-firstValue + secondValue) * lineCFG.inverse};
+
 
     firstValue = 0;
     secondValue = 0;
@@ -129,9 +130,9 @@ void setLeftSensorBlackLineBlackStop(short side, short stopType) {
     lineCFG.maxLine = 255;
     lineCFG.minLine = 0;
     lineCFG.inverse = -side;
-    lineCFG.crossRoadMax = 40;
+    lineCFG.crossRoadMax = 30;
     lineCFG.crossRoadMin = -100;
-    lineCFG.sensorsIndError = 1;
+    lineCFG.sensorsIndError = 0;
     lineCFG.sensorsIndCross = stopType;
     lineCFG.rgb[0] = true;
     lineCFG.rgb[1] = true;
@@ -142,14 +143,14 @@ void setLeftSensorBlackLineBlackStop(short side, short stopType) {
 }
 
 void setRightSensorBlackLineBlackStop(short side, short stopType) {
-    // 1 - in -1 - out ||| stop - 0(right) 1(left) 2(both)
+    // 1 - in -1 - out ||| stop - 0(left) 1(right) 2(both)
     setOneSensorCoef();
     lineCFG.maxLine = 255;
     lineCFG.minLine = 0;
     lineCFG.inverse = side;
-    lineCFG.crossRoadMax = 40;
+    lineCFG.crossRoadMax = 30;
     lineCFG.crossRoadMin = -100;
-    lineCFG.sensorsIndError = 0;
+    lineCFG.sensorsIndError = 1;
     lineCFG.sensorsIndCross = stopType;
     lineCFG.rgb[0] = true;
     lineCFG.rgb[1] = true;
@@ -176,12 +177,48 @@ void setDefaultLineWhiteCross() {
     lineCFG.rgbCross[2] = false;
 }
 
+void setDefaultLineRedCross() {
+    setBaseCoef();
+    lineCFG.maxLine = 255;
+    lineCFG.minLine = 0;
+    lineCFG.inverse = 1;
+    lineCFG.crossRoadMax = 80;
+    lineCFG.crossRoadMin = -100;
+    lineCFG.sensorsIndError = 2;
+    lineCFG.sensorsIndCross = 2;
+    lineCFG.rgb[0] = true;
+    lineCFG.rgb[1] = true;
+    lineCFG.rgb[2] = true;
+    lineCFG.rgbCross[0] = false;
+    lineCFG.rgbCross[1] = true;
+    lineCFG.rgbCross[2] = true;
+}
+
+void setDefaultLineYellowCross() {
+    setBaseCoef();
+    lineCFG.maxLine = 255;
+    lineCFG.minLine = 0;
+    lineCFG.inverse = 1;
+    lineCFG.crossRoadMax = 70;
+    lineCFG.crossRoadMin = -100;
+    lineCFG.sensorsIndError = 2;
+    lineCFG.sensorsIndCross = 2;
+    lineCFG.rgb[0] = true;
+    lineCFG.rgb[1] = true;
+    lineCFG.rgb[2] = true;
+    lineCFG.rgbCross[0] = false;
+    lineCFG.rgbCross[1] = false;
+    lineCFG.rgbCross[2] = true;
+}
+
 void calcKF(float power, float *kp, float *kd, float *ki) {
     float temp = sqrt(power / calibrationPower);
     *kp = temp * kpNow;
     *kd = temp * kdNow;
     *ki = temp * kiNow;
 }
+
+const int it = 20;
 
 void lineFollowCross(float startPower, float endPower, short crossCount,
                      float boost = gBoost) {
@@ -197,8 +234,8 @@ void lineFollowCross(float startPower, float endPower, short crossCount,
     short curCnt = 0;
     bool flag = false;
 
-    int errSz = 20;
-    int err[20];
+    int errSz = it;
+    int err[it];
     for (int i = 0; i < errSz; ++i) {
         err[i] = 0;
     }
@@ -242,8 +279,8 @@ void lineFollowCross(float startPower, float endPower, short crossCount,
 
         D = (e - ee) * kd;
         U = P + I * ki + D;
-        curPowerA = -curPower - U;
-        curPowerB = curPower - U;
+        curPowerA = -curPower + U;
+        curPowerB = curPower + U;
 
         saveRatioPID(&curPowerA, &curPowerB);
 
@@ -269,8 +306,8 @@ void lineFollowEncoder(float startPower, float topPower, float endPower,
     float oldAveEnc = (nMotorEncoder[motorB] - nMotorEncoder[motorA]) / 2;
     short curEnc = 0;
 
-    int errSz = 20;
-    int err[20];
+    int errSz = it;
+    int err[it];
     for (int i = 0; i < errSz; ++i) {
         err[i] = 0;
     }
@@ -315,14 +352,9 @@ void lineFollowEncoder(float startPower, float topPower, float endPower,
 
         D = (e - ee) * kd;
         U = P + I * ki + D;
-        // curPowerA = -curPower - U * 1.308;
-        // curPowerB = curPower - U * 0.692;
-        curPowerA = -curPower - U;
-        curPowerB = curPower - U;
+        curPowerA = -curPower + U;
+        curPowerB = curPower + U;
         saveRatioPID(&curPowerA, &curPowerB);
-        // displayCenteredTextLine(1, "%d", e);
-        // displayCenteredTextLine(2, "%d", curPowerA);
-        // displayCenteredTextLine(3, "%d", curPowerB);
 
 
         motor[motorA] = curPowerA;
