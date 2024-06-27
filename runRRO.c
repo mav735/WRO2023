@@ -15,22 +15,22 @@ void vsos(int deg) {
 	if (deg <= 40) {
 		arcEnc(-30, 30, 15, 15, deg);
 	} else {
-		arcEnc(-35, 35, 35, 15, deg - 50);
+		arcEnc(-35, 35, 50, 15, deg - 50);
 		arcEnc(-15, 15, 15, 15, 50);
 	}
 	changePosGrabberC(100, grabberC.firstLevelT);
 	stopMove(100);
-	changePosGrabberD(25, grabberD.openStack);
-	stopMove(300);
+	changePosGrabberD(35, grabberD.openStack);
+	stopMove(350);
 	changePosGrabberC(100, grabberC.maxDown);
 	changePosGrabberD(30, grabberD.openStack2);
-	stopMove(350);
+	stopMove(300);
 	changePosGrabberD(60, grabberD.close);
-	stopMove(350);
+	stopMove(300);
 	changePosGrabberC(100, grabberC.firstLevel);
 }
 
-void fromClawsToTower() {
+void fromClawsToTower1() {
 	changePosGrabberC(100, grabberC.maxUp);
 	stopMove(400);
 	arcAccelEnc(35, -35, 35, 20, 200, 70);
@@ -56,6 +56,57 @@ void fromClawsToTower() {
 	arcAccelEnc(45, 0, 100, 40, 385, 80);
 	stopMove(200);
 	arcAccelEnc(0, -45, -100, -40, 385, 80);
+	changePosGrabberC(100, grabberC.firstLevel);
+	stopMove(200);
+	arcAccelEnc(-35, 35, 35, 15, 230, 80);
+	stopMove(200);
+	changePosGrabberC(100, grabberC.firstLevelT);
+	stopMove(300);
+	changePosGrabberD(30, grabberD.smallOpen);
+	stopMove(400);
+	arcAccelEnc(35, -35, 35, 20, 65, 40);
+	changePosGrabberC(100, grabberC.maxDown);
+	stopMove(600);
+	changePosGrabberD(60, grabberD.close);
+	stopMove(300);
+	arcAccelEnc(35, -35, 35, 20, 110, 60);
+	stopMove(200);
+	changePosGrabberD(30, grabberD.smallOpen);
+	stopMove(500);
+	arcAccelEnc(-35, 35, 35, 20, 90, 40);
+	changePosGrabberD(60, grabberD.close);
+	stopMove(300);
+	changePosGrabberC(100, grabberC.firstLevel);
+	stopMove(100);
+	vsos(190);
+}
+
+void fromClawsToTower2() {
+	changePosGrabberC(100, grabberC.maxUp);
+	stopMove(400);
+	arcAccelEnc(35, -35, 35, 20, 200, 70);
+	//stopMove(200);
+	arcAccelEnc(45, 0, 100, 40, 265, 80);
+	stopMove(200);
+	arcAccelEnc(0, -45, -100, -40, 265, 80);
+	changePosGrabberD(30, grabberD.smallOpen);
+	changePosGrabberC(100, grabberC.maxDown);
+	stopMove(400);
+	arcAccelEnc(-35, 35, 35, 20, 140, 70);
+	changePosGrabberD(60, grabberD.close);
+	stopMove(300);
+	arcAccelEnc(35, -35, 35, 20, 100, 60);
+	changePosGrabberD(30, grabberD.smallOpen);
+	stopMove(200);
+	arcAccelEnc(-35, 35, 35, 20, 70, 30);
+	changePosGrabberD(60, grabberD.close);
+	stopMove(300);
+	changePosGrabberC(100, grabberC.firstLevel);
+	vsos(200);
+	stopMove(200);
+	arcAccelEnc(0, -45, -100, -40, 385, 80);
+	stopMove(200);
+	arcAccelEnc(45, 0, 100, 40, 385, 80);
 	changePosGrabberC(100, grabberC.firstLevel);
 	stopMove(200);
 	arcAccelEnc(-35, 35, 35, 15, 230, 80);
@@ -149,7 +200,7 @@ void takeSecondPairsFromStart1() {
 	arcEnc(-45, -60, -100, -60, 480, &CDSensor2, 1);
 }
 
-void throwTwoTowers() {
+void throwTwoTowers1() {
 	changePosGrabberC(100, grabberC.closeClaws);
 	setRightSensorBlackLineBlackStop(1, 0);
 	lineFollowEncoder(40, 100, 100, 250);
@@ -167,7 +218,7 @@ void throwTwoTowers() {
 	stopMove(200);
 	changePosGrabberC(100, grabberC.maxUp);
 	arcEnc(35, -35, 35, 25, 100);
-	fromClawsToTower();
+	fromClawsToTower1();
 	arcEnc(-40, 0, -50, -40, 180);
 	arcEnc(-40, 40, 40, 15, 195);
 	changePosGrabberC(100, grabberC.maxDown);
@@ -184,9 +235,9 @@ void twoBGAfterRY() {
 	changePosGrabberD(100, grabberD.close);
 	changePosGrabberC(100, grabberC.firstLevel);
 	setDefaultLineRedCross();
-	lineFollowEncoder(25, 90, 90, 230);
-	lineFollowCross(90, 90, 1);
-	arcEnc(-90, 90, 90, 25, 325);
+	lineFollowEncoder(25, 80, 80, 230);
+	lineFollowCross(80, 80, 1);
+	arcEnc(-80, 80, 100, 25, 325);
 	arcEnc(-25, 25, 25, 25, 180);
 	stopMove(200);
 	arcAccelEnc(0, 45, 60, 40, 455, 100);
@@ -216,10 +267,10 @@ void twoBGAfterRY() {
 	changePosGrabberC(100, grabberC.maxUp);
 	arcEnc(0, -40, -100, -30, 160);
 	stopMove(300);
-	arcEnc(-35, 35, 35, 20, 300);
+	arcEnc(-35, 35, 35, 20, 293);
 	changePosGrabberC(100, grabberC.maxDown);
 	stopMove(600);
-	arcEnc(-35, 35, 35, 20, 40);
+	arcEnc(-30, 30, 30, 20, 43);
 	changePosGrabberC(100, grabberC.maxUp);
 	stopMove(600);
 	arcEnc(-60, 10, -100, 30, 120);
@@ -242,14 +293,7 @@ void twoBGAfterRY() {
 	//lineFollowCross(MTVarsB.targetV, 100, 1);
 }
 
-void musor() {
-	changePosGrabberC(100, grabberC.maxUp);
-	setRightSensorBlackLineBlackStop(1, 0);
-	arcEnc(0, 50, 100, 40, 410);
-	stopMove(100);
-	arcEnc(0, -50, -100, -40, 410);
-	lineFollowEncoder(50, 100, 40, 80);
-	changePosGrabberC(100, grabberC.closeClaws);
+void baseOfMusor() {
 	lineFollowCross(40, 100, 1);
 	lineFollowEncoder(MTVarsB.targetV, 100, 20, 445);
 	lineFollowEncoder(20, 20, 20, 40);
@@ -277,7 +321,7 @@ void musor() {
 	arcEnc(0, -40, -50, -30, 255);
 
 	stopMove(300);
-	arcAccelEnc(-35, 35, 60, 20, 378, 50);
+	arcAccelEnc(-35, 35, 60, 20, 382, 50);
 	changePosGrabberC(100, grabberC.maxUp);
 	stopMove(200);
 	arcEnc(-40, 0, -40, -30, 70);
@@ -288,7 +332,21 @@ void musor() {
 	arcEnc(-40, -40, -100, -30, 480, &CDSensor2, 1);
 }
 
-void lastTowerAndFinish() {
+void musor1() {
+	changePosGrabberC(100, grabberC.maxUp);
+	setRightSensorBlackLineBlackStop(1, 0);
+	arcEnc(0, 50, 100, 40, 410);
+	stopMove(100);
+	arcEnc(0, -50, -100, -40, 410);
+	lineFollowEncoder(50, 100, 40, 80);
+	changePosGrabberC(100, grabberC.closeClaws);
+	baseOfMusor();
+
+}
+
+
+
+void lastTowerAndFinish1() {
 	setRightSensorBlackLineBlackStop(1, 0);
 	lineFollowEncoder(50, 50, 50, 80);
 	lineFollowCross(50, 30, 1);
@@ -307,7 +365,6 @@ void lastTowerAndFinish() {
 	vsos(80);
 	changePosGrabberC(100, grabberC.firstLevel);
 	arcAccelEnc(45, 0, 70, 40, 368, 80);
-
 	stopMove(100);
 	arcAccelEnc(0, -45, -70, -40, 368, 80);
 	stopMove(300);
@@ -336,22 +393,193 @@ void lastTowerAndFinish() {
 	}
 }
 
+void start1() {
+	takeTwoRAndYFromStart1();
+	takeSecondPairsFromStart1();
+	throwTwoTowers1();
+	twoBGAfterRY();
+	musor1();
+	lastTowerAndFinish1();
+}
+
+void takeTwoRAndYFromStart2() {
+	arcEnc(-50, 0, -50, -50, 40);
+	arcEnc(-50, 50, 100, 50, 400);
+	arcAngle(0, 50, 100, 50, 150);
+	arcEnc(-80, 80, 80, 80, 100);
+	changePosGrabberC(100, grabberC.firstLevel);
+	changePosGrabberD(100, grabberD.smallOpen);
+	arcEnc(-80, 80, 80, 30, 240);
+	stopMove(200);
+	arcAngle(0, -80, -80, -80, 30);
+	arcAngle(0, -80, -100, -30, 100, &CDSensor2, 1);
+	setRightSensorBlackLineBlackStop(1, 0);
+	lineFollowEncoder(50, 100, 20, 650);
+	lineFollowCross(20, 20, 1);
+	lineFollowEncoder(20, 20, 20, 10);
+	stopMove(200);
+	arcAccelAngle(-35, -35, -60, -30, 90, 15);
+	stopMove(200);
+	changePosGrabberC(100, grabberC.maxDown);
+	stopMove(200);
+	arcEnc(-35, 35, 35, 20, 120);
+	changePosGrabberD(100, grabberD.close);
+	stopMove(200);
+	changePosGrabberC(100, grabberC.firstLevel);
+	arcAccelEnc(0, -40, -100, -35, 365, 20);
+	stopMove(100);
+	arcAccelEnc(40, 0, 100, 35, 365, 20);
+	stopMove(300);
+	arcEnc(-35, 35, 100, 25, 190);
+	vsos(100);
+	arcAngle(-50, -50, -100, -40, 180);
+}
+
+void takeSecondPairsFromStart2() {
+	setDefaultLine();
+	lineFollowEncoder(40, 100, 100, 700);
+	lineFollowCross(100, 50, 1);
+	arcAccelEnc(-50, 50, 50, 20, 165, 50);
+	stopMove(100);
+	arcAccelAngle(35, 35, 100, 35, 90, 10);
+	stopMove(100);
+	lineFollowEncoder(35, 100, 25, 300);
+	lineFollowEncoder(25, 25, 25, 90);
+	stopMove(200);
+	arcAccelAngle(-30, -30, -100, -30, 90, 15);
+	stopMove(200);
+	vsos(100);
+	arcAccelEnc(40, 0, 100, 35, 365, 20);
+	stopMove(100);
+	arcAccelEnc(0, -40, -100, -35, 365, 20);
+	stopMove(200);
+	arcEnc(-30, 30, 100, 30, 210);
+	vsos(80);
+	changePosGrabberC(100, grabberC.maxUp);
+	arcEnc(35, -35, 35, 25, 80);
+	stopMove(200);
+	arcAngle(-50, 0, -100, -100, 78);
+	arcEnc(-100, 100, 100, 40, 300);
+	arcAngle(-40, 0, -100, -40, 105);
+	changePosGrabberC(100, grabberC.firstLevel);
+	arcEnc(-40, 40, 100, 40, 50);
+	stopMove(200);
+	arcEnc(-45, -60, -100, -60, 480, &CDSensor2, 1);
+
+
+}
+
+void throwTwoTowers2() {
+	changePosGrabberC(100, grabberC.closeClaws);
+	setRightSensorBlackLineBlackStop(1, 0);
+	lineFollowEncoder(40, 40, 40, 100);
+	lineFollowCross(40, 40, 1);
+	lineFollowEncoder(40, 40, 25, g_distBetweenSensorsAndWheelBase);
+	stopMove(150);
+	arcAngle(40, 40, 100, 40, 90, &CDSensor1, 1);
+	setDefaultLineYellowCross();
+	lineFollowCross(40, 30, 1);
+	stopMove(200);
+	arcEnc(35, -35, 35, 25, 70);
+	changePosGrabberC(100, grabberC.maxDown);
+	stopMove(450);
+	changePosGrabberD(100, grabberD.smallOpen);
+	stopMove(200);
+	changePosGrabberC(100, grabberC.maxUp);
+	arcEnc(35, -35, 35, 25, 100);
+	fromClawsToTower2();
+	arcEnc(0, 40, 50, 40, 180);
+	arcEnc(-40, 40, 40, 15, 195);
+	changePosGrabberC(100, grabberC.maxDown);
+	stopMove(300);
+	changePosGrabberD(100, grabberD.smallOpen);
+	stopMove(200);
+	arcEnc(70, -70, 100, 70, 300);
+	arcEnc(70, 0, 100, 70, 400);
+	arcEnc(70, -70, 100, 70, 390);
+	arcEnc(70, 0, 100, 70, 630);
+	arcEnc(70, -70, 100, 70, 860);
+	arcEnc(70, 0, 100, 40, 200, &CDSensor2, 1);
+}
+
+void musor2() {
+	changePosGrabberC(100, grabberC.maxUp);
+	setRightSensorBlackLineBlackStop(1, 0);
+	arcEnc(0, 50, 100, 40, 410);
+	stopMove(100);
+	arcEnc(0, -50, -100, -40, 410);
+	lineFollowEncoder(50, 80, 40, 80);
+	changePosGrabberC(100, grabberC.closeClaws);
+	lineFollowCross(40, 30, 1);
+	stopMove(200);
+	arcAccelEnc(-45, 0, -60, -35, 205, 80);
+	stopMove(200);
+	arcAccelEnc(0, 45, 60, 35, 205, 80);
+	stopMove(200);
+	setLeftSensorBlackLineBlackStop(-1, 0);
+	lineFollowEncoder(MTVarsB.targetV, 80, 30, 300);
+	getCDValues(&CDSensor3);
+	//colSound(CDSensor3.color);
+	lineFollowEncoder(30, 30, 30, 45);
+	stopMove(200);
+	arcAccelAngle(-35, -35, -60, -30, 90, 15);
+	stopMove(200);
+	vsos(80);
+	changePosGrabberC(100, grabberC.firstLevel);
+	arcAccelEnc(45, 0, 70, 40, 368, 80);
+	stopMove(100);
+	arcAccelEnc(0, -45, -70, -40, 368, 80);
+	stopMove(300);
+	arcEnc(-35, 35, 100, 20, 190);
+	vsos(80);
+
+	arcAngle(90, 22, 100, 50, 90);
+	arcAccelEnc(40, -40, 100, 30, 500, 50);
+	stopMove(100);
+	setRightSensorBlackLineBlackStop(1, 0);
+	baseOfMusor();
+	setRightSensorBlackLineBlackStop(1, 0);
+	lineFollowCross(40, 100, 1);
+		changePosGrabberC(100, grabberC.almostFloor);
+	if (CDSensor3.color == 3) {
+			lineFollowEncoder(MTVarsb.targetV, 100, 30, 900);
+	} else {
+		lineFollowEncoder(MTVarsb.targetV, 100, 30, 537);
+	}
+	arcAccelAngle(40, 40, 100, 30, 90, 10);
+	stopMove(100);
+	arcEnc(-30, 30, 100, 30, 228);
+	changePosGrabberC(100, grabberC.maxDown);
+	stopMove(300);
+	changePosGrabberD(100, grabberD.bigOpen);
+	stopMove(200);
+		arcEnc(30, -30, 100, 50, 200);
+		arcAngle(0, -50, -100, -50, 90);
+	if (CDSensor3.color == 3) {
+			arcEnc(50, -50, 100, 30, 1400);
+	} else {
+		arcEnc(50, -50, 100, 30, 1000);
+	}
+	stopMove(1230320);
+}
+
+void start2() {
+
+}
+
 task main(){
 	initAll();
 	stopMove(1300);
 	unsigned long varPgmTime = nPgmTime;
 	float now = getBatteryVoltage();
-	now = getBatteryVoltage();
-
-	if (now < 7.6){
+	if (now < 7.8){
 		playSound(soundException);
 	}
-	takeTwoRAndYFromStart1();
-	takeSecondPairsFromStart1();
-	throwTwoTowers();
+	takeTwoRAndYFromStart2();
+	takeSecondPairsFromStart2();
+	throwTwoTowers2();
 	twoBGAfterRY();
-	musor();
-	lastTowerAndFinish();
+	musor2();
 	displayCenteredTextLine(2, "%d", nPgmTime - varPgmTime);
 
 	stopMove(20000);

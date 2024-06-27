@@ -20,21 +20,21 @@ bool motorBstop = false;
 
 void initAll(){
   colorDetectInit();
-    setMotorBrakeMode(motorA, motorCoast);
-    setMotorBrakeMode(motorB, motorCoast);
-    setMotorBrakeMode(motorC, motorBrake);
-    setMotorBrakeMode(motorD, motorBrake);
-		initSensor(&CDSensor3);
-		//initSensor(&CDSensor4);
+  setMotorBrakeMode(motorA, motorCoast);
+  setMotorBrakeMode(motorB, motorCoast);
+  setMotorBrakeMode(motorC, motorBrake);
+  setMotorBrakeMode(motorD, motorBrake);
+  initSensor(&CDSensor3);
+  //initSensor(&CDSensor4);
 
-    initMtVars();
+  initMtVars();
 
-	#ifdef READ
-    	readMinMax();
-	#endif
+  #ifdef READ
+    readMinMax();
+  #endif
 
-    setDefaultLine();
-    startTask(initGrabber, kLowPriority);
-    setLEDColor(ledOff);
-	setSoundVolume(100);
+  setDefaultLine();
+  startTask(initGrabber, kLowPriority);
+  setLEDColor(ledOff);
+  setSoundVolume(100);
 }

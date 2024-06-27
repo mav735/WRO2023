@@ -190,7 +190,7 @@ void setDefaultLineRedCross() {
     lineCFG.rgb[1] = true;
     lineCFG.rgb[2] = true;
     lineCFG.rgbCross[0] = false;
-    lineCFG.rgbCross[1] = true;
+    lineCFG.rgbCross[1] = false;
     lineCFG.rgbCross[2] = true;
 }
 

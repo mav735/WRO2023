@@ -65,7 +65,7 @@ task initGrabber() {
     nMotorEncoder[motorD] = 0;
 
     grabberC.maxUp = 0;
-    grabberC.kran = -505;
+    grabberC.kran = -510;
     grabberC.kranUp = 700;      
     grabberC.closeClaws = -240;
     grabberC.maxDown = -800;
