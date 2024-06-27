@@ -9,6 +9,7 @@ short moveTypeIndex = 0;
 short *elementsColToShow;
 short amountToShow;
 
+
 task readingColors() {
     float nowEncWheels[3] = {0, 0, 0};
     

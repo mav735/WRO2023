@@ -1,5 +1,5 @@
 const float stopKP = 4;
-const float stopKI = 0.05;
+const float stopKI = 0.06;
 const float stopKD = 4;
 
 task stopA_task_old {

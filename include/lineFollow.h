@@ -4,9 +4,9 @@ float kpNow = 0.2;
 float kdNow = 1;
 float kiNow = 0;
 
-const float kpConstBase = 0.6;
-const float kdConstBase = 6.6;
-const float kiConstBase = 0.01;
+const float kpConstBase = 0.5;
+const float kdConstBase = 5;
+const float kiConstBase = 0.001;
 
 const float kpConstOne = 0.4;
 const float kdConstOne = 5;
@@ -218,7 +218,7 @@ void calcKF(float power, float *kp, float *kd, float *ki) {
     *ki = temp * kiNow;
 }
 
-const int it = 20;
+const int it = 60;
 
 void lineFollowCross(float startPower, float endPower, short crossCount,
                      float boost = gBoost) {
